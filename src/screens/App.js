@@ -77,6 +77,7 @@ import { MoreV2 } from "../v2/screens/MoreV2";
 import { BnccV2 } from "../v2/screens/BnccV2";
 import { ReportsV2 } from "../v2/screens/ReportsV2";
 import { SettingsV2 } from "../v2/screens/SettingsV2";
+import { AppearanceV2 } from "../v2/screens/AppearanceV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1051,8 +1052,8 @@ function App() {
                             storage,
                             onGoToClasses: () => zt("gerenciar-turmas"),
                           }))
-                        : (Re == null ? void 0 : Re.name) === "tema"
-                          ? (ht = React.createElement(AppearanceScreen, {
+                          : (Re == null ? void 0 : Re.name) === "tema"
+                          ? (ht = React.createElement(AppearanceV2, {
                               onBack: _t,
                               theme: Oe,
                               setTheme: Ei,

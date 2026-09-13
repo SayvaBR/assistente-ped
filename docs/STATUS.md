@@ -111,6 +111,10 @@ O destino `relatorios` agora monta `ReportsV2` em `src/v2/`, com leitura de cham
 
 O destino `configuracoes` agora monta `SettingsV2` em `src/v2/`, com grupos de perfil/trabalho, preferências, dados/segurança, ajuda e experiência. Sons continuam ligados ao estado persistido do App; cada item mantém seu callback de rota existente. A aparência e os subfluxos acessados permanecem na fila de migração individual.
 
+## Superfície em construção — Aparência V2
+
+O destino `tema` agora monta `AppearanceV2`, preservando os callbacks reais de tema/cor do App e incluindo modo claro/sistema/escuro, cor de ação, focus visible e reduced motion. A superfície continua propositalmente clara por padrão; validação de contraste e comportamento Android dark mode permanecem no hardening.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

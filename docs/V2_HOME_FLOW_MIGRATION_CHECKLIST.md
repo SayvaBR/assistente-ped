@@ -22,6 +22,7 @@ A Home V2 é a direção visual aprovada. Esta checklist registra a continuidade
 | BNCC | `bncc` / `BnccV2` | V2 em construção | seleção assistida no editor de plano |
 | Relatórios | `relatorios` / `ReportsV2` | V2 em construção | exportação PDF e hardening dos filtros |
 | Configurações | `configuracoes` / `SettingsV2` | V2 em construção | aparência e subfluxos de conta/dados |
+| Aparência | `tema` / `AppearanceV2` | V2 em construção | contraste, Android dark mode e hardening |
 
 ## Frequência V2 — contratos preservados
 

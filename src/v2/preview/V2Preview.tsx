@@ -13,6 +13,7 @@ import { LessonPlanV2 } from '../screens/LessonPlanV2';
 import { BnccV2 } from '../screens/BnccV2';
 import { ReportsV2 } from '../screens/ReportsV2';
 import { SettingsV2 } from '../screens/SettingsV2';
+import { AppearanceV2 } from '../screens/AppearanceV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -99,6 +100,8 @@ export function V2Preview() {
   const previewState = new URLSearchParams(window.location.search).get('state');
   const initialObservationStudent = new URLSearchParams(window.location.search).get('student') || undefined;
   const [activeScreen, setActiveScreen] = useState(screen);
+  const [previewTheme, setPreviewTheme] = useState('claro');
+  const [previewAccent, setPreviewAccent] = useState('#168be0');
   const [previewSounds, setPreviewSounds] = useState(true);
   const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
   const frequencyStateData: FrequencyV2Data = {
@@ -156,7 +159,7 @@ export function V2Preview() {
           ) : activeScreen === 'files' ? (
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
-            <MoreV2 goTo={(route) => route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
+            <MoreV2 goTo={(route) => route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : route === 'tema' ? setActiveScreen('appearance') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
           ) : activeScreen === 'plan-editor' ? (
             <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
@@ -164,7 +167,9 @@ export function V2Preview() {
           ) : activeScreen === 'reports' ? (
             <ReportsV2 turma={reportPreviewClass} alunos={classStudentsPreview} storage={previewStorage} initialDays={reportPreviewDays} onBack={() => setActiveScreen('more')} />
           ) : activeScreen === 'settings' ? (
-            <SettingsV2 sonsAtivados={previewSounds} onBack={() => setActiveScreen('more')} goTo={() => undefined} setSonsAtivados={setPreviewSounds} />
+            <SettingsV2 sonsAtivados={previewSounds} onBack={() => setActiveScreen('more')} goTo={(route) => route === 'tema' ? setActiveScreen('appearance') : undefined} setSonsAtivados={setPreviewSounds} />
+          ) : activeScreen === 'appearance' ? (
+            <AppearanceV2 theme={previewTheme} setTheme={setPreviewTheme} accentColor={previewAccent} setAccentColor={setPreviewAccent} systemDark={false} onBack={() => setActiveScreen('settings')} />
           ) : (
             <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} />
           )}

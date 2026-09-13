@@ -41,6 +41,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 9. BNCC — `IN PROGRESS`
 10. Relatórios — `IN PROGRESS`
 11. Configurações — `IN PROGRESS`
+12. Aparência — `IN PROGRESS`
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -116,7 +117,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Notificações — `TODO`
 - Mais hub — `TODO`
 - Configurações — `IN PROGRESS`
-- Aparência/acessibilidade — `TODO`
+- Aparência/acessibilidade — `IN PROGRESS`
 - Privacidade/segurança — `TODO`
 - Backup/sync — `TODO`
 - Ajuda/suporte — `TODO`
