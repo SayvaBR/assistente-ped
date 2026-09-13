@@ -1,404 +1,383 @@
 ---
 name: assistente-pedagogico-rapid-ui
 description: >
-  Modo de produção visual rápida para o Assistente Pedagógico. Use quando houver
-  screenshot/mockup aprovado ou uma tela V2 claramente especificada e o objetivo for
-  chegar rapidamente a uma primeira versão visual de alta fidelidade antes de fazer
-  integração profunda, refatoração arquitetural ou rollout para outras telas.
-version: 1.0.0
+  Modo visual-builder para o Assistente Pedagógico. Use sempre que houver trabalho de UI.
+  O agente deve operar em ciclos curtos de hipótese -> experimento -> observação -> correção,
+  renderizando a interface real cedo e usando screenshots como feedback de desenvolvimento.
+version: 1.1.0
 language: pt-BR
 ---
 
-# Assistente Pedagógico — Rapid UI Skill
+# Assistente Pedagógico — Rapid UI / Visual Builder
 
-Esta skill existe para reproduzir o que ferramentas visual-first fazem bem: **ver o alvo, construir cedo, renderizar cedo, comparar cedo e corrigir cedo**.
+Esta skill existe para fazer o Codex trabalhar como um **builder visual**, e não como um agente que escreve código por longos períodos antes de olhar o resultado.
 
-Ela não reduz qualidade, segurança ou integridade. Ela muda a ordem do trabalho para evitar passar horas auditando/refatorando antes de existir algo visualmente revisável.
+> **Loop central obrigatório:**
+>
+> `HIPÓTESE -> EXPERIMENTO -> OBSERVAÇÃO -> CORREÇÃO -> NOVA HIPÓTESE`
 
-> **Regra central: primeiro provar visualmente a tela certa; depois conectar e endurecer a implementação.**
-
----
-
-## 1. Quando usar
-
-Ative esta skill quando pelo menos uma destas condições existir:
-
-- há screenshot/mockup aprovado;
-- existe uma tela V2 bem especificada;
-- a tarefa é reconstruir visualmente uma tela existente;
-- o objetivo é validar identidade, composição ou componente;
-- o usuário pediu velocidade e quer ver resultado visual rapidamente.
-
-Use em conjunto com `$assistente-pedagogico-ui-screen-craft`.
+O objetivo é reduzir drasticamente o tempo entre uma decisão visual e a evidência de que ela funcionou ou não.
 
 ---
 
-## 2. O que esta skill muda
+## 1. Regra principal
 
-O fluxo tradicional `auditar tudo -> abstrair tudo -> integrar tudo -> finalmente renderizar` está proibido em tarefas visuais com target claro.
+Para UI, código não é evidência suficiente.
 
-O fluxo passa a ser:
+Toda mudança visual relevante deve entrar rapidamente no app/preview real e produzir evidência observável.
 
-`TARGET -> PRIMEIRO RENDER -> COMPARAÇÃO -> REFINO VISUAL -> CONEXÃO REAL -> ESTADOS -> QA`
+O fluxo normal é:
 
-A primeira entrega deve ser uma tela visualmente reconhecível, não uma arquitetura invisível.
+```text
+TARGET / PROBLEMA VISUAL
+-> formular uma hipótese concreta
+-> alterar somente o necessário para testá-la
+-> renderizar a superfície real
+-> capturar screenshot
+-> comparar com o target/estado anterior
+-> escrever as 3–5 diferenças mais importantes
+-> corrigir a maior diferença
+-> repetir
+```
 
----
-
-## 3. Contexto mínimo antes do primeiro render
-
-Para uma tela com screenshot aprovado, antes do primeiro render leia apenas o conjunto mínimo necessário:
-
-1. `docs/DESIGN_AUTHORITY.md`;
-2. esta skill;
-3. `$assistente-pedagogico-ui-screen-craft`;
-4. a `SCREEN_SPEC_*` da tela, se disponível;
-5. o screenshot/mockup aprovado;
-6. os arquivos/repositories diretamente usados pela tela atual.
-
-Documentação complementar continua obrigatória antes de merge/integração final quando aplicável, mas **não deve atrasar o primeiro render visual sem motivo**.
-
-Segurança, privacidade, billing, storage e dados continuam imutáveis.
+Não passar dezenas de minutos acumulando mudanças visuais não observadas.
 
 ---
 
-## 4. Screenshot aprovado = target
+## 2. O que é uma hipótese visual válida
 
-Quando o usuário fornecer ou aprovar uma imagem:
+Hipótese deve ser pequena, falsificável e ligada ao que se vê.
 
-- trate como target visual principal;
-- replique hierarquia, proporções, densidade, ritmo, superfícies e peso visual;
-- preserve o DNA, mesmo quando o conteúdo real variar;
-- não “reinterpretar” para uma estética preferida pelo agente;
-- não converter candy/tactile UI em minimalismo corporativo;
-- não converter composição rica em uma lista de rows por conveniência.
+Boas hipóteses:
 
-Não usar a imagem como background. Implementar com componentes reais.
+- “O hero está pesado porque ocupa altura demais; reduzir sua proporção deve aproximar o balanço do target.”
+- “A tela parece corporativa porque faltam superfícies brancas táteis entre fundo e ações.”
+- “A hierarquia está fraca porque título e metadata têm contraste tipográfico semelhante.”
+- “Em 320 px o CTA quebra de forma ruim; permitir wrap e empilhar ações deve preservar a copy.”
 
----
+Hipóteses ruins:
 
-## 5. Primeiro passo de código: uma vertical slice visual
+- “Vou refatorar o design system inteiro.”
+- “Vou criar primitives para todas as telas.”
+- “Acho que isso ficará melhor.”
 
-Antes de refatoração ampla, construir uma única tela em estado representativo.
-
-A primeira vertical slice pode usar **fixtures sintéticas isoladas apenas no preview/dev harness** se isso for necessário para validar composição rapidamente.
-
-Regras das fixtures:
-
-- nunca substituir fonte real em produção;
-- nunca usar dados reais de aluno;
-- usar nomes/dados fictícios;
-- deixar claramente isolado do fluxo de produção;
-- remover ou desconectar quando a tela for ligada aos repositories reais.
-
-A preferência continua sendo usar dados reais já disponíveis se isso não atrasar a primeira renderização.
+A hipótese deve dizer **o que está errado, por que parece errado e qual mudança queremos observar**.
 
 ---
 
-## 6. Não refatorar arquitetura antes da prova visual
+## 3. Experimento
 
-Antes de a tela atingir o target, não gastar ciclos em:
+O experimento deve ser o menor conjunto de alterações capaz de testar a hipótese.
 
-- renomear dezenas de arquivos;
-- criar design system completo do zero;
-- migrar todos os componentes legados;
-- refatorar repositories não relacionados;
-- redesenhar outras telas;
-- criar abstrações para casos hipotéticos;
-- implementar todos os estados de uma vez.
+Durante a fase visual:
 
-Faça somente a infraestrutura mínima necessária para a tela ficar correta.
+- prefira editar a tela/componente diretamente afetado;
+- evite refatoração ampla;
+- não migre outras telas;
+- não crie abstrações especulativas;
+- fixtures sintéticas são permitidas somente no preview/dev harness para validar composição;
+- dados reais de professor/aluno nunca entram em fixtures ou screenshots públicas.
 
-Depois que o padrão visual for aprovado, extraia primitives/componentes reutilizáveis.
-
-> **Código duplicado temporário em uma prova isolada é menos perigoso que uma abstração errada espalhada por 30 telas.**
-
-Antes do merge, duplicações relevantes devem ser consolidadas.
+Se uma hipótese puder ser testada mudando 30 linhas, não altere 20 arquivos.
 
 ---
 
-## 7. Ordem de produção de cada tela
+## 4. Observação é obrigatória
 
-### Passo 1 — Clone visual da composição
+Depois do experimento, **renderize e olhe**.
 
-Implementar:
+A observação deve responder, no mínimo:
 
-- shell;
-- background;
-- header;
-- objeto dominante;
-- superfícies principais;
-- tipografia;
-- ícones;
-- bottom navigation se existir.
+1. Qual é o primeiro elemento que chama atenção?
+2. A composição está mais perto ou mais longe do target?
+3. O balanço de branco / azul-claro / azul vivo está correto?
+4. Tipografia, radius, profundidade e iconografia pertencem à mesma família?
+5. Existe algo quebrado em responsividade, copy ou acessibilidade?
 
-Sem obsessão por edge cases nesta etapa.
+Não continue codando baseado apenas em memória do screenshot.
 
-### Passo 2 — Screenshot imediato
+---
 
-Renderizar em 390 px primeiro.
+## 5. Correção
 
-Comparar lado a lado com o target.
+Corrija primeiro a diferença de maior impacto perceptivo.
 
-Não seguir adiante se visualmente parece outro produto.
-
-### Passo 3 — Corrigir as 5 maiores diferenças
-
-Prioridade:
+Prioridade padrão:
 
 1. composição;
 2. proporção;
 3. hierarquia;
 4. tipografia;
-5. cor/superfície.
+5. cor e superfícies;
+6. iconografia;
+7. spacing;
+8. microdetalhes;
+9. motion.
 
-Só depois ajustar microspacing.
-
-### Passo 4 — Conectar lógica real
-
-Conectar:
-
-- repositories;
-- selectors;
-- navigation;
-- persistência;
-- ações;
-- offline;
-- domain logic.
-
-A conexão não pode destruir a composição aprovada.
-
-### Passo 5 — Estados
-
-Adicionar:
-
-- loading;
-- empty;
-- error;
-- offline;
-- disabled;
-- pressed;
-- success quando aplicável.
-
-### Passo 6 — Motion
-
-Adicionar apenas motion definido pelo sistema:
-
-- press feedback;
-- tab/shared indicator;
-- transições causais;
-- microfeedback;
-- Reduced Motion.
-
-### Passo 7 — Responsive
-
-Validar 360 / 390 / 430 px.
+Se a composição estiver errada, microspacing não salva a tela.
 
 ---
 
-## 8. Uma tela por vez
+## 6. Cadência do loop
 
-Em modo rápido:
+Durante iteração visual ativa, o objetivo é obter uma nova observação visual aproximadamente a cada **5–10 minutos quando o ambiente permitir**.
 
-- não implementar 5–10 telas antes de feedback;
-- terminar uma tela candidata;
-- publicar screenshot;
-- marcar `READY FOR DESIGN REVIEW — <TELA>`;
-- só expandir depois de revisão.
+Isso não significa fazer screenshot inútil a cada pequena alteração. Significa não ficar longos períodos programando UI sem verificar o resultado.
 
-Isso evita multiplicar um erro visual.
+Um ciclo pode ser:
 
----
+```text
+09:00 hipótese
+09:03 implementação
+09:05 render + screenshot
+09:06 observação
+09:08 correção
+09:10 nova screenshot
+```
 
-## 9. Composição primeiro, componentes depois
-
-Ferramentas visual-first ficam bonitas porque priorizam a composição percebida.
-
-O Codex deve fazer o mesmo:
-
-- resolver a tela como experiência;
-- então identificar padrões reais;
-- então extrair componentes.
-
-Não começar perguntando “qual componente existente eu consigo reutilizar?”.
-
-Começar perguntando:
-
-> “Qual composição reproduz melhor o target e a tarefa do professor?”
-
-Depois decidir o que reutilizar.
+Se build/emulador demorar mais, preservar a lógica do ciclo, não o cronômetro literal.
 
 ---
 
-## 10. Reuso seletivo, não inercial
+## 7. Target aprovado
 
-Reusar legado somente quando ele não prejudicar o target.
+Screenshot/mockup aprovado é **target visual**, não inspiração vaga.
 
-Se `Card`, `IconTile`, `recovered.js`, `ScreenHeader` ou qualquer abstraction antiga impuser formato inadequado:
+Reproduzir com alta fidelidade:
 
-- preservar a lógica;
-- desacoplar apresentação;
-- criar a versão V2;
-- conectar a mesma lógica;
-- aposentar o visual antigo depois.
+- hierarquia;
+- proporções;
+- densidade;
+- ritmo;
+- balanço de cores;
+- superfícies;
+- radius;
+- tipografia;
+- escala de ícones;
+- profundidade;
+- sensação tátil;
+- personalidade.
 
-Não deformar o target para caber no legado.
+Não usar a screenshot como background. Implementar interface real.
+
+Não reinterpretar o target como fintech, dashboard SaaS, Material default, minimalismo editorial ou Tailwind starter.
 
 ---
 
-## 11. Linguagem positiva obrigatória
+## 8. Viewport-âncora não é layout fixo
 
-A tela deve preservar:
+Quando o target tiver uma largura conhecida, use um **viewport-âncora** para comparação lado a lado. Se o target estiver em torno de 390 px, 390 px é apenas a régua inicial.
+
+> **Uma screenshot tem uma largura. O aplicativo não.**
+
+Depois que a composição estiver convincente no viewport-âncora, validar a matriz Android definida em `$assistente-pedagogico-android-adaptive-ui`.
+
+Nunca:
+
+- fixar root em 390 px;
+- cortar copy essencial;
+- usar ellipsis/line-clamp em título/CTA principal;
+- esconder funcionalidade porque a tela estreitou.
+
+---
+
+## 9. Uma tela por vez
+
+Enquanto uma tela não estiver visualmente aprovada:
+
+- não expandir para outra área;
+- não fazer rollout em massa;
+- não criar 10 telas usando um padrão ainda não provado.
+
+O padrão nasce de telas aprovadas, não de abstração antecipada.
+
+---
+
+## 10. Primeiro render antes da arquitetura
+
+Antes do primeiro render convincente, evitar:
+
+- Design System completo;
+- renomear dezenas de arquivos;
+- refatorar repositories não relacionados;
+- migrar todos os componentes legados;
+- implementar todos os edge cases;
+- auditoria estética do app inteiro.
+
+Faça a infraestrutura mínima para provar a tela.
+
+Depois da aprovação visual:
+
+1. extrair primitives realmente repetidas;
+2. tokenizar;
+3. conectar repositories reais;
+4. implementar estados;
+5. endurecer acessibilidade/responsividade;
+6. integrar motion;
+7. executar QA.
+
+---
+
+## 11. Clean room V2
+
+Toda nova UI V2 nasce em `src/v2/`.
+
+Pode reutilizar lógica, dados, repositories, domínio, storage, BNCC, billing e adapters nativos.
+
+Não usar como autoridade visual:
+
+- `src/screens/**` V1;
+- `src/components/**` V1;
+- `src/core/recovered.js` para composição/UI;
+- CSS/tokens V1;
+- `Card`, `IconTile` ou equivalentes legados.
+
+Preservar os motores; reconstruir a carroceria.
+
+---
+
+## 12. Linguagem positiva
+
+A tela deve parecer:
+
+> **Friendly Professional + Candy UI + Tactile + Educational + Motion-led**
+
+Preservar:
 
 - fundo azul-claro respirável;
-- superfícies brancas/azul muito claro;
-- azul vivo em foco/ações;
+- superfícies majoritariamente brancas;
+- azul vivo para foco/ação;
 - navy forte;
 - tipografia rounded/chunky;
 - radius generoso;
-- elementos táteis;
-- ícones com presença;
-- semantic colors apenas quando significativas;
-- profundidade por borda/depth controlada;
-- variação de composição;
-- aparência Friendly Professional + Candy UI.
+- profundidade tátil controlada;
+- ícones chunky/rounded;
+- densidade operacional adequada;
+- composição variada.
 
-Não aceitar como substituto:
-
-- fintech/editorial austero;
-- dashboard SaaS;
-- Material default;
-- Tailwind starter;
-- rows corporativas infinitas;
-- uppercase em todo heading;
-- azul chapado ocupando metade da tela sem necessidade.
+Anti-card não significa anti-surface.
+Profissional não significa corporativo.
+Playful não significa infantil.
 
 ---
 
-## 12. Regra de fidelidade
+## 13. Loop de comparação
 
-Com screenshot target, a primeira aprovação visual exige aproximadamente:
+A cada screenshot relevante:
 
-- mesma estrutura perceptiva;
-- mesmo balanço entre branco/azul-claro/azul vivo;
-- mesma força de tipografia;
-- mesma escala de radius/surfaces;
-- mesma densidade;
-- mesma prioridade de ação;
-- mesma sensação de produto.
+```text
+TARGET | IMPLEMENTAÇÃO
+```
 
-Não é necessário copiar pixel por pixel. É necessário parecer **a mesma família e a mesma direção**, sem explicações.
+Olhar por poucos segundos e registrar as maiores diferenças perceptivas.
 
----
+Não usar frases como “parece bom” sem critério.
 
-## 13. Visual diff humano obrigatório
+Use observações concretas, por exemplo:
 
-Após cada render:
+- hero 20% alto demais;
+- título sem força;
+- excesso de azul;
+- falta superfície branca;
+- bottom nav muito genérica;
+- ícones pequenos;
+- spacing vertical apertado;
+- CTA parece botão web, não tátil.
 
-1. target à esquerda;
-2. implementação à direita;
-3. olhar por 3 segundos;
-4. responder:
-   - qual chama mais atenção primeiro?
-   - o peso visual é semelhante?
-   - há superfícies faltando?
-   - a tela ficou mais fria/corporativa?
-   - há texto pequeno demais?
-   - há azul demais?
-   - há whitespace demais?
-5. corrigir antes de integrar mais lógica.
+Cada observação deve alimentar a próxima hipótese.
 
 ---
 
-## 14. Limite de exploração
+## 14. Responsividade é outro experimento
 
-Não criar três direções diferentes quando já existe uma referência aprovada.
+Depois de a direção visual estar correta, rode hipóteses de adaptação:
 
-Com target aprovado:
+- 320/360: o que precisa empilhar?
+- 390: a fidelidade continua correta?
+- 412/432/480: a tela fica esticada ou ganha espaço de forma elegante?
+- texto 115/130/150%: continua utilizável?
+- safe areas: nada fica coberto?
 
-- implementar a direção;
-- não abrir nova rodada conceitual;
-- não inventar alternativa estética;
-- não pedir confirmação para detalhes que o target já resolve.
-
-Perguntar apenas quando houver conflito funcional, segurança, privacidade, dados, billing ou decisão realmente não resolvida.
-
----
-
-## 15. Regra de velocidade
-
-Para cada ciclo visual:
-
-- produzir primeiro render antes de qualquer refatoração ampla;
-- limitar a rodada a uma tela;
-- limitar mudanças às diferenças visuais de maior impacto;
-- evitar documentação adicional durante a rodada, salvo conflito real;
-- não redesenhar áreas não solicitadas;
-- não esperar “arquitetura perfeita” para mostrar resultado.
-
-A revisão visual deve acontecer **durante** a construção, não no fim de uma grande implementação.
+Responsividade não é encolher a screenshot. É preservar hierarquia e função em diferentes restrições.
 
 ---
 
-## 16. O que não pode ser acelerado
+## 15. O que nunca pode ser acelerado
 
-Nunca usar esta skill para pular:
+O loop visual não autoriza atalhos em:
 
 - segurança;
 - LGPD;
-- integridade de dados;
-- migração;
+- integridade/migração de dados;
 - billing/entitlement;
+- storage/backup;
+- funcionamento offline;
 - acessibilidade;
 - Reduced Motion;
-- funcionamento offline;
-- confirmação real de operações destrutivas;
-- testes essenciais antes do merge.
-
-Velocidade vale para **ciclo visual**, não para atalhos perigosos.
+- operações destrutivas;
+- testes essenciais antes de merge.
 
 ---
 
-## 17. Critério de saída da fase visual
+## 16. Critério de saída visual
 
-A tela pode sair da fase de prova quando:
+Uma tela pode sair da fase de prova quando:
 
-- visualmente pertence à mesma família do target;
-- a composição está aprovada;
-- os principais controles parecem corretos;
-- 390 px está convincente;
-- não há padrão genérico dominante.
+- pertence claramente à mesma família do target;
+- composição e hierarquia estão convincentes;
+- não há padrão genérico dominante;
+- viewport-âncora está forte;
+- matriz Android não quebra copy/fluxo;
+- screenshots reais existem.
 
-Então conectar/harden.
+Depois disso, conectar e endurecer a implementação.
 
 ---
 
-## 18. Critério final
+## 17. Reporte de cada rodada
+
+Durante trabalho ativo, reporte de forma curta:
+
+```text
+HIPÓTESE: ...
+EXPERIMENTO: ...
+OBSERVAÇÃO: ...
+CORREÇÃO: ...
+EVIDÊNCIA: screenshot / viewport / commit
+```
+
+Não escrever longos relatórios arquiteturais entre ciclos visuais.
+
+---
+
+## 18. Gate final
 
 Antes de marcar pronta:
 
-- 360 / 390 / 430;
+- target identificado;
+- screenshots reais;
+- matriz Android responsiva;
+- texto aumentado;
 - lógica real conectada;
-- states relevantes;
+- estados relevantes;
 - offline quando aplicável;
-- accessibility;
-- motion/reduced motion;
+- acessibilidade;
+- motion + Reduced Motion;
 - build/testes;
-- screenshot final;
-- gravação se motion relevante.
+- branch e commit informados.
 
 Publicar:
 
 > **READY FOR DESIGN REVIEW — <NOME DA TELA>**
 
-Não declarar aprovação por conta própria.
+Nunca declarar aprovação por conta própria.
 
 ---
 
-## 19. Mantra operacional
+## 19. Mantra
 
-> **Visual primeiro. Render cedo. Compare cedo. Corrija cedo. Integre depois.**
+> **Hipótese. Experimento. Observação. Correção.**
 
-> **Não faça arquitetura invisível por horas antes de mostrar a tela.**
+> **Render cedo. Olhe o resultado. Corrija o que realmente apareceu.**
 
-> **Não tente melhorar um target aprovado; primeiro prove que consegue reproduzi-lo.**
+> **Código funcionando não significa UI aprovada.**
