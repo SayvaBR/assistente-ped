@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { HomeV2, type HomeV2Data } from '../screens/HomeV2';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -17,23 +18,28 @@ function setPreviewWidth(width: PreviewWidth) {
   window.location.reload();
 }
 
-function EmptyHomeTarget() {
-  return (
-    <main className="v2-root v2-preview-empty">
-      <section className="v2-preview-empty__content" aria-labelledby="v2-preview-title">
-        <span className="v2-preview-kicker">V2 VISUAL LAB</span>
-        <h1 className="v2-title" id="v2-preview-title">Home V2</h1>
-        <p>
-          Substitua este placeholder pela implementação clean-room da Home. O target visual aprovado deve ser reproduzido aqui antes de integrar profundamente a navegação legado.
-        </p>
-        <p>
-          390 px é apenas o viewport-âncora para comparação com o target. A tela final precisa se adaptar à matriz Android sem cortar conteúdo essencial.
-        </p>
-        <code>src/v2/screens/HomeV2.tsx</code>
-      </section>
-    </main>
-  );
-}
+const homePreviewData: HomeV2Data = {
+  teacherName: 'Marina',
+  dateLabel: 'Terça-feira, 16 de setembro',
+  classLabel: '5º ano B',
+  classMeta: 'Ensino Fundamental',
+  lesson: {
+    status: 'Chamada pendente',
+    subject: 'Matemática',
+    theme: 'Frações equivalentes',
+    detail: 'Observe, registre e converse sobre diferentes formas de representar a mesma parte.',
+    schedule: '07h30 — 08h20',
+    room: 'Sala 12',
+    code: 'EF05MA03',
+  },
+  agenda: [
+    { time: '07h30', title: 'Matemática — 5º B', detail: 'Frações equivalentes', tone: 'primary' },
+    { time: '09h20', title: 'Conselho de classe', detail: 'Sala dos professores', tone: 'warning' },
+    { time: '10h10', title: 'Português — 4º A', detail: 'Leitura compartilhada', tone: 'neutral' },
+    { time: '13h00', title: 'Reunião com responsável', detail: 'Família do Théo', tone: 'success' },
+  ],
+  pendingCount: 1,
+};
 
 export function V2Preview() {
   const width = useMemo(readWidth, []);
@@ -61,7 +67,7 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          <EmptyHomeTarget />
+          <HomeV2 data={homePreviewData} />
         </div>
       </div>
     </div>
