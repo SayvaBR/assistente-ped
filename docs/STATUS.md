@@ -8,7 +8,7 @@ Atualizado em 12/09/2026.
 - Correções de acessibilidade e comportamento aplicadas: títulos com IDs únicos, linhas de planos navegáveis por clique/teclado, agenda vazia correta após carregamento e rolagem sem sobreposição em 393×873 e 375×812.
 - Evidências antes/depois e estados relevantes versionadas em `docs/qa/home-pr/`; relatório em `docs/HOME-VISUAL-REVIEW.md`.
 - Validação desta entrega: 46 testes Vitest, build web, sincronização Capacitor, 25 E2E e APK debug Android aprovados. A captura usa fixtures sintéticas; o Poco X7 físico não foi alterado.
-- Matriz visual ampliada: chamada pendente/concluída, agenda vazia fora da semana, erro/retry, conclusão/reabertura, foco por teclado, reduced-motion e zoom de 125% sem overflow horizontal.
+- Matriz visual ampliada: chamada pendente/concluída, agenda vazia fora da semana, erro/retry, conclusão/reabertura, falha de gravação, foco por teclado, reduced-motion e zoom de 125% sem overflow horizontal.
 - Aguardando revisão da Home no PR #2; nenhuma alteração desta rodada foi mesclada em `main`.
 
 ## Concluído nesta rodada
