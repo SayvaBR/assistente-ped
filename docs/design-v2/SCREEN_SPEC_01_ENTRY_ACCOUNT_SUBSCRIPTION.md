@@ -1,6 +1,15 @@
 # Volume 1 — Entrada, Conta, Setup Inicial e Assinatura
 
-Este volume define exatamente como construir as telas 1–11.
+Este volume define como construir as telas/estados 1–11 e deve ser lido junto com:
+
+- `GROWTH_MONETIZATION_SYSTEM.md`;
+- `ONBOARDING_ACTIVATION_SPEC.md`;
+- `PAYWALL_SUBSCRIPTION_SPEC.md`;
+- `ANALYTICS_EXPERIMENTATION_RETENTION.md`;
+- `MONETIZATION_ETHICS.md`;
+- `MOTION_SYSTEM_V2.md`.
+
+As decisões de Growth são vinculantes. O baseline V1 usa hard paywall após ativação guiada; não existe plano gratuito funcional do núcleo.
 
 ## Recursos existentes a preservar/reusar
 
@@ -18,9 +27,9 @@ Este volume define exatamente como construir as telas 1–11.
 - `src/domain/subscription.ts`
 - `src/domain/subscriptionBilling.ts`
 - RevenueCat via `@revenuecat/purchases-capacitor`
-- Capacitor App quando necessário para ciclo de vida
+- Capacitor App/Local Notifications quando aplicável
 
-A UI desses arquivos pode ser profundamente reescrita. Contratos de persistência/billing devem ser preservados ou migrados explicitamente.
+A UI pode ser profundamente reescrita. Contratos de persistência/billing devem ser preservados ou migrados explicitamente. Se algum recurso listado não existir na branch de implementação, não criar UI fictícia para simular funcionalidade.
 
 ---
 
@@ -28,88 +37,90 @@ A UI desses arquivos pode ser profundamente reescrita. Contratos de persistênci
 
 ## Objetivo
 
-Abrir o app de forma rápida, confiável e elegante; decidir se o destino é onboarding, setup incompleto, Home ou recuperação de erro.
+Abrir o app rápido e decidir corretamente entre onboarding, setup incompleto, hard paywall, Home ou recuperação de erro.
 
 ## Layout
 
 1. Safe area superior vazia.
-2. Centro visual: símbolo/livro da marca, 88–112px.
-3. Nome `Assistente Pedagógico` logo abaixo, display forte.
-4. Microcopy curta opcional: `Organizando o que importa para sua rotina.`
-5. Terço inferior: barra/progresso discreto somente quando inicialização exceder ~400ms.
-6. Rodapé: mensagem de estado apenas quando necessário (`Preparando seus dados…`, `Atualizando estrutura local…`).
+2. Centro visual: marca/símbolo 88–112px.
+3. `Assistente Pedagógico` abaixo.
+4. Microcopy opcional: `Organizando o que importa para sua rotina.`
+5. Progresso discreto apenas se bootstrap exceder ~400ms.
+6. Rodapé de estado somente quando necessário.
 
-Não usar vários cards, botões ou navegação.
+## Lógica de bootstrap
 
-## Lógica
+`Native splash -> storage -> migração -> preferências/setup -> entitlement cache -> refresh RevenueCat em background -> decisão de rota`
 
-Sequência esperada:
+Regras:
 
-`Native splash -> App shell -> carregar storage -> validar/migrar schema -> recuperar preferências/sessão -> recuperar entitlement -> decidir rota`.
-
-Não bloquear o núcleo local aguardando internet. RevenueCat pode atualizar em background; entitlement local/cache deve ser usado até confirmação.
+- usuário com entitlement válido/cache seguro pode entrar offline;
+- ausência temporária de rede não derruba assinante legítimo;
+- usuário novo segue para onboarding;
+- setup concluído + entitlement ausente/expirado segue para paywall/expired state, não Home operacional;
+- corrupção/migração nunca autoriza apagar dados automaticamente.
 
 ## Estados
 
-- rápido: transição sem mostrar progresso;
-- carregando: barra curta indeterminada/progressiva;
-- migração local: texto específico;
-- offline: segue normalmente se storage íntegro;
-- erro recuperável: tela substitui splash com `Tentar novamente` e opção `Abrir em modo local` quando seguro;
-- corrupção/migração impossível: nunca apagar automaticamente; mostrar ação segura e orientação.
+- rápido;
+- loading;
+- migração;
+- offline seguro;
+- erro recuperável;
+- erro de storage/migração;
+- RevenueCat indisponível com cache válido;
+- entitlement expirado.
 
 ## Motion
 
-Logo pode entrar com fade + scale 0.96→1 em 180–240ms. Respeitar `prefers-reduced-motion`.
-
-## Aceite
-
-Nunca spinner infinito. Timeout tratável. Nenhuma perda de dados para “resolver” bootstrap.
+Fade + scale discreto, sem loop. Reduced Motion.
 
 ---
 
 # 2. Onboarding e apresentação do produto
 
+A implementação detalhada vive em `ONBOARDING_ACTIVATION_SPEC.md`.
+
 ## Objetivo
 
-Explicar valor e iniciar integração. Não é carrossel publicitário de 3 slides; é uma sequência curta de narrativa + passagem para criação/login + setup guiado.
+Levar o professor de `não conheço o produto` para `entendo o valor, vejo que foi adaptado à minha rotina e sei o que poderei fazer`, antes do hard paywall.
 
-## Estrutura recomendada
+Não é carrossel de 3 slides.
 
-### Tela A — proposta de valor
+## Arquitetura resumida
 
-- topo direito: `Pular` somente se isso não impedir configuração mínima;
-- heading grande: `Mais tempo para ensinar.`
-- subtítulo: benefício claro;
-- ilustração humana principal, central, ocupando ~35–40% da altura útil;
-- dois benefícios em formato editorial, não grid de quatro cards;
-- CTA primário no rodapé: `Continuar`.
+1. promessa de valor;
+2. fluxo conectado `Planejar -> Dar aula -> Registrar -> Acompanhar`;
+3. benefício recorrente;
+4. nome de exibição;
+5. etapas de ensino;
+6. disciplinas/contexto quando relevante;
+7. quantidade aproximada de turmas;
+8. principal atrito;
+9. ritmo de planejamento;
+10. objetivo imediato;
+11. resumo personalizado;
+12. primeira turma opcional/recomendada;
+13. preferência essencial de aparência quando suportada;
+14. conta/persistência quando realmente disponível;
+15. preview personalizado;
+16. micro-preview da primeira ação útil;
+17. hard paywall.
 
-### Tela B — organização real
-
-- heading: `Tudo o que você precisa, no mesmo fluxo.`
-- composição visual com agenda/plano/turma conectados;
-- texto curto explicando planejamento + chamada + registros;
-- CTA `Continuar`.
-
-### Tela C — trabalho que se adapta ao professor
-
-- heading focado em personalização;
-- demonstração de rotina/dia/semana;
-- CTA final `Começar agora`;
-- link secundário `Já tenho uma conta`.
+Branching pode reduzir a rota. Alvo: 2–4 minutos na rota principal.
 
 ## Regras
 
-- cada etapa deve comunicar uma ideia diferente;
-- não repetir exatamente `título + imagem + botão` sem variação de composição;
-- não usar mascote;
-- ilustração humana é narrativa, não personagem persistente;
-- indicadores de progresso devem ser discretos e acessíveis.
-
-## Persistência
-
-Salvar `onboardingSeen` somente quando a etapa final for concluída ou quando houver skip válido. Não marcar setup docente como concluído aqui.
+- valor antes de perguntas;
+- uma decisão principal por tela;
+- nenhuma pergunta sem consequência real;
+- não pedir dados de aluno;
+- não pedir gênero/idade sem necessidade;
+- não usar “diagnóstico” falso;
+- mencionar antes do fim que o acesso completo funciona por assinatura;
+- back preserva respostas;
+- app kill retoma fluxo;
+- não pedir notificações/câmera/arquivos/microfone sem contexto.
 
 ---
 
@@ -117,104 +128,87 @@ Salvar `onboardingSeen` somente quando a etapa final for concluída ou quando ho
 
 ## Objetivo
 
-Criar identidade de acesso sem misturar todo o setup pedagógico na mesma tela.
+Criar identidade de acesso somente se a infraestrutura de conta existir de verdade.
 
-## Layout de cima para baixo
+## Posição no fluxo
 
-1. `TopBar` com voltar.
-2. Heading `Crie sua conta`.
-3. Texto auxiliar `É rápido e gratuito.`
-4. Bloco de provedores externos, se realmente configurados: Google / Apple.
-5. Separador `ou`.
-6. `TextField` Nome completo.
-7. `TextField` E-mail.
-8. `PasswordField` Senha + mostrar/ocultar.
-9. Microcopy de requisitos de senha.
-10. Checkbox/consentimento apenas quando juridicamente necessário; links para Termos/Privacidade.
-11. CTA primário `Criar conta`.
-12. Link `Já tem uma conta? Entrar`.
+Preferência V1: depois que o usuário já entendeu valor e forneceu contexto de personalização, antes da compra quando conta for necessária para sync/recuperação.
 
-## Comportamento
+Se backend/auth ainda não existir, não construir cadastro falso. Manter perfil local e arquitetura de identidade RevenueCat conforme suporte real.
 
-- validação inline após blur/submissão;
-- e-mail normalizado sem alterar visualmente dados do usuário de forma destrutiva;
-- botão mostra loading durante envio;
-- erro de rede não apaga formulário;
-- duplicidade de e-mail oferece `Entrar`/`Recuperar acesso`.
+## Layout
+
+1. TopBar/back;
+2. `Crie sua conta`;
+3. explicação curta do benefício de recuperação/sincronização;
+4. providers externos somente se configurados;
+5. separador `ou`;
+6. nome;
+7. email;
+8. senha;
+9. requisitos;
+10. Termos/Privacidade;
+11. CTA `Criar conta`;
+12. `Já tenho uma conta`.
+
+Não usar `É rápido e gratuito` porque o núcleo do produto é por assinatura; conta pode ser gratuita, mas a frase cria ambiguidade comercial.
 
 ## Privacidade
 
-Não logar senha/e-mail em analytics. Não guardar senha em storage local em texto puro.
-
-## Observação técnica
-
-Se autenticação remota ainda não existir de fato, não criar UI falsa. Implementar somente métodos reais ou manter fluxo local explicitamente documentado.
+Nunca enviar nome/email/senha a analytics. Senha nunca em storage local plaintext.
 
 ---
 
 # 4. Login e recuperação de acesso
 
-## Tela Login
-
-Layout:
+## Login
 
 1. voltar;
-2. heading `Bem-vinda de volta!`;
-3. e-mail;
+2. `Bem-vindo(a) de volta`;
+3. email;
 4. senha;
-5. linha `Lembrar de mim` somente se comportamento real + `Esqueceu a senha?`;
+5. `Esqueceu a senha?`;
 6. CTA `Entrar`;
-7. provedores externos reais;
-8. link `Criar uma conta`.
+7. providers reais;
+8. `Criar conta`.
 
-Estados: loading, credenciais inválidas, offline, conta inexistente, provider cancelado.
+Depois do login:
 
-## Recuperação — etapa 1
+- recuperar perfil/setup;
+- recuperar entitlement;
+- se entitlement válido, seguir para setup restante/Home;
+- se não, seguir para preview/paywall sem apagar dados.
 
-- heading `Recuperar acesso`;
-- campo e-mail;
-- CTA `Enviar instruções`;
-- resposta neutra para evitar enumeração de contas quando aplicável.
+## Recuperação
 
-## Recuperação — sucesso
-
-- ícone/check discreto;
-- texto `Confira seu e-mail`;
-- `Reenviar` com cooldown;
-- `Voltar para entrar`.
-
-Nunca simular envio se backend não existir.
+- resposta neutra para evitar enumeração;
+- cooldown de reenvio;
+- nunca simular email enviado.
 
 ---
 
 # 5. Configuração inicial do perfil docente
 
-## Objetivo
+Parte integrante do onboarding adaptativo; detalhes em `ONBOARDING_ACTIVATION_SPEC.md`.
 
-Coletar somente o que personaliza a experiência e não pode ser inferido depois.
+## Coletar
 
-## Layout
+- nome de exibição;
+- etapas de atuação;
+- componente/disciplina quando relevante;
+- contexto profissional estritamente necessário.
 
-1. topo: back + progress `1 de 3` ou step indicator;
-2. heading `Conte um pouco sobre você`;
-3. texto explicando consequência da personalização;
-4. avatar/foto opcional em componente compacto;
-5. nome de exibição;
-6. forma de tratamento/identificação profissional quando necessário;
-7. `StageMultiSelect` para etapas de atuação: Infantil / Fundamental / Médio;
-8. componentes/disciplina opcional se relevante;
-9. CTA `Continuar`.
+## Não coletar no onboarding
 
-## Regras
+- escola;
+- endereço;
+- CPF;
+- gênero;
+- data de nascimento;
+- dados de alunos;
+- foto obrigatória.
 
-- foto nunca obrigatória;
-- câmera/galeria apenas após ação explícita e permissão contextual;
-- etapa de atuação do professor pode ser múltipla;
-- não confundir etapa do professor com etapa de uma turma específica.
-
-## Persistência
-
-Salvar rascunho progressivamente em `localStore`/estrutura já usada pelo setup; commit final da etapa ao avançar.
+Avatar/foto, se houver, é opcional e a permissão só aparece depois de ação explícita.
 
 ---
 
@@ -222,132 +216,125 @@ Salvar rascunho progressivamente em `localStore`/estrutura já usada pelo setup;
 
 ## Objetivo
 
-Criar contexto real para Home, chamada, planejamento e aluno.
+Criar contexto real para a preview e primeira ação, sem transformar onboarding em cadastro administrativo longo.
 
-## Layout
+## Campos mínimos
 
-1. progress `2 de 3`;
-2. heading `Vamos criar sua primeira turma`;
-3. `TextField` nome da turma;
-4. `Select` etapa de ensino;
-5. campos condicionais à etapa: ano/série/faixa etária;
-6. turno em `SegmentedControl`;
-7. ano letivo;
-8. componente curricular quando a turma precisar desse contexto;
-9. CTA `Criar turma e continuar`;
-10. secundário `Agora não` somente se app continuar funcional sem turma.
+- nome/apelido local;
+- etapa/ano;
+- turno;
+- componente quando necessário.
+
+Não pedir alunos aqui.
 
 ## Comportamento
 
-Campos mudam conforme etapa. Educação Infantil não deve exibir estruturas próprias de Médio/Fundamental sem necessidade.
+- `Criar turma` recomendado;
+- `Criar depois` permitido;
+- se pular, preview usa dados demonstrativos claramente marcados como exemplo;
+- turma real criada deve aparecer depois da compra sem recriação.
 
-## Dados
-
-Usar/adaptar `src/data/classes.js`, `ClassManager.tsx`, modelos de educação em `src/domain/education.ts`.
-
-## Aceite
-
-Ao concluir, a turma aparece de verdade em `Classes`, Home e seletores; nada de fixture temporária.
+Analytics não recebe nome da turma.
 
 ---
 
 # 7. Personalização inicial do app
 
-## Objetivo
+No onboarding, personalização significa **rotina**, não customização cosmética extensa.
 
-Definir preferências úteis, não pedir escolhas cosméticas sem impacto.
+## V1
 
-## Layout
+- tema Sistema/Claro/Escuro, se já suportado;
+- prioridade derivada de objetivo/atrito;
+- visão inicial de planejamento sugerida pelo ritmo informado.
 
-1. progress `3 de 3`;
-2. heading `Deixe o app com a sua cara`;
-3. seção `Tema`: Claro / Escuro / Sistema;
-4. seção `Tamanho do texto`: padrão / maior; evitar controles irrelevantes;
-5. seção `Notificações`: lembretes de compromissos, resumo diário, novidades do app separadas;
-6. cor de destaque somente se realmente suportada; a identidade base continua azul;
-7. CTA `Finalizar configuração`.
+## Adiar
 
-## Regras
+- cor de destaque livre;
+- dezenas de preferências visuais;
+- notificações genéricas.
 
-Notificação só deve pedir permissão do sistema no momento em que o usuário ativa um tipo que a exige; não pedir permissão no primeiro launch sem contexto.
-
-Persistir preferências e aplicá-las imediatamente.
+Permissões de notificação só aparecem no contexto de uma função real, como lembrete de trial ou ritual semanal opt-in.
 
 ---
 
 # 8. Escolha de plano
 
-## Objetivo
+## Decisão de UX
 
-Explicar opções sem pressão enganosa e antes do paywall detalhado.
+**Não criar uma tela separada obrigatória antes do paywall.**
 
-## Layout
+A escolha Anual/Mensal é um componente do próprio hard paywall. Manter o item 8 como estado conceitual/documental para arquitetura, mas a rota V1 deve reduzir fricção e apresentar seleção + benefícios + termos em uma única superfície.
 
-1. TopBar/back quando aplicável;
-2. heading `Escolha seu plano`;
-3. toggle Mensal/Anual somente se ambos existirem na loja;
-4. `PlanChoiceRow` Gratuito;
-5. `PlanChoiceCard` Pro com preço real da offering;
-6. Vitalício somente se produto real existir;
-7. comparação curta de benefícios;
-8. CTA `Continuar`;
-9. secundário `Comparar planos` ou `Continuar no gratuito` com visibilidade honesta.
+Uma tela separada só pode surgir por experimento posterior.
 
-## Billing
+## Baseline Brasil
 
-Fonte de preço: RevenueCat/loja. `subscriptionBilling.ts` deve fornecer offering/package/price. Não renderizar R$19,90 como verdade se loja retornar outro valor.
+- Pro Anual: R$ 149,90/ano, recomendado;
+- Pro Mensal: R$ 24,90/mês;
+- trial: 7 dias no anual quando elegível;
+- sem weekly;
+- sem lifetime;
+- sem free tier funcional.
 
-## Estados
-
-- loading de offerings: skeleton;
-- falha de loja: opção gratuita continua disponível; botão tentar novamente para premium;
-- restore disponível em local apropriado.
+A UI nunca hardcode esses valores: ler package/store/RevenueCat.
 
 ---
 
-# 9. Paywall / assinatura
+# 9. Hard Paywall / assinatura
 
-## Objetivo
+A anatomia completa vive em `PAYWALL_SUBSCRIPTION_SPEC.md`.
 
-Vender benefício real sem dark pattern.
+## Ordem de cima para baixo
 
-## Layout
+1. TopBar com voltar/fechar >=48px;
+2. restaurar compras claramente encontrável;
+3. headline personalizada localmente quando possível: `{Nome}, seu espaço docente está pronto.`;
+4. subheadline de transformação;
+5. 3–5 benefícios reais, ordenados pelo contexto do onboarding;
+6. seletor Anual/Mensal;
+7. timeline clara do trial quando aplicável;
+8. controle opt-in `Lembrar 2 dias antes do fim do teste`;
+9. CTA de compra específico ao estado;
+10. microcopy de preço posterior/renovação;
+11. Termos/Privacidade/como cancelar;
+12. link de suporte humano.
 
-1. hero compacto com ícone/coroa abstrata, não mascote;
-2. heading `Leve sua prática docente mais longe`;
-3. subtítulo orientado a economia de tempo;
-4. lista de 4–6 benefícios concretos, cada um em linha, sem cards individuais;
-5. plano selecionado com preço/periodicidade real;
-6. informação de renovação/cobrança clara;
-7. CTA principal `Assinar por {preço}`;
-8. `Restaurar compras`;
-9. links Termos / Privacidade;
-10. ação de recusa/voltar claramente acessível.
+## Regras comerciais
 
-## Benefícios válidos
+- anual selecionado por padrão;
+- mensal sempre visível;
+- anual total mais destacado que equivalente mensal;
+- economia calculada em runtime;
+- trial eligibility real;
+- sem desconto falso;
+- sem esconder plano após toggle;
+- sem timer/urgência falsa;
+- sem confirmshaming;
+- sem benefício ainda não implementado;
+- sem segurança/LGPD como feature premium.
 
-- planos sem limite artificial relevante;
-- relatórios/exportações profissionais;
-- reaproveitar planejamento;
-- ferramentas premium reais;
-- múltiplas turmas quando essa for a regra comercial.
+## Purchase
 
-Nunca vender segurança, LGPD ou acesso aos próprios dados.
+1. load offerings;
+2. selecionar package;
+3. CTA bloqueia double submit;
+4. purchase real;
+5. cancelamento pelo usuário = estado neutro;
+6. erro = retry seguro;
+7. sucesso somente após entitlement confirmado;
+8. persistir snapshot conforme repository/domain;
+9. então seguir para confirmação.
 
-## Compra
+## Trial reminder
 
-Ao tocar CTA:
+Só agendar após trial confirmado. Se o usuário ativou lembrete:
 
-- desabilitar duplo toque;
-- iniciar purchase no package selecionado;
-- manter contexto se usuário cancelar;
-- erro de billing com mensagem específica e retry;
-- sucesso só após entitlement confirmado;
-- persistir snapshot seguro via repository existente.
-
-## Anti-dark-pattern
-
-Sem cronômetro falso, urgência falsa, X escondido, botão gratuito invisível, preço ambíguo ou desconto inventado.
+- pedir permissão contextual;
+- agendar 48h antes com data real;
+- revalidar ao retornar;
+- oferecer aviso in-app;
+- não prometer entrega garantida pelo SO.
 
 ---
 
@@ -355,20 +342,33 @@ Sem cronômetro falso, urgência falsa, X escondido, botão gratuito invisível,
 
 ## Objetivo
 
-Confirmar resultado e orientar próximo passo.
+Transformar compra confirmada em confiança + próxima ação útil.
 
 ## Layout
 
-1. grande ícone de sucesso sem ocupar metade da tela;
-2. heading `Assinatura confirmada!`;
-3. texto com nome do plano e status;
-4. lista curta `Agora você pode…`;
-5. CTA `Ir para o início`;
-6. opcional `Criar meu primeiro plano` se setup ainda estiver incompleto.
+1. success visual V2;
+2. heading:
+   - trial: `Seu acesso Pro começou!`;
+   - compra direta: `Assinatura confirmada!`;
+   - restore: `Compra restaurada!`;
+3. resumo factual do plano/estado;
+4. se reminder ativo, confirmação do agendamento;
+5. `Agora você pode…` com 2–3 itens;
+6. CTA **personalizado pela meta do onboarding**.
+
+Exemplos:
+
+- `Criar meu primeiro plano`;
+- `Organizar minha semana`;
+- `Fazer minha primeira chamada`.
+
+Não usar `Ir para o início` como único CTA se já conhecemos uma ação de valor melhor.
 
 ## Lógica
 
-A tela só aparece após confirmação real de entitlement. Em restore, microcopy deve dizer `Compra restaurada` em vez de fingir nova assinatura.
+Tela só aparece com entitlement real ativo.
+
+Motion de sucesso não pode antecipar billing.
 
 ---
 
@@ -376,30 +376,85 @@ A tela só aparece após confirmação real de entitlement. Em restore, microcop
 
 ## Objetivo
 
-Encerrar onboarding/setup mostrando que as decisões anteriores tiveram efeito.
+Fazer o preview virar produto real e levar à ativação.
 
-## Layout
+## Transição
 
-1. ilustração humana leve ou check expressivo;
-2. heading `Tudo pronto!`;
-3. resumo em lista de conclusão:
-   - perfil configurado;
-   - primeira turma criada, se criada;
-   - preferências salvas;
-   - plano atual;
-4. cada linha usa check sem virar quatro cards;
-5. CTA principal `Ir para minha Home`.
+Preferir continuidade espacial: preview do onboarding se reorganiza/transforma no shell real quando possível. Reduced Motion usa fade/estado simples.
 
-## Comportamento
+## Home inicial
 
-Ao tocar:
+Deve refletir:
 
-- marcar setup como concluído;
-- garantir flush/persistência;
-- navegar para Home sem voltar ao wizard via back stack normal.
+- turma criada, se houver;
+- objetivo/atrito principal;
+- visão de planejamento preferida;
+- primeira ação recomendada.
 
-Se turma não foi criada, Home deve abrir em estado útil de setup pendente, não quebrar.
+Não exibir marketing para assinante recém-convertido. Entregar valor.
 
-## Gate deste volume
+## Métrica de ativação
 
-Antes de considerar entrada/onboarding prontos, anexar screenshots de: splash rápido/carregando/erro, principais etapas do onboarding, cadastro/login, setup perfil, primeira turma, personalização, escolha de plano, paywall loading/erro/sucesso e primeiro sucesso. Testar 360/390/430px, teclado, erro de storage, offline e reduced motion.
+Compra não é ativação. Registrar `first_value_action_completed` somente após uma ação docente real definida em `GROWTH_MONETIZATION_SYSTEM.md`.
+
+---
+
+# 12. Estados de assinatura que este volume precisa cobrir
+
+Mesmo que telas de gerenciamento apareçam no Volume 6, entrada precisa rotear corretamente:
+
+- active paid;
+- trial active;
+- cancelled but active until date;
+- grace period/payment issue;
+- expired;
+- restore pending/success/none;
+- offline cache valid;
+- RevenueCat unavailable;
+- offering unavailable.
+
+Nunca apagar dados por mudança de estado de assinatura.
+
+---
+
+# 13. Analytics deste volume
+
+Seguir exclusivamente `ANALYTICS_EXPERIMENTATION_RETENTION.md`.
+
+Proibido free text/PII/student data.
+
+RevenueCat = verdade financeira/experiment attribution.
+
+Aptabase EU = produto anônimo por allowlist, via adapter interno, após revisão final da implementação.
+
+---
+
+# 14. Gate deste volume
+
+Antes de considerar entrada/onboarding/assinatura prontos, anexar:
+
+- splash rápido/loading/error;
+- gravação do onboarding principal;
+- retomada após fechar/reabrir app;
+- preview personalizada;
+- 360/390/430;
+- keyboard/focus;
+- Reduced Motion;
+- offline;
+- paywall offering loading/error;
+- anual com trial elegível;
+- anual sem trial;
+- mensal;
+- purchase user-cancelled;
+- purchase error;
+- entitlement success;
+- restore success/none;
+- cancelled-but-active;
+- expired/read-only recovery;
+- reminder permission allow/deny;
+- evidência de preço/moeda reais da store;
+- lista de eventos analytics + properties;
+- confirmação de zero PII/student/free-text em analytics;
+- Android real.
+
+O volume falha mesmo funcionalmente correto se o onboarding parecer interrogatório, o paywall parecer genérico/manipulativo ou a compra não tiver clareza suficiente.
