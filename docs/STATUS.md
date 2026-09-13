@@ -139,3 +139,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - As cinco etapas, escolha `gratuito`/`pro`, persistência de `assinatura:interesse`, pular, voltar e entrada no wizard permanecem conectadas ao fluxo existente.
 - O Visual Lab expõe `?v2-preview=onboarding&width=390` para comparação em larguras Android.
 - Estado: `IN PROGRESS`; falta validar o fluxo completo de primeiro uso com o wizard, conta e billing reais.
+
+## Android 1.0 — splash V2 em andamento
+
+- `src/v2/screens/SplashV2.tsx` remove a composição baseada em mascote e apresenta a marca com símbolo editorial, progresso local e princípios do produto.
+- O roteamento real continua chamando `onDone` para respeitar Home, wizard ou onboarding já configurados.
+- O Visual Lab expõe `?v2-preview=splash&width=390`; a entrada de teste segue para o onboarding V2.
+- Estado: `IN PROGRESS`; falta validar a cadeia completa de primeiro uso no Android com restauração de estado.

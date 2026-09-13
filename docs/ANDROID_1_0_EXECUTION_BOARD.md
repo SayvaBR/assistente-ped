@@ -97,7 +97,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 ## Milestone M5 — Onboarding, conta e monetização
 
-- Splash — `TODO`
+- Splash — `IN PROGRESS`
 - Onboarding — `IN PROGRESS`
 - Cadastro — `TODO`
 - Login / recuperação — `TODO`

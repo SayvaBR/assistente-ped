@@ -42,6 +42,7 @@ import { SubscriptionScreen } from "../screens/SubscriptionScreen";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
+import { SplashV2 } from "../v2/screens/SplashV2";
 import { StudentScreen } from "../screens/StudentScreen.js";
 import { TeacherProfileScreen } from "../screens/TeacherProfileScreen.js";
 import { ToolsScreen } from "../screens/ToolsScreen.js";
@@ -1505,7 +1506,7 @@ function App() {
             },
           }),
         o === "splash" &&
-          React.createElement(SplashScreen, {
+          React.createElement(SplashV2, {
             onDone: () => u(yt ? "home" : dt ? "wizard" : "onboarding"),
           }),
         o === "onboarding" &&

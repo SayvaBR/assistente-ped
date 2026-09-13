@@ -15,6 +15,7 @@ import { ReportsV2 } from '../screens/ReportsV2';
 import { SettingsV2 } from '../screens/SettingsV2';
 import { AppearanceV2 } from '../screens/AppearanceV2';
 import { OnboardingV2 } from '../screens/OnboardingV2';
+import { SplashV2 } from '../screens/SplashV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -135,7 +136,9 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          {activeScreen === 'onboarding' ? (
+          {activeScreen === 'splash' ? (
+            <SplashV2 autoAdvance={false} onDone={() => setActiveScreen('onboarding')} />
+          ) : activeScreen === 'onboarding' ? (
             <OnboardingV2 storage={previewStorage} onDone={() => setActiveScreen('home')} />
           ) : activeScreen === 'attendance' ? (
             <FrequencyV2 data={frequencyStateData} onBack={() => setActiveScreen('home')} onRetry={() => undefined} onSave={() => undefined} />
