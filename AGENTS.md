@@ -6,9 +6,7 @@ Este arquivo contém regras obrigatórias para qualquer agente de código que tr
 
 Levar o Assistente Pedagógico até Android 1.0 funcional, estável, seguro, publicável e com identidade visual própria forte.
 
-A aplicação legada é **baseline funcional, não baseline de design**.
-
-A partir da V2, o objetivo é trabalhar em modo **visual-first + clean room**, seguindo `docs/CODEX_LOVABLE_MODE.md` e as skills do projeto.
+A aplicação legada é **baseline funcional, não baseline de design**. A V2 trabalha em modo **visual-first + clean room**, seguindo `docs/CODEX_LOVABLE_MODE.md` e as skills do projeto.
 
 ## Stack
 
@@ -17,9 +15,7 @@ A partir da V2, o objetivo é trabalhar em modo **visual-first + clean room**, s
 - Vite
 - Capacitor Android
 
-Não migrar de stack sem decisão explícita de produto.
-
-A stack atual é suficiente para reproduzir os targets visuais aprovados. Não usar a stack como justificativa para manter layout antigo ou UI genérica.
+Não migrar de stack sem decisão explícita de produto. A stack atual é suficiente para reproduzir os targets aprovados e adaptar a interface a diferentes Androids.
 
 ## Autoridade
 
@@ -29,7 +25,7 @@ Para UI/UX, obedecer nesta ordem:
 2. `docs/DESIGN_AUTHORITY.md`;
 3. este `AGENTS.md`;
 4. `docs/CODEX_LOVABLE_MODE.md`;
-5. skills `.agents/skills/assistente-pedagogico-rapid-ui/` e `.agents/skills/assistente-pedagogico-ui-screen-craft/`;
+5. skills do projeto em `.agents/skills/`;
 6. `docs/design-v2/` e screen spec correspondente;
 7. `docs/VISUAL_IDENTITY_V2.md`;
 8. legado.
@@ -38,9 +34,7 @@ Screenshot/mockup explicitamente aprovado é **target visual**, não inspiraçã
 
 ## Git preflight obrigatório
 
-O Codex deve consultar o Git remoto antes de começar a implementar.
-
-Executar:
+Antes de implementar:
 
 ```bash
 git status
@@ -50,9 +44,7 @@ git log -1 --oneline
 git log -1 --oneline origin/$(git branch --show-current)
 ```
 
-Se a branch local estiver atrás, sincronizar primeiro.
-
-Não implementar por horas em estado local desatualizado.
+Se a branch local estiver atrás, sincronizar primeiro. Não trabalhar por horas em estado local desatualizado.
 
 Antes de encerrar uma rodada:
 
@@ -66,9 +58,9 @@ Toda evidência visual deve informar branch e commit.
 
 ## V2 Clean Room
 
-Toda nova interface V2 deve nascer em `src/v2/`.
+Toda nova interface V2 nasce em `src/v2/`.
 
-A camada V2 pode consumir lógica/dados do legado, mas não sua arquitetura visual.
+A V2 pode consumir lógica e dados do legado, mas não sua arquitetura visual.
 
 ### Pode reutilizar
 
@@ -90,9 +82,55 @@ A camada V2 pode consumir lógica/dados do legado, mas não sua arquitetura visu
 - tokens V1;
 - `Card`, `IconTile` ou equivalentes herdados da V1.
 
-Se lógica estiver presa a componente V1, extrair a lógica para camada neutra e conectar à V2.
+Se lógica estiver presa a componente V1, extrair a lógica para camada neutra e conectar à V2. Não deformar a V2 para caber no legado.
 
-Não deformar a V2 para caber no legado.
+## Android adaptativo — regra obrigatória
+
+**390 px é apenas um viewport de comparação visual quando o target foi produzido nessa largura. Não é a largura do aplicativo.**
+
+A UI de produção deve ser fluida e funcionar entre larguras de Android, sem depender de um modelo específico de aparelho.
+
+Durante o trabalho visual, 390 pode ser usado como **anchor** para comparar rapidamente com a referência. Antes de Design Review, validar uma matriz representativa:
+
+- 320 px — stress test estreito;
+- 360 px — Android compacto comum;
+- 384/390 px — faixa intermediária e viewport de referência;
+- 411/412 px — Android amplo comum;
+- 432 px — Android amplo moderno;
+- 480 px — stress test de telefone largo;
+- 600 px ou maior quando a tela também precisar funcionar em tablet/foldable.
+
+Não criar layouts especiais para cada número. Construir **um layout responsivo contínuo** que se comporte corretamente entre eles.
+
+### Texto e conteúdo
+
+- conteúdo essencial não pode ser cortado com `ellipsis`, `line-clamp` ou altura fixa;
+- títulos, nomes de aula, labels, CTAs e mensagens de estado devem quebrar linha quando necessário;
+- truncamento só é aceitável para metadata secundária quando a informação completa estiver acessível por outro caminho;
+- botão deve acomodar texto real em PT-BR sem cortar palavras;
+- não reduzir fonte até ficar ilegível para “fazer caber”;
+- testar crescimento de texto equivalente a pelo menos 100%, 115%, 130% e 150% nas superfícies críticas;
+- evitar `white-space: nowrap` em conteúdo essencial;
+- nenhum fluxo principal pode depender de uma frase artificialmente curta para não quebrar o layout.
+
+### Layout
+
+Preferir:
+
+- `flex`, `grid`, `minmax()`, `clamp()` e container/media queries quando úteis;
+- largura relativa com `max-width` apenas quando houver razão de leitura/composição;
+- altura automática para superfícies com texto;
+- `min-width: 0` em filhos flex/grid quando necessário;
+- `env(safe-area-inset-*)` para safe areas;
+- componentes que mudam composição quando falta espaço, em vez de apenas encolher.
+
+Proibido:
+
+- root da aplicação com largura fixa de 390 px;
+- cards/hero com alturas rígidas que cortem copy;
+- scroll horizontal acidental;
+- esconder ação essencial porque a tela ficou estreita;
+- tratar screenshot como moldura fixa da aplicação.
 
 ## Fluxo visual-first obrigatório
 
@@ -101,16 +139,18 @@ Para tela com target claro:
 ```text
 TARGET
 -> PRIMEIRA COMPOSIÇÃO V2
--> PRIMEIRO RENDER 390px
+-> RENDER NO VIEWPORT-ÂNCORA DO TARGET (390px quando aplicável)
 -> COMPARAÇÃO LADO A LADO
 -> CORRIGIR AS 5 MAIORES DIFERENÇAS
--> 360/390/430
+-> VALIDAR MATRIZ ANDROID RESPONSIVA
 -> CONECTAR DADOS REAIS
 -> ESTADOS/OFFLINE/ERROS
 -> MOTION/HAPTICS
--> TESTES/ANDROID
+-> TESTES/ANDROID REAL
 -> DESIGN REVIEW
 ```
+
+O viewport-âncora existe para acelerar comparação, não para limitar responsividade.
 
 Não fazer antes do primeiro render:
 
@@ -157,30 +197,11 @@ Regras:
 - hierarquia clara;
 - cards apenas quando representam objetos reais.
 
-Rejeitar como linguagem dominante:
+Rejeitar como linguagem dominante dashboard SaaS, fintech/editorial corporativo, grid 2×N de atalhos, card branco para tudo, uppercase excessivo, Material default, Tailwind starter look, glassmorphism, gradiente genérico, bento decorativo e o padrão repetido `ícone + título + subtítulo + chevron`.
 
-- dashboard SaaS;
-- fintech/editorial corporativo;
-- grid 2×N de atalhos;
-- card branco para tudo;
-- uppercase excessivo;
-- Material default;
-- Tailwind starter look;
-- glassmorphism;
-- gradiente genérico;
-- bento decorativo;
-- `ícone + título + subtítulo + chevron` repetido;
-- estética de template de IA.
-
-Anti-card não significa anti-surface.
-Profissional não significa corporativo.
-Playful não significa infantil.
+Anti-card não significa anti-surface. Profissional não significa corporativo. Playful não significa infantil.
 
 ## Motion
-
-Para motion, consultar os documentos V2 correspondentes.
-
-Regras mínimas:
 
 - motion explica causalidade/estado;
 - nada de animação gratuita;
@@ -191,29 +212,11 @@ Regras mínimas:
 
 ## O que é imutável
 
-Não quebrar:
-
-- integridade e migração de dados;
-- privacidade/LGPD;
-- segurança;
-- dados de alunos e dados pedagógicos;
-- billing/RevenueCat;
-- storage;
-- backup/restauração;
-- funcionamento offline do núcleo;
-- regras pedagógicas;
-- BNCC;
-- acessibilidade;
-- direitos de exportação/portabilidade/exclusão;
-- fluxo de assinatura legítimo.
+Não quebrar integridade/migração de dados, privacidade/LGPD, segurança, dados pedagógicos/alunos, billing/RevenueCat, storage, backup/restauração, funcionamento offline, regras pedagógicas, BNCC, acessibilidade e direitos de exportação/portabilidade/exclusão.
 
 Dados pedagógicos e de alunos não podem ser enviados a analytics.
 
 ## Growth/billing
-
-Seguir os documentos Growth V2 quando disponíveis.
-
-Baseline atual:
 
 - hard paywall após ativação guiada;
 - mensal e anual visíveis;
@@ -227,7 +230,7 @@ Baseline atual:
 
 Obrigatório:
 
-- touch target >= 48px;
+- touch target >= 48 px;
 - contraste adequado;
 - foco perceptível;
 - texto escalável;
@@ -235,7 +238,8 @@ Obrigatório:
 - safe areas;
 - Reduced Motion;
 - alternativa para gesto;
-- labels acessíveis.
+- labels acessíveis;
+- nenhuma ação essencial perdida por responsividade.
 
 ## Testes e evidência
 
@@ -243,6 +247,7 @@ Antes de marcar pronto, executar o que se aplicar:
 
 ```text
 pnpm run check:v2-boundary
+pnpm run test:v2-responsive
 pnpm test
 pnpm build
 node scripts/android-sync.mjs
@@ -251,22 +256,19 @@ node scripts/android-sync.mjs
 Para UI importante, evidência mínima:
 
 - target;
-- screenshot antes/depois;
-- 360px;
-- 390px;
-- 430px;
+- screenshot no viewport-âncora para fidelidade;
+- matriz Android responsiva representativa;
 - estados relevantes;
 - loading/empty/error/offline quando aplicável;
 - gravação de motion relevante;
 - Reduced Motion;
 - branch e commit;
-- build/testes executados.
+- build/testes executados;
+- confirmação de ausência de overflow horizontal e truncamento de copy essencial.
 
 ## Aprovação
 
-O agente nunca aprova a própria tela.
-
-Ao chegar em uma candidata real, escrever:
+O agente nunca aprova a própria tela. Ao chegar em candidata real, escrever:
 
 `READY FOR DESIGN REVIEW — <NOME DA TELA>`
 
