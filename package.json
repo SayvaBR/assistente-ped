@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc --noEmit && vite build",
+    "check:v2-boundary": "node scripts/check-v2-boundary.mjs",
+    "build": "pnpm run check:v2-boundary && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "test:e2e": "playwright test --config playwright.config.ts",
