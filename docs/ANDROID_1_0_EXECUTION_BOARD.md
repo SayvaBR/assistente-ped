@@ -120,7 +120,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Configurações — `IN PROGRESS`
 - Aparência/acessibilidade — `IN PROGRESS`
 - Privacidade/segurança — `IN PROGRESS`
-- Backup/sync — `TODO`
+- Backup/sync — `IN PROGRESS`
 - Ajuda/suporte — `TODO`
 - Sobre — `TODO`
 - Gerenciar assinatura — `TODO`

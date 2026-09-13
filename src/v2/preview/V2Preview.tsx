@@ -20,6 +20,7 @@ import { SetupWizardV2 } from '../screens/SetupWizardV2';
 import { NewStudentV2 } from '../screens/NewStudentV2';
 import { SubscriptionV2 } from '../screens/SubscriptionV2';
 import { PrivacyV2 } from '../screens/PrivacyV2';
+import { BackupV2 } from '../screens/BackupV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -140,7 +141,9 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          {activeScreen === 'privacy' ? (
+          {activeScreen === 'backup' ? (
+            <BackupV2 storage={previewStorage} onBack={() => setActiveScreen('privacy')} />
+          ) : activeScreen === 'privacy' ? (
             <PrivacyV2 onBack={() => setActiveScreen('more')} goTo={(route) => route === 'backup' ? undefined : undefined} />
           ) : activeScreen === 'subscription' ? (
             <SubscriptionV2 onBack={() => setActiveScreen('more')} goTo={() => undefined} />
