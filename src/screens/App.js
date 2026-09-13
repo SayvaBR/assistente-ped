@@ -1001,10 +1001,10 @@ function App() {
                                                               ? (ht =
                                                                   React.createElement(
                                                                     QuickRecordScreen,
-                                                                     {
-                                                                       alunos:
-                                                                         Ka,
-                                                                       onBack:
+                                                                    {
+                                                                      alunos:
+                                                                        Ka,
+                                                                      onBack:
                                                                         _t,
                                                                       goTo: zt,
                                                                     },

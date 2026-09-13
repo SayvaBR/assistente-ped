@@ -12,19 +12,19 @@ const students = [
   { id: 'qa-davi', nome: 'Davi Alves' },
 ];
 const seed = {
-  'perfil:professor': JSON.stringify({ id: 'qa-prof', nome: 'Marina', tratamento: 'professora' }),
+  'perfil:professor': JSON.stringify({ id: 'qa-prof', nome: 'Marina', tratamento: 'professora', foto: '/reference-art/home-teacher-avatar.png' }),
   'turmas:lista': JSON.stringify([{ id: classId, nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Manhã', professorId: 'qa-prof', criadoEm: new Date().toISOString() }]),
   'turmas:ativa': classId,
   [`turma:${classId}:alunos`]: JSON.stringify(students),
   [`turma:${classId}:planejamento:${today}`]: JSON.stringify([{ id: 'qa-plan', tituloTema: 'Ciclo da água', status: 'pronto', turmaId: classId, dataKey: today, momentos: [{ horario: '09:30', titulo: 'Experimento do ciclo da água', descricao: 'Observar, registrar e conversar sobre as mudanças de estado.', tipo: 'historia' }] }]),
   [`turma:${classId}:chamada:${today}`]: JSON.stringify({ 'qa-ana': 'presente', 'qa-bruno': 'presente', 'qa-camila': 'falta' }),
-  [`turma:${classId}:agenda:eventos`]: JSON.stringify([{ id: 'qa-event-1', turmaId: classId, data: today, hora: '09:30', titulo: 'Experimento do ciclo da água', tipo: 'aula', concluido: false, criadoEm: new Date().toISOString() }, { id: 'qa-event-2', turmaId: classId, data: today, hora: '14:00', titulo: 'Revisar registros da turma', tipo: 'planejamento', concluido: false, criadoEm: new Date().toISOString() }]),
+  [`turma:${classId}:agenda:eventos`]: JSON.stringify([{ id: 'qa-event-1', turmaId: classId, data: today, hora: '09:30', titulo: 'Experimento do ciclo da água', tipo: 'evento', concluido: false, criadoEm: new Date().toISOString() }, { id: 'qa-event-2', turmaId: classId, data: today, hora: '14:00', titulo: 'Revisar registros da turma', tipo: 'tarefa', concluido: false, criadoEm: new Date().toISOString() }]),
 };
 
-async function open(browser, url, width, reducedMotion = 'no-preference') {
+async function open(browser, url, width, reducedMotion = 'no-preference', entries = seed) {
   const context = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion });
   const page = await context.newPage();
-  await page.addInitScript((entries) => { for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value); }, seed);
+  await page.addInitScript((entries) => { for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value); }, entries);
   await page.goto(url);
   return { context, page };
 }
@@ -61,7 +61,17 @@ async function capture() {
     await page.waitForTimeout(1500);
     metrics.push(await assertViewport(page, width, 'Home'));
     await page.screenshot({ path: `${output}/after-home-${width}.png` });
-    await page.getByRole('button', { name: /^Fazer chamada/ }).click();
+    if (width === 390) {
+      await page.screenshot({ path: `${output}/after-home-${width}-full.png`, fullPage: true });
+      await page.locator('.v2-agenda-block').evaluate((element) => element.scrollIntoView({ block: 'center' }));
+      await page.screenshot({ path: `${output}/after-home-agenda-${width}.png` });
+      await page.evaluate(() => window.scrollTo(0, 0));
+    }
+    await page.getByRole('button', { name: /Fazer chamada/ }).click({ timeout: 5000 });
+    if (width === 390) {
+      await page.waitForTimeout(60);
+      await page.screenshot({ path: `${output}/after-attendance-loading-${width}.png` });
+    }
     await page.waitForTimeout(250);
     metrics.push(await assertViewport(page, width, 'Chamada'));
     await page.screenshot({ path: `${output}/after-attendance-${width}.png` });
@@ -77,17 +87,45 @@ async function capture() {
   const reduced = await open(browser, 'http://127.0.0.1:5173/', 390, 'reduce');
   await reduced.page.waitForTimeout(160);
   await reduced.page.screenshot({ path: `${output}/after-splash-reduced-motion-390.png` });
+  await reduced.page.waitForTimeout(650);
+  await reduced.page.screenshot({ path: `${output}/after-home-reduced-motion-390.png` });
   await reduced.context.close();
 
-  const error = await open(browser, 'http://127.0.0.1:5173/', 390);
+  const offline = await open(browser, 'http://127.0.0.1:5173/', 390);
+  await offline.page.waitForTimeout(1500);
+  await offline.page.evaluate(() => { Object.defineProperty(window.navigator, 'onLine', { configurable: true, get: () => false }); window.dispatchEvent(new Event('offline')); });
+  await offline.page.waitForTimeout(80);
+  await offline.page.screenshot({ path: `${output}/after-home-offline-390.png`, fullPage: true });
+  await offline.context.close();
+
+  const errorSeed = { ...seed, [`turma:${classId}:agenda:eventos`]: '{invalid' };
+  const error = await open(browser, 'http://127.0.0.1:5173/', 390, 'no-preference', errorSeed);
   await error.page.waitForTimeout(1500);
-  await error.page.evaluate((key) => localStorage.setItem(key, '{invalid'), `turma:${classId}:agenda:eventos`);
-  await error.page.reload();
-  await error.page.waitForTimeout(1500);
+  await error.page.locator('.v2-agenda-block').evaluate((element) => element.scrollIntoView({ block: 'center' }));
   await error.page.screenshot({ path: `${output}/after-home-error-390.png` });
   await error.context.close();
   fs.writeFileSync(`${output}/viewport-metrics.json`, JSON.stringify(metrics, null, 2));
   await browser.close();
 }
 
-capture().catch((error) => { console.error(error); process.exitCode = 1; });
+async function recordMotion() {
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, recordVideo: { dir: output } });
+  const page = await context.newPage();
+  await page.addInitScript((entries) => { for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value); }, seed);
+  await page.goto('http://127.0.0.1:5173/');
+  await page.waitForTimeout(1500);
+  await page.getByRole('button', { name: /Fazer chamada/ }).click({ timeout: 5000 });
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: /Marcar Ana Clara como Presente/ }).click({ timeout: 5000 });
+  await page.waitForTimeout(350);
+  await page.getByRole('button', { name: 'Voltar', exact: true }).click({ timeout: 5000 });
+  await page.waitForTimeout(500);
+  const video = page.video();
+  await context.close();
+  const videoPath = await video.path();
+  fs.renameSync(videoPath, `${output}/motion-v2.webm`);
+  await browser.close();
+}
+
+capture().then(recordMotion).catch((error) => { console.error(error); process.exitCode = 1; });

@@ -8,3 +8,4 @@ android/**/build/
 test-results/
 playwright-report/
 tmp/
+docs/qa/design-v2/page@*.webm

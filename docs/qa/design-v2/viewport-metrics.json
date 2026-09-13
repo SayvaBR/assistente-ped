@@ -13,69 +13,81 @@
       },
       {
         "tag": "BUTTON",
-        "width": 97,
-        "height": 48,
-        "label": "Abrir turma"
+        "width": 141,
+        "height": 52,
+        "label": "Fazer chamada"
       },
       {
         "tag": "BUTTON",
-        "width": 156,
-        "height": 50,
-        "label": "Continuar plano"
+        "width": 141,
+        "height": 52,
+        "label": "Ver plano"
       },
       {
         "tag": "BUTTON",
-        "width": 328,
-        "height": 72,
-        "label": "Fazer chamada2 presentes · 1 f"
-      },
-      {
-        "tag": "BUTTON",
-        "width": 328,
-        "height": 72,
+        "width": 160,
+        "height": 112,
         "label": "Registrar observaçãoDeixe o co"
       },
       {
         "tag": "BUTTON",
-        "width": 140,
-        "height": 48,
-        "label": "Ver planejamento"
+        "width": 160,
+        "height": 112,
+        "label": "CompromissosVeja o que vem dep"
       },
       {
         "tag": "BUTTON",
-        "width": 179,
-        "height": 56,
-        "label": "Tentar novamente"
+        "width": 101,
+        "height": 48,
+        "label": "Ver agenda"
       },
       {
         "tag": "BUTTON",
-        "width": 91,
+        "width": 306,
+        "height": 104,
+        "label": "09:30Experimento do ciclo da á"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 306,
+        "height": 104,
+        "label": "14:00Revisar registros da turm"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 90,
         "height": 48,
-        "label": "Ver todos"
+        "label": "Resolver"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Ver planos"
       },
       {
         "tag": "BUTTON",
         "width": 328,
-        "height": 66,
-        "label": "Ciclo da água09:30Rascunho"
+        "height": 68,
+        "label": "Ciclo da água09:30rascunho"
       },
       {
         "tag": "BUTTON",
-        "width": 300,
-        "height": 98,
-        "label": "Frequência registradaChamada ·"
+        "width": 328,
+        "height": 56,
+        "label": "Frequência registradaChamada13"
       },
       {
         "tag": "BUTTON",
-        "width": 300,
-        "height": 74,
+        "width": 328,
+        "height": 56,
         "label": "Planejamento atualizadoPlaneja"
       },
       {
         "tag": "BUTTON",
-        "width": 300,
-        "height": 73,
-        "label": "Turma atualizadaTurma · 31 de "
+        "width": 328,
+        "height": 56,
+        "label": "Turma atualizadaTurma31 de dez"
       },
       {
         "tag": "BUTTON",
@@ -259,69 +271,81 @@
       },
       {
         "tag": "BUTTON",
-        "width": 97,
-        "height": 48,
-        "label": "Abrir turma"
+        "width": 144,
+        "height": 52,
+        "label": "Fazer chamada"
       },
       {
         "tag": "BUTTON",
-        "width": 156,
-        "height": 50,
-        "label": "Continuar plano"
+        "width": 144,
+        "height": 52,
+        "label": "Ver plano"
       },
       {
         "tag": "BUTTON",
-        "width": 342,
-        "height": 72,
-        "label": "Fazer chamada2 presentes · 1 f"
-      },
-      {
-        "tag": "BUTTON",
-        "width": 342,
-        "height": 72,
+        "width": 165,
+        "height": 118,
         "label": "Registrar observaçãoDeixe o co"
       },
       {
         "tag": "BUTTON",
-        "width": 140,
-        "height": 48,
-        "label": "Ver planejamento"
+        "width": 165,
+        "height": 118,
+        "label": "CompromissosVeja o que vem dep"
       },
       {
         "tag": "BUTTON",
-        "width": 179,
-        "height": 56,
-        "label": "Tentar novamente"
+        "width": 101,
+        "height": 48,
+        "label": "Ver agenda"
       },
       {
         "tag": "BUTTON",
-        "width": 91,
+        "width": 308,
+        "height": 104,
+        "label": "09:30Experimento do ciclo da á"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 308,
+        "height": 104,
+        "label": "14:00Revisar registros da turm"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 94,
         "height": 48,
-        "label": "Ver todos"
+        "label": "Resolver"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Ver planos"
       },
       {
         "tag": "BUTTON",
         "width": 342,
-        "height": 66,
-        "label": "Ciclo da água09:30Rascunho"
+        "height": 68,
+        "label": "Ciclo da água09:30rascunho"
       },
       {
         "tag": "BUTTON",
-        "width": 314,
-        "height": 98,
-        "label": "Frequência registradaChamada ·"
+        "width": 342,
+        "height": 56,
+        "label": "Frequência registradaChamada13"
       },
       {
         "tag": "BUTTON",
-        "width": 314,
-        "height": 74,
+        "width": 342,
+        "height": 56,
         "label": "Planejamento atualizadoPlaneja"
       },
       {
         "tag": "BUTTON",
-        "width": 314,
-        "height": 73,
-        "label": "Turma atualizadaTurma · 31 de "
+        "width": 342,
+        "height": 56,
+        "label": "Turma atualizadaTurma31 de dez"
       },
       {
         "tag": "BUTTON",
@@ -505,69 +529,81 @@
       },
       {
         "tag": "BUTTON",
-        "width": 97,
-        "height": 48,
-        "label": "Abrir turma"
+        "width": 164,
+        "height": 52,
+        "label": "Fazer chamada"
       },
       {
         "tag": "BUTTON",
-        "width": 156,
-        "height": 50,
-        "label": "Continuar plano"
+        "width": 164,
+        "height": 52,
+        "label": "Ver plano"
       },
       {
         "tag": "BUTTON",
-        "width": 382,
-        "height": 72,
-        "label": "Fazer chamada2 presentes · 1 f"
-      },
-      {
-        "tag": "BUTTON",
-        "width": 382,
-        "height": 72,
+        "width": 185,
+        "height": 118,
         "label": "Registrar observaçãoDeixe o co"
       },
       {
         "tag": "BUTTON",
-        "width": 140,
-        "height": 48,
-        "label": "Ver planejamento"
+        "width": 185,
+        "height": 118,
+        "label": "CompromissosVeja o que vem dep"
       },
       {
         "tag": "BUTTON",
-        "width": 179,
-        "height": 56,
-        "label": "Tentar novamente"
+        "width": 101,
+        "height": 48,
+        "label": "Ver agenda"
       },
       {
         "tag": "BUTTON",
-        "width": 91,
+        "width": 348,
+        "height": 104,
+        "label": "09:30Experimento do ciclo da á"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 348,
+        "height": 104,
+        "label": "14:00Revisar registros da turm"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 94,
         "height": 48,
-        "label": "Ver todos"
+        "label": "Resolver"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Ver planos"
       },
       {
         "tag": "BUTTON",
         "width": 382,
-        "height": 66,
-        "label": "Ciclo da água09:30Rascunho"
+        "height": 68,
+        "label": "Ciclo da água09:30rascunho"
       },
       {
         "tag": "BUTTON",
-        "width": 354,
-        "height": 74,
-        "label": "Frequência registradaChamada ·"
+        "width": 382,
+        "height": 56,
+        "label": "Frequência registradaChamada13"
       },
       {
         "tag": "BUTTON",
-        "width": 354,
-        "height": 74,
+        "width": 382,
+        "height": 56,
         "label": "Planejamento atualizadoPlaneja"
       },
       {
         "tag": "BUTTON",
-        "width": 354,
-        "height": 73,
-        "label": "Turma atualizadaTurma · 31 de "
+        "width": 382,
+        "height": 56,
+        "label": "Turma atualizadaTurma31 de dez"
       },
       {
         "tag": "BUTTON",

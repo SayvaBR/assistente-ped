@@ -184,6 +184,12 @@ Deve responder rapidamente: o que acontece agora, o que precisa de atenção e q
 
 Direção aprovada: contexto do professor -> próxima aula como elemento dominante -> ações contextuais -> agenda/planejamento -> pendências -> atividade recente -> navegação inferior. A arquitetura pode abandonar completamente o layout atual se houver solução melhor.
 
+### Override explícito mais recente — replicação Lovable
+
+Em 13/09/2026, o usuário aprovou o visual e os fluxos observados no projeto Lovable Pixel Perfect e determinou a replicação no app existente. Para a Home em implementação, essa decisão redefine a composição de referência: saudação e data, `Aula em foco` com metadados e ações `Fazer chamada`/`Ver plano`, `Atalhos do dia` com `Registrar observação`/`Compromissos`, agenda temporal e BottomNavigation com cinco destinos. O código baixado em `lovable-pixel-perfect-source` é referência de composição, tipografia, escala, proporções e interação.
+
+Essa decisão não autoriza substituir repositories, persistência, domínio, offline, billing, LGPD ou navegação funcional pelo scaffolding do Lovable. A apresentação deve ser portada e ligada aos contratos reais do Assistente Pedagógico. Não usar uma ilustração gerada como substituto da composição nem gastar iterações de design em arte enquanto a equivalência estrutural, tipográfica e de fluxo não estiver validada.
+
 ## Monetização — decisão atual
 
 A hipótese antiga `Gratuito / Pro R$19,90 / Vitalício` está **revogada** e não pode bloquear a implementação atual.
