@@ -71,6 +71,12 @@ O destino contextual `compromissos` da Home agora monta `CommitmentsV2` em `src/
 
 Evidência local: `docs/qa/clean-room/commitments-v2-412.png`. O E2E `e2e/v2-commitments-flow.pw.ts` cobre render, criação e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, revisão completa de estados e revisão visual externa.
 
+## Superfície em construção — Planejamento diário V2
+
+O destino `Home V2 -> Ver plano` agora monta `PlanningDayV2` em `src/v2/`, com timeline de momentos, troca de dia, estados loading/empty/error/offline, abertura do editor de plano existente e criação pelo domínio `newLessonPlan`. A leitura usa `loadPlansByDate`; Dia/Semana/Mês permanecem explicitamente em migração sequencial.
+
+Evidência local: `docs/qa/clean-room/planning-day-v2-412.png`. O E2E `e2e/v2-planning-day-flow.pw.ts` cobre render e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta integrar Semana/Mês, hardening Android real e revisão visual externa.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

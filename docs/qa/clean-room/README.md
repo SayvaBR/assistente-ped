@@ -54,3 +54,9 @@ A primeira composição em 412px cobre o picker de aluno e o formulário de obse
 A primeira composição em 412px usa uma timeline diária com contexto de turma, seletor de data, compromissos semânticos, concluir/reabrir, excluir e editor de novo compromisso. A integração de produção preserva os contratos locais `Cp`/`Xf`.
 
 ![Compromissos V2 — 412px](commitments-v2-412.png)
+
+## Planejamento diário V2 — primeiro render
+
+A primeira composição do planejamento usa uma timeline de momentos, troca de dia, abertura do plano existente e criação de novo plano, com os dados reais do repositório de planejamento.
+
+![Planejamento diário V2 — 412px](planning-day-v2-412.png)

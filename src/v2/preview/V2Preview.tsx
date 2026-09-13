@@ -3,6 +3,8 @@ import { HomeV2, type HomeV2Data } from '../screens/HomeV2';
 import { FrequencyV2, type FrequencyV2Data } from '../screens/FrequencyV2';
 import { ObservationV2 } from '../screens/ObservationV2';
 import { CommitmentsV2, type CommitmentV2Event } from '../screens/CommitmentsV2';
+import { PlanningDayV2 } from '../screens/PlanningDayV2';
+import type { LessonPlan } from '../../domain/models';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -69,6 +71,10 @@ const commitmentsPreviewEvents: CommitmentV2Event[] = [
   { id: 'meeting', titulo: 'Reunião pedagógica', tipo: 'reuniao', data: '2024-08-28', hora: '10:00', observacoes: 'Sala dos professores' },
   { id: 'family', titulo: 'Atendimento à família', tipo: 'lembrete', data: '2024-08-28', hora: '15:00', observacoes: 'João Pedro' },
 ];
+const planningPreviewPlans: LessonPlan[] = [
+  { id: 'plan-math', turmaId: 'preview', dataKey: '2024-08-28', tituloTema: 'Frações: conceitos e prática', horaInicio: '10:00', horaFim: '10:50', status: 'concluido', objetivoGeral: 'Representar frações em diferentes situações.', objetivosEspecificos: [], bncc: { habilidades: ['EF05MA03'] }, momentos: [{ id: 'moment-math', titulo: 'Matemática', horario: '10:00', duracaoMin: 50, descricao: '5º Ano A · Sala 1', tipo: 'aula' }], recursos: '', avaliacao: '', inclusao: '', observacoes: '', posAula: { comoFoi: null, observacoesPosAula: '' }, criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' },
+  { id: 'plan-science', turmaId: 'preview', dataKey: '2024-08-28', tituloTema: 'Experimento do ciclo da água', horaInicio: '13:00', horaFim: '13:50', status: 'rascunho', objetivoGeral: 'Observar mudanças de estado.', objetivosEspecificos: [], bncc: { habilidades: [] }, momentos: [{ id: 'moment-science', titulo: 'Ciências', horario: '13:00', duracaoMin: 50, descricao: '5º Ano A · Sala 1', tipo: 'aula' }], recursos: '', avaliacao: '', inclusao: '', observacoes: '', posAula: { comoFoi: null, observacoesPosAula: '' }, criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' },
+];
 
 export function V2Preview() {
   const width = useMemo(readWidth, []);
@@ -121,8 +127,10 @@ export function V2Preview() {
             />
           ) : activeScreen === 'commitments' ? (
             <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} />
+          ) : activeScreen === 'planning-day' ? (
+            <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
           ) : (
-            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : undefined} />
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : undefined} />
           )}
         </div>
       </div>
