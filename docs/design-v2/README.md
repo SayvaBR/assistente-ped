@@ -15,11 +15,39 @@ Quando houver conflito, obedecer nesta ordem:
 
 O código atual é baseline funcional, não baseline visual. Componentes existentes podem ser substituídos quando impedirem a identidade V2.
 
+## Leitura obrigatória antes de implementar UI
+
+1. `FOUNDATIONS.md`
+2. `COMPONENTS.md`
+3. `SCREEN_SPEC_INDEX.md`
+4. volume `SCREEN_SPEC_*` correspondente à tela
+5. `RUNTIME_RESOURCE_MAP.md`
+6. `IMPLEMENTATION_PLAYBOOK.md`
+7. `VISUAL_QA_CHECKLIST.md`
+
+Não implementar uma tela V2 apenas olhando um mockup. A especificação de tela define comportamento, posição, dados, serviços, estados e critérios de aceite.
+
 ## Documentos deste sistema
+
+### Fundamentos e componentes
 
 - `FOUNDATIONS.md` — tokens, cor, tipografia, spacing, radius, depth, iconografia, motion, grid, acessibilidade e estados.
 - `COMPONENTS.md` — catálogo de primitives e componentes de produto, anatomia, variantes, comportamento e anti-patterns.
-- `SCREEN_PATTERNS_AND_FLOWS.md` — arquitetura dos fluxos, padrões de tela e blueprint das áreas principais.
+- `SCREEN_PATTERNS_AND_FLOWS.md` — arquitetura geral dos fluxos e padrões de tela.
+
+### Especificação completa das 62 telas/fluxos
+
+- `SCREEN_SPEC_INDEX.md` — índice mestre e regras globais.
+- `SCREEN_SPEC_01_ENTRY_ACCOUNT_SUBSCRIPTION.md` — Splash, onboarding, cadastro, login, setup, plano, paywall, confirmação e primeiro sucesso.
+- `SCREEN_SPEC_02_HOME_DAILY_WORK.md` — Home, chamada, observação, agenda e atividade recente.
+- `SCREEN_SPEC_03_PLANNING.md` — visão geral, dia, semana, mês, plano de aula, BNCC e atividades.
+- `SCREEN_SPEC_04_CLASSES_STUDENTS_ACADEMIC.md` — turmas, alunos, frequência, registros, histórico, notas e avaliações.
+- `SCREEN_SPEC_05_FILES_REPORTS_MORE.md` — arquivos, pastas, importação, lixeira, relatórios, perfil, ferramentas, notificações e Mais.
+- `SCREEN_SPEC_06_SETTINGS_LIFECYCLE_SYSTEM_STATES.md` — configurações, acessibilidade, privacidade, backup, suporte, assinatura, estados, logout e exclusão de conta.
+- `RUNTIME_RESOURCE_MAP.md` — quais screens, repositories, domains, plugins Capacitor, RevenueCat e testes usar em cada área.
+
+### Implementação e QA
+
 - `IMPLEMENTATION_PLAYBOOK.md` — como o Codex deve migrar o app, organização de código, testes, evidências e gate de aprovação.
 - `VISUAL_QA_CHECKLIST.md` — checklist obrigatória de revisão visual, acessibilidade, estados, privacidade, billing e aprovação.
 
