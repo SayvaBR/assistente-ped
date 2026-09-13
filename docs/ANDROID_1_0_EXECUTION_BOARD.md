@@ -35,7 +35,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 3. Compromissos / Agenda — `IN PROGRESS`
 4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
 5. Turmas — `IN PROGRESS`
-6. Perfil do professor — `TODO`
+6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `TODO`
 8. Mais — `TODO`
 
@@ -49,7 +49,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Planejamento semanal — `IN PROGRESS`
 - Planejamento mensal — `IN PROGRESS`
 - Turmas — `IN PROGRESS`
-- Perfil — `TODO`
+- Perfil — `IN PROGRESS`
 - Arquivos — `TODO`
 - Mais — `TODO`
 
@@ -190,12 +190,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `dfc5801` + Turmas V2 local ainda não commitada
-- Tela/fluxo: Turmas V2 — contexto ativo, ações e alunos
-- Screenshot/evidência: `docs/qa/clean-room/classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
-- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas, texto ampliado
-- Resultado: `IN PROGRESS`; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Observação `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: fechar hardening de Turmas e iniciar Perfil/Arquivos conforme o primeiro anel
+- HEAD: `a04dbb4` + Perfil V2 em construção local
+- Tela/fluxo: Turmas V2 endurecida e Perfil profissional V2 conectado à rota real
+- Screenshot/evidência: `docs/qa/clean-room/classes-v2-412.png`; `docs/qa/clean-room/profile-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
+- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil, texto ampliado; CI verde no commit anterior e nova suíte local verde
+- Resultado: `IN PROGRESS`; Perfil entra em construção V2; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: commit/push do Perfil V2 e iniciar Arquivos sem migrar telas em massa
 
 ## Dívida visual conhecida
 

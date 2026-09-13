@@ -6,6 +6,7 @@ import { CommitmentsV2, type CommitmentV2Event } from '../screens/CommitmentsV2'
 import { PlanningDayV2 } from '../screens/PlanningDayV2';
 import { PlanningCalendarV2 } from '../screens/PlanningCalendarV2';
 import { ClassesV2 } from '../screens/ClassesV2';
+import { ProfileV2 } from '../screens/ProfileV2';
 import type { LessonPlan } from '../../domain/models';
 import '../styles/foundation.css';
 import './v2-preview.css';
@@ -79,6 +80,7 @@ const planningPreviewPlans: LessonPlan[] = [
 ];
 const classesPreview = [{ id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' }, { id: 'class-b', nome: '4º Ano B', nivel: 'Ensino Fundamental', turno: 'Vespertino' }];
 const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id, name, color }) => ({ id, nome: name, cor: color }));
+const profilePreview = { id: 'teacher-preview', nome: 'Marina Souza', tratamento: 'professora', escola: 'Escola Horizonte', cidade: 'São Paulo', uf: 'SP', etapaEnsino: 'Ensino Fundamental' };
 
 export function V2Preview() {
   const width = useMemo(readWidth, []);
@@ -137,8 +139,10 @@ export function V2Preview() {
             <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
           ) : activeScreen === 'classes' ? (
             <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => undefined} onNewStudent={() => undefined} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} />
+          ) : activeScreen === 'profile' ? (
+            <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
           ) : (
-            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : undefined} />
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           )}
         </div>
       </div>

@@ -81,6 +81,10 @@ Evidências locais: `docs/qa/clean-room/planning-day-v2-412.png`, `planning-week
 
 O destino do BottomNavigation `turmas-v2` agora monta `ClassesV2` em `src/v2/`, usando a lista real de turmas, turma ativa e alunos do controlador. A superfície oferece ações reais para chamada, observação, perfil do aluno, cadastro e ativação de outra turma, sem substituir as rotas acadêmicas existentes.
 
+## Superfície em construção — Perfil profissional V2
+
+O destino `perfil-professor` agora monta `ProfileV2` em `src/v2/`, com identidade do professor, tratamento, escola, cidade/UF e etapa de ensino em composição V2. O salvamento continua usando `repository.salvarPerfil`; troca de foto preserva o `PhotoCropper` e o armazenamento local de mídia existentes, incluindo limpeza da mídia anterior quando aplicável. O fluxo ainda está em construção e não é aprovação visual.
+
 Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes-flow.pw.ts` cobre render, entrada em Frequência e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real e revisão visual externa.
 
 ## Baseline funcional preservado

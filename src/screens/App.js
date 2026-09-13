@@ -70,6 +70,7 @@ import { z0 } from "../screens/z0.js";
 import { PlanningDayV2 } from "../v2/screens/PlanningDayV2";
 import { PlanningCalendarV2 } from "../v2/screens/PlanningCalendarV2";
 import { ClassesV2 } from "../v2/screens/ClassesV2";
+import { ProfileV2 } from "../v2/screens/ProfileV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1149,13 +1150,23 @@ function App() {
                                                       : Re.name) ===
                                                     "perfil-professor"
                                                   ? (ht = React.createElement(
-                                                      TeacherProfileScreen,
+                                                      ProfileV2,
                                                       {
                                                         onBack: _t,
                                                         onConcluido: Ot,
-                                                        perfil: yt,
+                                                        perfil: yt || {},
                                                         onSalvar: ot,
                                                         onDirtyChange: pe,
+                                                        onTabChange: (tab) =>
+                                                          xr(
+                                                            {
+                                                              inicio: "inicio",
+                                                              planejamento: "plano",
+                                                              turmas: "turmas-v2",
+                                                              arquivos: "biblioteca",
+                                                              mais: "mais",
+                                                            }[tab],
+                                                          ),
                                                       },
                                                     ))
                                                   : (Re == null
