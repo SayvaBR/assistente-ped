@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - codex/5-v2-clean-room
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,3 +31,51 @@ jobs:
       - run: pnpm test
       - run: pnpm run test:v2-responsive
       - run: pnpm build
+
+  apk-qa:
+    name: Build Android QA APK
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK API 36
+        run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build QA APK
+        run: pnpm run android:qa
+
+      - name: Prepare downloadable APK
+        run: |
+          mkdir -p artifacts/android-qa
+          cp android/app/build/outputs/apk/qa/app-qa.apk artifacts/android-qa/Assistente-Pedagogico-V2-QA.apk
+          printf 'branch=%s\ncommit=%s\nworkflow=%s\n' "${GITHUB_REF_NAME}" "${GITHUB_SHA}" "${GITHUB_RUN_ID}" > artifacts/android-qa/build-info.txt
+
+      - name: Upload QA APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: assistente-pedagogico-v2-qa
+          path: artifacts/android-qa/
+          if-no-files-found: error
+          retention-days: 14
