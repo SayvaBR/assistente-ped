@@ -190,7 +190,7 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `de20f7b` + editor de plano V2 em construção local
+- HEAD: `9efd2df`
 - Tela/fluxo: Mais V2 integrado e `plano-aula` migrado para `LessonPlanV2`
 - Screenshot/evidência: `docs/qa/clean-room/plan-editor-v2-412-full.png`; `files-v2-412-full.png`; `more-v2-412-full.png`; `profile-v2-412-full.png`; `classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
 - Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil/Arquivos/Mais/Editor, texto ampliado; 35 E2E passaram antes do editor e editor específico 2/2 verde
