@@ -2668,43 +2668,6 @@ textarea:focus-visible,
   }
 }
 
-/* Apple-inspired first pass: calmer hierarchy, contained cards and restrained navigation. */
-.home-content {
-  gap: 14px !important;
-}
-
-.home-content > .home-class-card {
-  min-height: 72px;
-  border-radius: 20px !important;
-  box-shadow: none !important;
-}
-
-.home-content > section:has(#home-attendance-title) .home-attendance-card,
-.home-content > section:has(#home-focus-title) .home-focus-card {
-  min-height: 104px;
-  border-radius: 20px !important;
-  box-shadow: none !important;
-}
-
-.home-content > section:has(#home-attendance-title) .home-attendance-card {
-  background: var(--color-primary-light) !important;
-  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-border)) !important;
-}
-
-.home-content > section:has(#home-plans-title) {
-  display: none !important;
-}
-
-.home-plans-section {
-  display: none !important;
-}
-
-.home-shortcut {
-  min-height: 72px;
-  border-radius: 16px !important;
-  box-shadow: none !important;
-}
-
 .bottom-nav {
   background: color-mix(in srgb, var(--color-surface) 94%, transparent) !important;
   box-shadow: 0 -1px 0 color-mix(in srgb, var(--color-border) 76%, transparent), 0 -8px 24px rgba(19, 78, 74, 0.05) !important;
@@ -3488,57 +3451,6 @@ button,
   gap: 22px;
 }
 
-.home-content {
-  gap: 24px !important;
-  padding-inline: 20px !important;
-}
-
-.home-content > .home-class-card,
-.home-content > .ui-card,
-.home-shortcut {
-  border-color: var(--color-border) !important;
-  background: var(--color-surface) !important;
-  box-shadow: 0 1px 2px rgba(16, 42, 39, 0.03), 0 8px 20px rgba(16, 42, 39, 0.025) !important;
-}
-
-.home-content > section:has(.home-attendance-card) .home-attendance-card,
-.home-content > section:has(.home-focus-card) .home-focus-card {
-  border: 0 !important;
-  background: var(--color-primary-light) !important;
-  box-shadow: none !important;
-}
-
-.home-attendance-card,
-.home-focus-card {
-  border-radius: 20px !important;
-}
-
-.home-shortcut-grid {
-  gap: 8px !important;
-}
-
-.home-shortcut {
-  min-height: 78px !important;
-  border-radius: 16px !important;
-  padding: 12px !important;
-}
-
-.home-shortcut strong {
-  font-size: 14px !important;
-  font-weight: 760 !important;
-  letter-spacing: -0.01em;
-}
-
-.home-shortcut span span {
-  color: var(--color-muted) !important;
-}
-
-.home-quick-action {
-  border-radius: 15px !important;
-  background: var(--color-surface) !important;
-  box-shadow: none !important;
-}
-
 .bottom-nav {
   min-height: 78px;
   border-top: 1px solid color-mix(in srgb, var(--color-border) 82%, transparent);
@@ -3684,85 +3596,6 @@ body,
 }
 
 .screen-heading-copy p {
-  color: var(--color-muted) !important;
-}
-
-.home-content {
-  gap: 18px !important;
-  padding-inline: 20px !important;
-}
-
-.home-content > .home-class-card,
-.home-content > section > .ui-card,
-.home-content > .ui-card {
-  background: var(--color-surface) !important;
-  border: 1px solid var(--color-border) !important;
-  box-shadow: var(--card-shadow) !important;
-}
-
-.home-class-card {
-  border-radius: 16px !important;
-}
-
-.home-content > section:has(.home-attendance-card) .home-attendance-card,
-.home-content > section:has(.home-focus-card) .home-focus-card {
-  min-height: 96px;
-  background: var(--color-surface) !important;
-  border: 1px solid var(--color-border) !important;
-  border-left: 3px solid var(--color-primary) !important;
-  box-shadow: var(--card-shadow) !important;
-}
-
-.home-content > section:has(.home-attendance-card) .home-attendance-card .icon-tile,
-.home-content > section:has(.home-focus-card) .home-focus-card .icon-tile {
-  background: var(--color-primary-light) !important;
-}
-
-.home-content > section > .ui-card:not(.home-attendance-card):not(.home-focus-card) {
-  border-radius: 16px !important;
-}
-
-.home-shortcut-grid {
-  grid-template-columns: 1fr !important;
-  gap: 0 !important;
-  overflow: hidden;
-  padding: 3px 14px !important;
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  background: var(--color-surface);
-  box-shadow: var(--card-shadow);
-}
-
-.home-shortcut {
-  min-height: 64px !important;
-  border: 0 !important;
-  border-bottom: 1px solid var(--color-border) !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding-inline: 0 !important;
-}
-
-.home-shortcut:last-child {
-  border-bottom: 0 !important;
-}
-
-.home-shortcut > div:first-child {
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 10px !important;
-  background: var(--color-surface-soft) !important;
-}
-
-.home-shortcut > div:first-child svg {
-  color: var(--color-primary) !important;
-}
-
-.home-shortcut strong {
-  font-weight: 700 !important;
-}
-
-.home-shortcut span span {
   color: var(--color-muted) !important;
 }
 
@@ -3932,5 +3765,308 @@ body,
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/* Home v4 — a focused light surface with one blue action color. */
+.app-shell:has(.home-screen) {
+  --home-blue: #0066cc;
+  --home-blue-soft: #eaf3ff;
+  --home-ink: #17202a;
+  --home-muted: #667485;
+  --home-canvas: #f6f8fb;
+  --home-line: #d9e2ec;
+}
+
+.app-shell:has(.home-screen) .app-screen-scroll {
+  background: var(--home-canvas) !important;
+  padding-bottom: calc(112px + var(--safe-bottom)) !important;
+}
+
+.app-shell:has(.home-screen) .home-screen {
+  background: var(--home-canvas) !important;
+  color: var(--home-ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+.app-shell:has(.home-screen) .home-screen > .app-header {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid var(--home-line);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.app-shell:has(.home-screen) .home-screen .screen-heading-copy h1 {
+  color: var(--home-ink) !important;
+  font-size: clamp(28px, 7vw, 32px) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.045em;
+}
+
+.app-shell:has(.home-screen) .home-screen .screen-heading-copy p {
+  color: var(--home-muted) !important;
+  font-size: 16px;
+}
+
+.app-shell:has(.home-screen) .home-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none !important;
+  padding: 0 20px 32px !important;
+  gap: 20px !important;
+}
+
+.app-shell:has(.home-screen) .home-content > .home-class-card {
+  min-height: 112px;
+  margin: 12px 0 0 !important;
+  padding: 20px !important;
+  border: 1px solid var(--home-line) !important;
+  border-left: 5px solid var(--home-blue) !important;
+  border-radius: 20px !important;
+  background: white !important;
+  box-shadow: 0 7px 18px rgba(30, 70, 110, 0.06) !important;
+  color: var(--home-ink) !important;
+}
+
+.app-shell:has(.home-screen) .home-class-card > div:first-child {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 16px !important;
+  background: var(--home-blue-soft) !important;
+}
+
+.app-shell:has(.home-screen) .home-class-card > div:first-child svg {
+  color: var(--home-blue) !important;
+  stroke: currentColor !important;
+}
+
+.app-shell:has(.home-screen) .home-class-card > div:nth-child(2) > div:first-child {
+  color: var(--home-ink) !important;
+  font-size: 22px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.035em;
+}
+
+.app-shell:has(.home-screen) .home-class-card > div:nth-child(2) > div:last-child {
+  color: var(--home-muted) !important;
+  font-size: 14px !important;
+}
+
+.app-shell:has(.home-screen) .home-class-card > svg {
+  color: var(--home-blue) !important;
+  stroke: currentColor !important;
+}
+
+.app-shell:has(.home-screen) .home-class-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--home-blue) !important;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.app-shell:has(.home-screen) .home-content > section > div:first-child h2 {
+  color: var(--home-ink) !important;
+  font-size: 17px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.02em;
+}
+
+.app-shell:has(.home-screen) .home-content > section > div:first-child .touch-target {
+  min-height: 48px;
+  color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section > div:first-child > div:first-child > span {
+  background: var(--home-blue-soft) !important;
+  color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card {
+  min-height: 96px;
+  border: 1px solid var(--home-line) !important;
+  border-left: 4px solid var(--home-blue) !important;
+  border-radius: 20px !important;
+  background: white !important;
+  box-shadow: 0 6px 18px rgba(30, 70, 110, 0.06) !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section:has(#home-attendance-title) .home-attendance-card {
+  background: white !important;
+  border-color: var(--home-line) !important;
+  border-left-color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card > div:first-child {
+  border-radius: 14px !important;
+  background: var(--home-blue-soft) !important;
+  color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card > div:first-child svg {
+  stroke: currentColor !important;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card h3 {
+  color: var(--home-ink) !important;
+  font-size: 16px !important;
+  font-weight: 650 !important;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card p {
+  color: var(--home-muted) !important;
+  font-size: 14px !important;
+  line-height: 1.35;
+}
+
+.app-shell:has(.home-screen) .home-attendance-card > span {
+  color: var(--home-blue) !important;
+  font-size: 13px !important;
+  font-weight: 750 !important;
+}
+
+.app-shell:has(.home-screen) .home-focus-card,
+.app-shell:has(.home-screen) .home-content > section > .empty-state {
+  border-radius: 22px !important;
+  box-shadow: none !important;
+}
+
+.app-shell:has(.home-screen) .home-focus-card {
+  border: 1px solid var(--home-line) !important;
+  border-left: 4px solid var(--home-blue) !important;
+  background: white !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-focus-title"] > .empty-state {
+  min-height: 210px;
+  border: 1px solid var(--home-line) !important;
+  border-left: 4px solid var(--home-blue) !important;
+  background: white !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-focus-title"] .empty-state-icon {
+  background: var(--home-blue-soft) !important;
+  color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-focus-title"] .empty-state-title {
+  color: var(--home-ink) !important;
+  font-size: 22px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.035em;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-focus-title"] .empty-state-description {
+  max-width: 300px;
+  color: #52677f !important;
+  font-size: 16px !important;
+  line-height: 1.45;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-focus-title"] .empty-state .ui-button {
+  min-height: 48px;
+  border-radius: 999px !important;
+  background: var(--home-blue) !important;
+  color: white !important;
+  box-shadow: 0 6px 14px rgba(0, 102, 204, 0.18) !important;
+}
+
+.app-shell:has(.home-screen) .home-content > section > .ui-card {
+  border: 1px solid var(--home-line) !important;
+  border-radius: 20px !important;
+  background: white !important;
+  box-shadow: none !important;
+}
+
+.app-shell:has(.home-screen) .home-plans-section {
+  display: block !important;
+}
+
+.app-shell:has(.home-screen) .home-plans-section [role="button"]:focus-visible,
+.app-shell:has(.home-screen) .home-shortcut:focus-visible {
+  outline: 3px solid rgba(0, 102, 204, 0.38) !important;
+  outline-offset: 2px;
+}
+
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-week-title"] > .ui-card,
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-plans-title"] > .ui-card,
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-reminders-title"] > .ui-card,
+.app-shell:has(.home-screen) .home-content > section[aria-labelledby="home-recent-title"] > .ui-card {
+  padding: 8px 14px !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut-grid {
+  gap: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--home-line);
+  border-radius: 20px;
+  background: white;
+}
+
+.app-shell:has(.home-screen) .home-shortcut {
+  min-height: 72px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--home-line) !important;
+  border-radius: 0 !important;
+  background: white !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut:nth-last-child(-n + 2) {
+  border-bottom: 0 !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut > div:first-child {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  background: var(--home-blue-soft) !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut > div:first-child svg {
+  color: var(--home-blue) !important;
+  stroke: currentColor !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut strong {
+  color: var(--home-ink) !important;
+}
+
+.app-shell:has(.home-screen) .home-shortcut span span {
+  color: var(--home-muted) !important;
+}
+
+.app-shell:has(.home-screen) > .bottom-nav {
+  width: min(100vw, 430px) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-top: 1px solid var(--home-line) !important;
+  box-shadow: 0 -8px 24px rgba(30, 70, 110, 0.06) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.app-shell:has(.home-screen) > .bottom-nav .nav-button {
+  color: #728196 !important;
+}
+
+.app-shell:has(.home-screen) > .bottom-nav .nav-button-active,
+.app-shell:has(.home-screen) > .bottom-nav .nav-button-active .nav-label {
+  color: var(--home-blue) !important;
+}
+
+.app-shell:has(.home-screen) > .bottom-nav .nav-icon-shell-active {
+  background: var(--home-blue-soft) !important;
+  color: var(--home-blue) !important;
+}
+
+@media (max-width: 420px) {
+  .app-shell:has(.home-screen) .home-content {
+    padding-inline: 16px !important;
+  }
+
+  .app-shell:has(.home-screen) .home-class-card {
+    border-radius: 20px !important;
   }
 }
