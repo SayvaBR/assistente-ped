@@ -16,7 +16,7 @@ A V2 é construída em clean room dentro da stack atual.
 - Vite;
 - Capacitor Android.
 
-Não migrar apenas para obter mudança visual. Lovable também trabalha no ecossistema React; o diferencial que queremos reproduzir é o ciclo de design/preview, não copiar seu backend.
+Não migrar apenas para obter mudança visual. O diferencial que queremos reproduzir de builders visual-first é o ciclo de design/preview, não copiar backend ou framework.
 
 ## 3. Diretório V2 isolado
 
@@ -61,7 +61,7 @@ Sincronizar se estiver atrás. Antes de encerrar, registrar `git status`, `git d
 
 A UI real precisa se adaptar continuamente ao Android.
 
-### Matriz de stress antes do Design Review
+### Matriz de stress antes do Gate B
 
 Validar pelo menos:
 
@@ -87,20 +87,26 @@ Conteúdo essencial deve sobreviver a telas estreitas e texto ampliado:
 - truncar apenas metadata secundária quando houver acesso à informação completa;
 - testar crescimento de texto em 100%, 115%, 130% e 150% nas superfícies críticas.
 
-## 6. Fluxo visual-first obrigatório
+## 6. Fluxo Visual Builder obrigatório
 
 ```text
-TARGET
+TARGET / NORTH STAR
   ↓
-COMPOSIÇÃO V2 CLEAN ROOM
+HIPÓTESE VISUAL
   ↓
-RENDER NO VIEWPORT-ÂNCORA DO TARGET
+EXPERIMENTO MÍNIMO
   ↓
-COMPARAÇÃO LADO A LADO
+RENDER NO VIEWPORT-ÂNCORA
   ↓
-CORRIGIR AS 5 MAIORES DIFERENÇAS
+SCREENSHOT
   ↓
-VALIDAR MATRIZ ANDROID RESPONSIVA
+OBSERVAÇÃO / COMPARAÇÃO
+  ↓
+CORRIGIR A MAIOR DIFERENÇA
+  ↓
+REPETIR ATÉ CONVERGIR
+  ↓
+VALIDAR MATRIZ ANDROID
   ↓
 CONECTAR DADOS REAIS
   ↓
@@ -109,13 +115,11 @@ ESTADOS / OFFLINE / ERROS
 MOTION / HAPTICS
   ↓
 TESTES / ANDROID REAL
-  ↓
-DESIGN REVIEW
 ```
 
-Durante iteração rápida não é necessário recapturar toda a matriz a cada ajuste. Use o viewport-âncora para velocidade; rode a matriz após mudanças estruturais e antes do gate.
+Durante iteração rápida não é necessário recapturar toda a matriz a cada ajuste. Use o viewport-âncora para velocidade; rode a matriz após mudanças estruturais e antes do gate de produção.
 
-Não iniciar com maratona de refatoração ampla, abstrações para dezenas de telas, migração global ou Design System especulativo. Primeiro provar uma tela.
+Não iniciar com maratona de refatoração ampla, abstrações para dezenas de telas, migração global ou Design System especulativo. Primeiro provar visualmente a superfície.
 
 ## 7. Screenshot aprovado é target
 
@@ -129,16 +133,28 @@ A referência define a linguagem; responsividade preserva essa linguagem em outr
 
 A primeira implementação pode ser específica da tela, desde que limpa e acessível. Depois de validada, extrair apenas primitives realmente provadas pelo uso.
 
-## 9. Uma tela por vez
+## 9. Home aprovada como North Star; migrar o primeiro anel
 
-Enquanto a Home V2 não passar pelo Design Review:
+A Home V2 está aprovada como **direção visual** e pode alimentar a próxima etapa sem esperar todo o hardening final da Home.
 
-1. Home V2;
-2. Frequência;
-3. Registrar observação;
-4. Compromissos;
-5. Planejamento diário;
-6. Planejamento mensal.
+O próximo objetivo não é “fazer mais telas aleatórias”. É eliminar a quebra visual nos destinos diretos da Home.
+
+Ordem:
+
+1. Frequência / Fazer chamada;
+2. Registrar observação;
+3. Compromissos / Agenda;
+4. Planejamento — Dia, Semana e Mês;
+5. Turmas;
+6. Perfil do professor;
+7. Arquivos;
+8. Mais.
+
+Uma tela por vez dentro desta fila. Assim que uma tela atingir o Gate A de direção visual, iniciar a próxima enquanto o hardening da anterior continua.
+
+Para cada item, testar **o caminho real partindo da Home** e comparar a tela de destino com a Home lado a lado. O professor não deve sentir que saiu de um produto e entrou em outro.
+
+Seguir `docs/V2_HOME_FLOW_VISUAL_RING.md`.
 
 ## 10. Linguagem positiva
 
@@ -181,32 +197,55 @@ Preferir ciclos automatizados de browser/render. O projeto já usa Playwright e 
 - detecção de overflow horizontal;
 - detecção de truncamento indevido em copy essencial;
 - screenshots de estados;
-- comparação visual antes/depois.
+- comparação visual antes/depois;
+- abertura do destino real a partir da Home para auditoria de continuidade.
 
 Ferramentas externas/skills podem complementar esse loop, mas não substituem `DESIGN_AUTHORITY`, os targets aprovados e os contratos do produto.
 
-## 15. Definition of Ready para Design Review
+## 15. Dois gates
 
-- target identificado;
-- screenshot no viewport-âncora;
-- matriz Android responsiva sem quebra importante;
-- nenhuma copy essencial truncada;
-- ausência de overflow horizontal;
-- comparação visual executada;
-- dados reais conectados ou protótipo claramente delimitado;
-- estados essenciais implementados na fase de integração;
-- build/testes relevantes;
-- sem imports visuais proibidos do legado em `src/v2`;
-- branch/commit informados.
+### Gate A — Visual Direction Approved
 
-Finalizar com:
+Exige:
 
-`READY FOR DESIGN REVIEW — <TELA>`
+- target específico ou North Star identificado;
+- screenshot real;
+- composição convincente;
+- DNA V2 correto;
+- fluxo principal compreensível;
+- ausência de regressão evidente para estética V1/genérica;
+- aprovação externa de produto/design.
 
-Nunca declarar aprovação por conta própria.
+Ao atingir:
+
+`VISUAL DIRECTION APPROVED — <TELA>`
+
+Isso libera a próxima tela da fila.
+
+### Gate B — Production / Merge Ready
+
+Exige:
+
+- repositories/dados reais;
+- estados essenciais;
+- offline quando aplicável;
+- acessibilidade;
+- touch targets;
+- texto ampliado;
+- matriz Android;
+- motion + Reduced Motion quando aplicável;
+- build/testes/CI;
+- Android QA;
+- fronteira V2 íntegra.
+
+Ao atingir:
+
+`PRODUCTION GATE READY — <TELA>`
+
+Isso é pré-condição para merge, não para começar a próxima prova visual.
 
 ## 16. Princípio final
 
 A V2 não deve parecer uma versão mais bonita da aplicação antiga. Ela deve parecer um produto novo construído com a maturidade funcional existente por baixo.
 
-> **Preservar os motores. Construir uma carroceria nova — adaptativa em qualquer Android.**
+> **Preservar os motores. Construir uma carroceria nova — adaptativa em qualquer Android e coerente de ponta a ponta.**
