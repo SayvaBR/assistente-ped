@@ -73,7 +73,7 @@ export function HomeV2({
         <header className="v2-home__header">
           <div className="v2-home__greeting">
             <h1 id="home-v2-greeting">
-              <span>{greetingParts[0]},</span>{' '}
+              <span>{greetingParts[0]},</span>
               <span>{greetingParts.slice(1).join(', ')}</span>
             </h1>
             <p className="v2-home__date">{data.dateLabel}</p>
