@@ -15,3 +15,7 @@ git pull --ff-only origin codex/5-v2-clean-room
 ```
 
 A branch ativa contém `src/v2/`, o clean-room visual, a spec local da Home e o gate de fronteira contra imports visuais legados.
+
+Toda nova UI V2 deve nascer em `src/v2/` seguindo `AGENTS.md`, `docs/CODEX_LOVABLE_MODE.md` e as skills Rapid UI/UI Screen Craft.
+
+Não voltar a implementar visualmente em `codex/1-import-baseline` ou `codex/design-identity-v2`.
