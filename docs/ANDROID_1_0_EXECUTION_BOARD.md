@@ -92,7 +92,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Favoritos — `TODO`
 - Importação/captura — `TODO`
 - Visualização — `TODO`
-- Lixeira — `TODO`
+- Lixeira — `IN PROGRESS`
 - Relatórios — `IN PROGRESS`
 
 ## Milestone M5 — Onboarding, conta e monetização

@@ -211,3 +211,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - `src/v2/screens/LegalV2.tsx` migra Termos de uso e Privacidade para a linguagem V2, mantendo o conteúdo legal existente.
 - Evidências: `docs/qa/android-1.0/help-v2-390.png` e `docs/qa/android-1.0/legal-v2-320.png`; E2E `e2e/v2-help-legal-flow.pw.ts` cobre validação, privacidade e compacto.
 - Estado: `IN PROGRESS`; revisão legal final e validação de compartilhamento no Android seguem bloqueadas pela configuração do canal comercial, não pela UI.
+
+## Android 1.0 — lixeira V2 em andamento
+
+- `src/v2/screens/TrashV2.tsx` migra o fluxo de recuperação e exclusão definitiva para uma superfície V2, usando os contratos reais da biblioteca e callbacks reais para alunos removidos.
+- A tela mantém loading, vazio, erro recuperável, restauração e confirmação explícita antes da exclusão irreversível.
+- Evidência: `docs/qa/android-1.0/trash-v2-390.png`; E2E `e2e/v2-trash-flow.pw.ts` cobre vazio e 320px.
+- Estado: `IN PROGRESS`; validação de dados realmente removidos e lifecycle Android ainda pendente.

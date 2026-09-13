@@ -50,6 +50,7 @@ import { StudentProfileV2 } from "../v2/screens/StudentProfileV2";
 import { ClassManagerV2 } from "../v2/screens/ClassManagerV2";
 import { HelpV2 } from "../v2/screens/HelpV2";
 import { LegalV2 } from "../v2/screens/LegalV2";
+import { TrashV2 } from "../v2/screens/TrashV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1156,12 +1157,13 @@ function App() {
                                             : (Re == null
                                                   ? void 0
                                                   : Re.name) === "lixeira"
-                                              ? (ht = React.createElement(
-                                                  TrashScreen,
-                                                  {
-                                                    onBack: _t,
-                                                  },
-                                                ))
+                                              ? (ht = React.createElement(TrashV2, {
+                                                  storage,
+                                                  onBack: _t,
+                                                  loadDeletedStudents: () => op.listarEstudantesExcluidos(),
+                                                  restoreStudent: (id) => op.restaurarEstudante(id),
+                                                  deleteStudent: (id) => op.excluirEstudanteDefinitivamente(id),
+                                                }))
                                               : (Re == null
                                                     ? void 0
                                                     : Re.name) ===
