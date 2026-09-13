@@ -21,6 +21,7 @@ import { Mic as tg } from "lucide-react";
 function ObservationScreen({
   crianca: crianca,
   onBack: onBack,
+  onSaved: onSaved,
   onDirtyChange: onDirtyChange,
 }) {
   const [y, v] = ReactHooks.useState(null),
@@ -197,7 +198,7 @@ function ObservationScreen({
           Rt(700),
           onDirtyChange == null || onDirtyChange(!1),
           U(!0),
-          setTimeout(onBack, 700));
+          setTimeout(() => (onSaved == null ? onBack() : onSaved()), 700));
       } catch (M) {
         (O && (await deleteMedia(O).catch(() => {})),
           console.error("Erro ao salvar observação:", M),

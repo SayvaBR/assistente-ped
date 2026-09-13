@@ -58,6 +58,7 @@ Métricas de viewport e touch targets: [viewport-metrics.json](viewport-metrics.
 - `node scripts/android-sync.mjs` — passou.
 - `node scripts/android-qa.mjs` — passou com geração do APK QA.
 - `git diff --check` — sem erros de whitespace.
+- Smoke funcional manual — passou: chamada com presença persistida e conclusão retornando à Home; observação salva no repository e retorno ao seletor sem alerta de descarte indevido; planejamento acessível pela Home.
 - Não há script `lint` declarado no `package.json`.
 - A suíte E2E legada completa continua com falhas preexistentes em `e2e/academic-saving.pw.ts`; não foram tratadas como parte desta fundação visual.
 

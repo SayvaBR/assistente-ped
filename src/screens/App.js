@@ -745,6 +745,7 @@ function App() {
                     ? (ht = React.createElement(ObservationScreen, {
                         crianca: Re.data,
                         onBack: _t,
+                        onSaved: Ot,
                         onDirtyChange: pe,
                       }))
                     : (Re == null ? void 0 : Re.name) === "biblioteca" ||
