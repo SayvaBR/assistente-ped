@@ -63,6 +63,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Allow Gradle wrapper execution
+        run: chmod +x android/gradlew
+
       - name: Build QA APK
         run: pnpm run android:qa
 
