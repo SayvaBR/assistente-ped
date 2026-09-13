@@ -6,16 +6,54 @@ Este documento registra decisões de design realmente aprovadas pelo usuário e 
 
 O objetivo não é apenas deixar o aplicativo funcional. O Assistente Pedagógico deve parecer um produto móvel profissional, memorável, confiável e claramente pensado para a rotina real do professor.
 
-A implementação visual deve evitar o aspecto comum de interface gerada por IA: mesma composição repetida em todas as telas, título grande centralizado, cartões brancos empilhados, gradientes genéricos, ícone dentro de círculo em todo item, bento sem função, glassmorphism, excesso de badges, sombras genéricas e grandes áreas vazias sem intenção.
+A UI atual é **baseline funcional, não baseline visual**. Elementos existentes podem e devem ser substituídos quando produzirem aparência genérica, defasada ou sem personalidade.
 
 ## Personalidade visual aprovada
 
 - Friendly Professional + Tactile + Motion-led + Educational.
 - Acolhedor, mas nunca infantilizado.
 - Visual expressivo sem sacrificar eficiência de trabalho.
-- Hierarquia forte e superfícies variadas, não uma sequência de cartões idênticos.
+- Hierarquia forte e superfícies variadas.
 - Motion comunica causa e efeito; não deve ser decoração gratuita.
 - Duolingo, iFood, Spotify, YouTube, OLX e outros produtos maduros podem inspirar princípios de conversão, clareza e interação, mas não devem ser clonados.
+
+## Anti-genérico — regra explícita
+
+Rejeitar como solução padrão qualquer tela que pareça um template de dashboard/SaaS mobile.
+
+Em especial, evitar:
+
+- sequência de cards coloridos/pastel com a mesma estrutura;
+- bloco repetido `ícone + título + subtítulo` para tudo;
+- grid de ações com aparência de starter kit;
+- card branco arredondado como resposta para qualquer agrupamento;
+- ícone Lucide dentro de círculo ou quadrado colorido em todos os itens;
+- pills/badges usados apenas para preencher espaço;
+- combinação previsível `título grande + texto auxiliar + cards + CTA` em toda tela;
+- bento decorativo sem função real;
+- gradiente roxo/azul genérico;
+- glassmorphism gratuito;
+- sombras suaves genéricas em excesso;
+- grandes áreas vazias sem propósito;
+- hierarquia onde todos os blocos têm peso visual parecido;
+- aparência de template gerado por IA ou biblioteca pronta sem adaptação forte.
+
+Esses padrões não são proibidos individualmente; são rejeitados quando usados como linguagem dominante e deixam a interface sem identidade.
+
+## O que a nova identidade precisa fazer
+
+A linguagem visual deve ser reconhecível como **Assistente Pedagógico** e não intercambiável com qualquer app de produtividade.
+
+Isso significa trabalhar intencionalmente:
+
+- composição e ritmo próprios;
+- contraste entre áreas principais e secundárias;
+- formas/superfícies com função, não decoração;
+- padrões de ação que façam sentido para rotina docente;
+- navegação com caráter;
+- tipografia com presença;
+- motion e feedback próprios;
+- componentes que não pareçam apenas versões customizadas de um kit genérico.
 
 ## Ilustrações
 
@@ -33,39 +71,54 @@ Quando o problema for estrutural, o agente deve reconsiderar hierarquia, quantid
 
 ## Processo obrigatório
 
-Nunca redesenhar dezenas de telas em lote.
+Grandes reformulações são permitidas quando tratadas como sistema.
 
-1. Escolher um único fluxo prioritário.
-2. Capturar o estado atual.
-3. Explicar os problemas visuais/UX observados.
-4. Propor a nova arquitetura antes de codificar quando a mudança for grande.
-5. Implementar.
-6. Capturar screenshot real Android/mobile.
+1. Registrar o estado atual.
+2. Identificar o que é requisito funcional e o que é apenas legado visual.
+3. Definir a arquitetura da nova linguagem visual quando o escopo for sistêmico.
+4. Implementar fundações e componentes-base.
+5. Validar em fluxos reais, não em tela isolada artificial.
+6. Capturar screenshots Android/mobile.
 7. Comparar antes/depois.
 8. Corrigir até atingir o gate visual.
-9. Só então seguir para outro fluxo importante.
+9. Migrar os demais fluxos de forma controlada.
 
 ## Gate visual
 
-Uma tela NÃO passa apenas porque compila. Ela precisa ter objetivo dominante claro, hierarquia reconhecível em poucos segundos, reduzir repetição visual, ter estados relevantes, funcionar em 360–430 px, manter áreas de toque >= 48 px, ter contraste adequado e screenshot real anexada ao PR.
+Uma tela NÃO passa apenas porque compila ou funciona.
+
+Ela precisa:
+
+- ter objetivo dominante claro;
+- ter hierarquia reconhecível em poucos segundos;
+- reduzir repetição visual;
+- ter personalidade visual perceptível;
+- não parecer template genérico;
+- ter estados vazio/carregando/erro/sucesso quando aplicável;
+- funcionar em 360–430 px;
+- manter áreas de toque >= 48 px;
+- ter contraste e legibilidade adequados;
+- não depender apenas de cor para comunicar estado;
+- ter screenshot real anexada ao PR.
 
 ## Prioridade visual P0
 
-1. Splash / bootstrap / recuperação de erro.
-2. Onboarding completo.
-3. Home.
-4. Shell de navegação.
-5. Turma.
-6. Perfil do aluno.
-7. Planejamento.
-8. Chamada.
-9. Notas / avaliação.
-10. BNCC.
-11. Arquivos.
-12. Relatórios.
-13. Configurações.
-14. Monetização / paywall.
-15. Estados de erro, vazio e conclusão.
+1. Fundação Visual V2 — tokens, tipografia, superfícies, controles, navegação, motion e shell.
+2. Splash / bootstrap / recuperação de erro.
+3. Onboarding completo.
+4. Home.
+5. Shell de navegação.
+6. Turma.
+7. Perfil do aluno.
+8. Planejamento.
+9. Chamada.
+10. Notas / avaliação.
+11. BNCC.
+12. Arquivos.
+13. Relatórios.
+14. Configurações.
+15. Monetização / paywall.
+16. Estados de erro, vazio e conclusão.
 
 ## Onboarding
 
@@ -77,7 +130,11 @@ Uma decisão por vez, com consequência visual/funcional perceptível. Evitar re
 
 ## Home
 
-A Home não deve ser uma lista de cartões brancos iguais. Deve responder rapidamente: o que acontece agora, o que precisa de atenção e qual a próxima ação útil. Usar saudação/contexto, turma, ação principal dinâmica, agenda, próximo planejamento, pendências e acessos rápidos com hierarquia visual diferente.
+A Home não deve ser uma lista de cartões iguais nem um dashboard SaaS genérico.
+
+Deve responder rapidamente: o que acontece agora, o que precisa de atenção e qual a próxima ação útil.
+
+A arquitetura pode abandonar completamente o layout atual se houver uma solução melhor.
 
 ## Monetização
 
@@ -95,4 +152,6 @@ Nenhum documento pode afirmar que uma direção visual foi `aprovada pelo usuár
 
 ## Definition of Done visual
 
-Todo PR visual precisa de screenshot antes, screenshot depois, estados relevantes, justificativa da arquitetura, teste em viewport móvel, build/testes e limitações conhecidas. Sem screenshot real, mudança de UI importante não está pronta.
+Todo PR visual precisa de screenshot antes, screenshot depois, estados relevantes, justificativa da arquitetura, teste em viewport móvel, build/testes e limitações conhecidas.
+
+Sem screenshot real e sem evidência de identidade própria, mudança de UI importante não está pronta.
