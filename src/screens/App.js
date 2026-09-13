@@ -38,6 +38,7 @@ import { SequenceScreen } from "../screens/SequenceScreen";
 import { PrivacyScreen } from "../screens/PrivacyScreen.js";
 import { SettingsScreen } from "../screens/SettingsScreen.js";
 import { SetupWizard } from "../screens/SetupWizard.js";
+import { SetupWizardV2 } from "../v2/screens/SetupWizardV2";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
@@ -1519,7 +1520,7 @@ function App() {
             },
           }),
         o === "wizard" &&
-          React.createElement(SetupWizard, {
+          React.createElement(SetupWizardV2, {
             onDone: Vt,
             onBack: () => u("onboarding"),
             onFinish: Ja,

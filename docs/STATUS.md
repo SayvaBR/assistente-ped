@@ -146,3 +146,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - O roteamento real continua chamando `onDone` para respeitar Home, wizard ou onboarding já configurados.
 - O Visual Lab expõe `?v2-preview=splash&width=390`; a entrada de teste segue para o onboarding V2.
 - Estado: `IN PROGRESS`; falta validar a cadeia completa de primeiro uso no Android com restauração de estado.
+
+## Android 1.0 — configuração inicial V2 em andamento
+
+- `src/v2/screens/SetupWizardV2.tsx` substitui a composição do wizard legado sem substituir seus contratos: rascunho `onboarding:rascunho:v2`, seis etapas, validação, retorno, confirmação de saída, estado de salvamento e sucesso.
+- A conclusão continua delegada ao callback real do App, que persiste perfil/turma nos repositories existentes e mantém o caminho para cadastrar o primeiro aluno ou entrar na Home.
+- O Visual Lab expõe `?v2-preview=wizard&width=390` e a suíte cobre conclusão em 390px e compactação em 320px.
+- Estado: `IN PROGRESS`; falta validar a jornada real completa com cadastro de aluno, assinatura e reinício do aplicativo.
