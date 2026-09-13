@@ -6,6 +6,7 @@ import '@fontsource/nunito-sans/800.css';
 import './styles/recovered.css';
 import './styles/design-system.css';
 import { App } from './screens/App.js';
+import { V2Preview } from './v2/preview/V2Preview';
 
 class AppBoundary extends React.Component<React.PropsWithChildren, { failed: boolean }> {
   state = { failed: false };
@@ -16,4 +17,14 @@ class AppBoundary extends React.Component<React.PropsWithChildren, { failed: boo
     return this.props.children;
   }
 }
-createRoot(document.getElementById('root')!).render(<React.StrictMode><AppBoundary><App /></AppBoundary></React.StrictMode>);
+
+const params = new URLSearchParams(window.location.search);
+const useV2VisualLab = import.meta.env.DEV && params.has('v2-preview');
+
+createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <AppBoundary>
+      {useV2VisualLab ? <V2Preview /> : <App />}
+    </AppBoundary>
+  </React.StrictMode>,
+);
