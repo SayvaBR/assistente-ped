@@ -5,6 +5,7 @@ import '@fontsource/nunito-sans/700.css';
 import '@fontsource/nunito-sans/800.css';
 import './styles/recovered.css';
 import './styles/design-system.css';
+import './design-system/v2.css';
 import { App } from './screens/App.js';
 
 class AppBoundary extends React.Component<React.PropsWithChildren, { failed: boolean }> {

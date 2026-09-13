@@ -6,12 +6,12 @@ import { OrganizationScreen } from "./OrganizationScreen";
 import { setSoundEnabled } from "../core/recovered.js";
 // Recovered from APK 0.2.0. Original behavior retained; vendor code uses npm packages.
 import { AppearanceScreen } from "../screens/AppearanceScreen.js";
-import { AttendanceScreen } from "../screens/AttendanceScreen.js";
+import { AttendanceScreenV2 as AttendanceScreen } from "../screens/AttendanceScreenV2.tsx";
 import { BackupScreen } from "../screens/BackupScreen.js";
 import { BnccInfantilScreen } from "../screens/BnccInfantilScreen.js";
 import { BnccScreen } from "../screens/BnccCatalogScreen.tsx";
 import { Bo } from "../core/recovered.js";
-import { BottomNavigation } from "../screens/BottomNavigation.js";
+import { BottomNavigation as BottomNavigationV2, AppShell as AppShellV2 } from "../design-system/index.tsx";
 import { ClassScreen } from "../screens/ClassScreen.js";
 import { ClassesScreen } from "../screens/ClassManager";
 import { ConfirmationDialog } from "../core/recovered.js";
@@ -19,7 +19,7 @@ import { Cu } from "../core/recovered.js";
 import { Dn } from "../core/recovered.js";
 import { DocumentsScreen } from "../screens/DocumentsScreen.js";
 import { GuidedTour } from "../screens/GuidedTour.js";
-import { HomeScreen } from "../screens/HomeScreen.js";
+import { HomeScreenV2 as HomeScreen } from "../screens/HomeScreenV2.tsx";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
@@ -38,7 +38,7 @@ import { SetupWizard } from "../screens/SetupWizard.js";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
-import { SplashScreen } from "../screens/SplashScreen.js";
+import { SplashScreenV2 as SplashScreen } from "../screens/SplashScreenV2.tsx";
 import { StudentScreen } from "../screens/StudentScreen.js";
 import { TeacherProfileScreen } from "../screens/TeacherProfileScreen.js";
 import { ToolsScreen } from "../screens/ToolsScreen.js";
@@ -1001,10 +1001,10 @@ function App() {
                                                               ? (ht =
                                                                   React.createElement(
                                                                     QuickRecordScreen,
-                                                                    {
-                                                                      alunos:
-                                                                        Ka,
-                                                                      onBack:
+                                                                     {
+                                                                       alunos:
+                                                                         Ka,
+                                                                       onBack:
                                                                         _t,
                                                                       goTo: zt,
                                                                     },
@@ -1019,6 +1019,8 @@ function App() {
                                                                       {
                                                                         alunos:
                                                                           Ka,
+                                                                        turma:
+                                                                          M,
                                                                         dataKey:
                                                                           ((xi =
                                                                             Re.data) ==
@@ -1178,7 +1180,7 @@ function App() {
                                                                                 },
                                                                               )),
     React.createElement(
-      "div",
+      AppShellV2,
       {
         className: "app-viewport",
         style: {
@@ -1253,7 +1255,7 @@ function App() {
               ht,
             ),
             !Re &&
-              React.createElement(BottomNavigation, {
+              React.createElement(BottomNavigationV2, {
                 tab: f,
                 setTab: xr,
               }),

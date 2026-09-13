@@ -4,68 +4,32 @@ Se você é o Codex/Astra trabalhando neste repositório, siga esta ordem antes 
 
 1. Leia `AGENTS.md`.
 2. Leia `docs/STATUS.md`.
-3. Leia `docs/DESIGN_AUTHORITY.md`.
-4. Leia `docs/DESIGN_SUPERVISION_WORKFLOW.md`.
-5. Trabalhe na branch indicada pela issue/PR atual.
-6. Nunca faça merge automático em `main`.
+3. Leia `docs/DESIGN_SUPERVISION_WORKFLOW.md`.
+4. Abra a Issue #1.
+5. Trabalhe somente na branch `codex/1-import-baseline` para a Issue #1.
+6. Não faça merge em `main`.
 
-## Tarefa atual — finalizar PR #2 / Issue #1
+## Tarefa atual
 
-O baseline já foi importado para `codex/1-import-baseline` e o PR #2 está aberto.
+Importar para este repositório a base atual do Assistente Pedagógico que está disponível no computador local do usuário.
 
-Antes de qualquer redesign, finalize corretamente esse PR.
+## Requisitos obrigatórios
 
-### Correções obrigatórias do PR #2
+- Preservar a stack React + TypeScript + Vite + Capacitor Android.
+- Preservar `appId = br.com.assistentepedagogico.app` se ele já existir no projeto local.
+- Trazer `package.json`, `src/`, `android/`, configs Vite/TS/Capacitor e assets necessários.
+- NÃO versionar `.env` com segredos, tokens, credenciais, keystore privado ou dados reais de usuários/alunos.
+- Criar/ajustar `.gitignore` antes do primeiro commit de código se necessário.
+- Rodar instalação de dependências e build web.
+- Rodar `npx cap sync android` e, quando o ambiente permitir, compilar o Android.
+- Documentar qualquer bloqueio real em `docs/STATUS.md`.
+- Abrir PR de `codex/1-import-baseline` para `main`.
+- No PR, listar comandos executados, build, testes, riscos, arquivos faltantes e problemas conhecidos.
 
-- Ajustar `docs/DIRECAO-VISUAL-UX.md`: a direção “Caderno Vivo” NÃO foi explicitamente aprovada pelo usuário. Trate-a como proposta experimental/local e declare `docs/DESIGN_AUTHORITY.md` como autoridade visual.
-- Corrigir a inconsistência em `docs/STATUS.md` sobre a quantidade de testes Vitest (há números divergentes). Registrar somente o número real reproduzido pelo comando atual.
-- Garantir que nenhum mascote/coruja seja usado no aplicativo. O usuário rejeitou mascotes explicitamente.
-- Se `public/reference-art/splash-mascots.png` não tiver uso real, remover ou deixar claramente documentado como asset legado não utilizado.
-- Atualizar o corpo do PR #2 com os comandos realmente executados e seus resultados: instalação, Vitest, E2E, build web, Capacitor sync, Android build, limitações conhecidas e riscos.
-- Não iniciar redesign em massa neste PR.
+## Trabalho visual futuro
 
-### Verificação obrigatória antes de marcar o PR #2 pronto
+Não redesenhe o aplicativo inteiro de uma vez. Depois do baseline, cada fluxo visual deve ser tratado isoladamente, com screenshot antes/depois e revisão antes de seguir para outro fluxo importante.
 
-Execute e registre o resultado real dos comandos disponíveis no ambiente:
+## Definição de pronto da Issue #1
 
-```text
-pnpm install --frozen-lockfile
-pnpm test
-pnpm test:e2e
-pnpm build
-node scripts/android-sync.mjs
-cd android && gradlew.bat assembleDebug
-```
-
-Se algum comando não puder rodar, documente o bloqueio de forma reproduzível. Não invente PASS.
-
-## Próxima tarefa visual — Issue #3
-
-Somente depois do baseline estar revisável, inicie a Issue #3: `P0 Visual — Redesenhar Splash + Onboarding com gate de screenshots`.
-
-A Issue #3 é um redesign estrutural, não um reskin. Antes de codificar, leia `docs/DESIGN_AUTHORITY.md`.
-
-Regras fundamentais:
-
-- NÃO usar mascote, coruja ou personagem-mascote.
-- Não repetir `título grande + card + botão inferior` em todas as etapas.
-- Não alterar dezenas de telas de uma vez.
-- Trabalhar somente Splash + Onboarding.
-- Capturar screenshots antes/depois e dos estados relevantes.
-- Testar 360, 390 e 430 px.
-- Uma tela que apenas compila não passa no gate visual.
-
-## Processo de trabalho visual
-
-1. Capturar a tela atual.
-2. Descrever problemas reais de hierarquia, densidade, navegação e feedback.
-3. Definir a nova arquitetura do fluxo.
-4. Implementar em uma branch própria da Issue #3.
-5. Rodar app e testes.
-6. Capturar screenshots reais.
-7. Abrir PR com antes/depois e justificativa.
-8. Parar e aguardar revisão antes de seguir para Home ou outras áreas.
-
-## Definition of Done
-
-Nenhum trabalho visual importante está pronto sem screenshot real, build/testes e evidência de que o fluxo funciona no viewport móvel alvo.
+A issue só está pronta quando o código-fonte real estiver no GitHub e houver evidência de que a base compila ou, se não compilar, o bloqueio estiver reproduzível e documentado.

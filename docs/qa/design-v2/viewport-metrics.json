@@ -1,0 +1,740 @@
+[
+  {
+    "width": 360,
+    "label": "Home",
+    "scrollWidth": 360,
+    "clientWidth": 360,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Abrir meu perfil"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Abrir turma"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 156,
+        "height": 50,
+        "label": "Continuar plano"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 328,
+        "height": 72,
+        "label": "Fazer chamada2 presentes · 1 f"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 328,
+        "height": 72,
+        "label": "Registrar observaçãoDeixe o co"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 140,
+        "height": 48,
+        "label": "Ver planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 179,
+        "height": 56,
+        "label": "Tentar novamente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 91,
+        "height": 48,
+        "label": "Ver todos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 328,
+        "height": 66,
+        "label": "Ciclo da água09:30Rascunho"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 300,
+        "height": 98,
+        "label": "Frequência registradaChamada ·"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 300,
+        "height": 74,
+        "label": "Planejamento atualizadoPlaneja"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 300,
+        "height": 73,
+        "label": "Turma atualizadaTurma · 31 de "
+      },
+      {
+        "tag": "BUTTON",
+        "width": 69,
+        "height": 65,
+        "label": "Início"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 69,
+        "height": 65,
+        "label": "Planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 69,
+        "height": 65,
+        "label": "Turmas"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 69,
+        "height": 65,
+        "label": "Arquivos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 69,
+        "height": 65,
+        "label": "Mais"
+      }
+    ],
+    "undersized": 0
+  },
+  {
+    "width": 360,
+    "label": "Chamada",
+    "scrollWidth": 360,
+    "clientWidth": 360,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Voltar"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 48,
+        "label": "Limpar"
+      },
+      {
+        "tag": "INPUT",
+        "width": 267,
+        "height": 48,
+        "label": ""
+      },
+      {
+        "tag": "BUTTON",
+        "width": 107,
+        "height": 48,
+        "label": "Todos 4"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 106,
+        "height": 48,
+        "label": "Pendentes 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 102,
+        "height": 48,
+        "label": "Presentes 2"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 79,
+        "height": 48,
+        "label": "Faltas 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 63,
+        "height": 56,
+        "label": "+ Justificar ausência"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 131,
+        "height": 52,
+        "label": "Voltar depois"
+      }
+    ],
+    "undersized": 0
+  },
+  {
+    "width": 390,
+    "label": "Home",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Abrir meu perfil"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Abrir turma"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 156,
+        "height": 50,
+        "label": "Continuar plano"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 342,
+        "height": 72,
+        "label": "Fazer chamada2 presentes · 1 f"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 342,
+        "height": 72,
+        "label": "Registrar observaçãoDeixe o co"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 140,
+        "height": 48,
+        "label": "Ver planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 179,
+        "height": 56,
+        "label": "Tentar novamente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 91,
+        "height": 48,
+        "label": "Ver todos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 342,
+        "height": 66,
+        "label": "Ciclo da água09:30Rascunho"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 314,
+        "height": 98,
+        "label": "Frequência registradaChamada ·"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 314,
+        "height": 74,
+        "label": "Planejamento atualizadoPlaneja"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 314,
+        "height": 73,
+        "label": "Turma atualizadaTurma · 31 de "
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 65,
+        "label": "Início"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 65,
+        "label": "Planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 65,
+        "label": "Turmas"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 65,
+        "label": "Arquivos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 65,
+        "label": "Mais"
+      }
+    ],
+    "undersized": 0
+  },
+  {
+    "width": 390,
+    "label": "Chamada",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Voltar"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 48,
+        "label": "Limpar"
+      },
+      {
+        "tag": "INPUT",
+        "width": 289,
+        "height": 48,
+        "label": ""
+      },
+      {
+        "tag": "BUTTON",
+        "width": 107,
+        "height": 48,
+        "label": "Todos 4"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 106,
+        "height": 48,
+        "label": "Pendentes 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 102,
+        "height": 48,
+        "label": "Presentes 2"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 79,
+        "height": 48,
+        "label": "Faltas 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 63,
+        "height": 56,
+        "label": "+ Justificar ausência"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 131,
+        "height": 52,
+        "label": "Voltar depois"
+      }
+    ],
+    "undersized": 0
+  },
+  {
+    "width": 430,
+    "label": "Home",
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Abrir meu perfil"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 97,
+        "height": 48,
+        "label": "Abrir turma"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 156,
+        "height": 50,
+        "label": "Continuar plano"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 382,
+        "height": 72,
+        "label": "Fazer chamada2 presentes · 1 f"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 382,
+        "height": 72,
+        "label": "Registrar observaçãoDeixe o co"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 140,
+        "height": 48,
+        "label": "Ver planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 179,
+        "height": 56,
+        "label": "Tentar novamente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 91,
+        "height": 48,
+        "label": "Ver todos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 382,
+        "height": 66,
+        "label": "Ciclo da água09:30Rascunho"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 354,
+        "height": 74,
+        "label": "Frequência registradaChamada ·"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 354,
+        "height": 74,
+        "label": "Planejamento atualizadoPlaneja"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 354,
+        "height": 73,
+        "label": "Turma atualizadaTurma · 31 de "
+      },
+      {
+        "tag": "BUTTON",
+        "width": 83,
+        "height": 65,
+        "label": "Início"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 83,
+        "height": 65,
+        "label": "Planejamento"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 83,
+        "height": 65,
+        "label": "Turmas"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 83,
+        "height": 65,
+        "label": "Arquivos"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 83,
+        "height": 65,
+        "label": "Mais"
+      }
+    ],
+    "undersized": 0
+  },
+  {
+    "width": 430,
+    "label": "Chamada",
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "interactive": [
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Voltar"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 75,
+        "height": 48,
+        "label": "Limpar"
+      },
+      {
+        "tag": "INPUT",
+        "width": 329,
+        "height": 48,
+        "label": ""
+      },
+      {
+        "tag": "BUTTON",
+        "width": 107,
+        "height": 48,
+        "label": "Todos 4"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 106,
+        "height": 48,
+        "label": "Pendentes 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 102,
+        "height": 48,
+        "label": "Presentes 2"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 79,
+        "height": 48,
+        "label": "Faltas 1"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Ana Clara como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Bruno Lima como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Camila Rocha como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 63,
+        "height": 56,
+        "label": "+ Justificar ausência"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Presente"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Atrasado"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 48,
+        "height": 48,
+        "label": "Marcar Davi Alves como Falta"
+      },
+      {
+        "tag": "BUTTON",
+        "width": 131,
+        "height": 52,
+        "label": "Voltar depois"
+      }
+    ],
+    "undersized": 0
+  }
+]
