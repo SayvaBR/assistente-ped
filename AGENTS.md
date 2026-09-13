@@ -6,7 +6,7 @@ Este arquivo contém regras obrigatórias para qualquer agente de código que tr
 
 Levar o Assistente Pedagógico até Android 1.0 funcional, estável, seguro, publicável e com identidade visual própria forte.
 
-A aplicação legada é **baseline funcional, não baseline de design**. A V2 trabalha em modo **visual-first + clean room**, seguindo `docs/CODEX_LOVABLE_MODE.md` e as skills do projeto.
+A aplicação legada é **baseline funcional, não baseline de design**. A V2 trabalha em modo **visual-first + clean room**, seguindo `docs/CODEX_LOVABLE_MODE.md`, `docs/V2_HOME_FLOW_VISUAL_RING.md` e as skills do projeto.
 
 ## Stack
 
@@ -24,7 +24,7 @@ Para UI/UX, obedecer nesta ordem:
 1. decisão explícita mais recente do usuário/produto;
 2. `docs/DESIGN_AUTHORITY.md`;
 3. este `AGENTS.md`;
-4. `docs/CODEX_LOVABLE_MODE.md`;
+4. `docs/CODEX_LOVABLE_MODE.md` e `docs/V2_HOME_FLOW_VISUAL_RING.md`;
 5. skills do projeto em `.agents/skills/`;
 6. `docs/design-v2/` e screen spec correspondente;
 7. `docs/VISUAL_IDENTITY_V2.md`;
@@ -90,7 +90,7 @@ Se lógica estiver presa a componente V1, extrair a lógica para camada neutra e
 
 A UI de produção deve ser fluida e funcionar entre larguras de Android, sem depender de um modelo específico de aparelho.
 
-Durante o trabalho visual, 390 pode ser usado como **anchor** para comparar rapidamente com a referência. Antes de Design Review, validar uma matriz representativa:
+Durante o trabalho visual, 390 pode ser usado como **anchor** para comparar rapidamente com a referência. Antes do gate de produção, validar uma matriz representativa:
 
 - 320 px — stress test estreito;
 - 360 px — Android compacto comum;
@@ -138,16 +138,19 @@ Para tela com target claro:
 
 ```text
 TARGET
--> PRIMEIRA COMPOSIÇÃO V2
--> RENDER NO VIEWPORT-ÂNCORA DO TARGET (390px quando aplicável)
--> COMPARAÇÃO LADO A LADO
--> CORRIGIR AS 5 MAIORES DIFERENÇAS
+-> HIPÓTESE VISUAL
+-> EXPERIMENTO MÍNIMO
+-> RENDER NO VIEWPORT-ÂNCORA DO TARGET
+-> SCREENSHOT
+-> OBSERVAÇÃO / COMPARAÇÃO
+-> CORREÇÃO DA MAIOR DIFERENÇA
+-> REPETIR ATÉ CONVERGIR
 -> VALIDAR MATRIZ ANDROID RESPONSIVA
 -> CONECTAR DADOS REAIS
 -> ESTADOS/OFFLINE/ERROS
 -> MOTION/HAPTICS
 -> TESTES/ANDROID REAL
--> DESIGN REVIEW
+-> GATE DE PRODUÇÃO
 ```
 
 O viewport-âncora existe para acelerar comparação, não para limitar responsividade.
@@ -162,18 +165,40 @@ Não fazer antes do primeiro render:
 
 Primeiro fazer uma tela convincente. Depois extrair primitives comprovadas.
 
-## Uma tela por vez
+## Migração visual — primeiro anel da Home
 
-Enquanto a Home V2 não passar por Design Review, não fazer rollout visual em massa.
+A Home V2 foi aceita como **direção visual V2** e não bloqueia mais o início das telas diretamente alcançadas a partir dela.
 
-Ordem atual:
+Migrar uma tela por vez, mas sem esperar o hardening final da Home para começar a próxima. Ordem atual:
 
-1. Home V2;
-2. Frequência;
-3. Registrar observação;
-4. Compromissos;
-5. Planejamento diário;
-6. Planejamento mensal.
+1. Frequência / Fazer chamada;
+2. Registrar observação;
+3. Compromissos / Agenda;
+4. Planejamento — Dia, Semana e Mês;
+5. Turmas;
+6. Perfil do professor;
+7. Arquivos;
+8. Mais.
+
+Ao tocar uma ação na Home, o destino deve parecer o **mesmo produto**. Se o destino ainda usa carroceria visual V1, ele entra imediatamente no backlog V2.
+
+Para cada fluxo Home -> destino, abrir o destino real, capturar screenshot e comparar a continuidade visual. Seguir `docs/V2_HOME_FLOW_VISUAL_RING.md`.
+
+## Dois gates diferentes
+
+### Gate A — Visual Direction Approved
+
+Libera a próxima tela visual quando composição, DNA V2 e screenshot real estiverem convincentes e a direção tiver sido aprovada por produto/design.
+
+Não exige que todo o hardening final daquela tela já esteja terminado.
+
+### Gate B — Production / Merge Ready
+
+Exige dados reais, estados, offline quando aplicável, acessibilidade, texto ampliado, responsividade, motion/Reduced Motion quando aplicável, testes, CI e Android QA.
+
+**Gate A libera a próxima tela. Gate B libera merge.**
+
+Não voltar a bloquear a produção visual inteira esperando detalhes finais de uma tela cuja direção visual já foi aprovada.
 
 ## Identidade visual V2
 
@@ -243,7 +268,7 @@ Obrigatório:
 
 ## Testes e evidência
 
-Antes de marcar pronto, executar o que se aplicar:
+Antes do Gate B, executar o que se aplicar:
 
 ```text
 pnpm run check:v2-boundary
@@ -255,9 +280,10 @@ node scripts/android-sync.mjs
 
 Para UI importante, evidência mínima:
 
-- target;
+- target ou North Star identificado;
 - screenshot no viewport-âncora para fidelidade;
-- matriz Android responsiva representativa;
+- screenshots de iteração suficientes para provar o loop Visual Builder;
+- matriz Android responsiva representativa antes do Gate B;
 - estados relevantes;
 - loading/empty/error/offline quando aplicável;
 - gravação de motion relevante;
@@ -268,17 +294,23 @@ Para UI importante, evidência mínima:
 
 ## Aprovação
 
-O agente nunca aprova a própria tela. Ao chegar em candidata real, escrever:
+O agente nunca aprova a própria tela.
 
-`READY FOR DESIGN REVIEW — <NOME DA TELA>`
+Quando houver candidata visual real, solicitar revisão. Após aprovação externa, registrar:
 
-Depois parar expansão visual e aguardar revisão.
+`VISUAL DIRECTION APPROVED — <NOME DA TELA>`
+
+Isso autoriza iniciar a próxima tela prevista sem significar merge.
+
+Quando todos os gates técnicos estiverem fechados, registrar:
+
+`PRODUCTION GATE READY — <NOME DA TELA>`
 
 ## Git e release
 
 - não trabalhar diretamente em `main`;
 - não fazer merge automático;
-- cada milestone relevante usa branch/PR;
+- durante o primeiro anel V2, evitar criar uma branch por tela enquanto `codex/5-v2-clean-room` for a integração ativa, salvo necessidade explícita de isolamento;
 - não alterar dados reais para facilitar teste;
 - não adicionar CTA falso;
 - não inventar backend, preço ou serviço;
