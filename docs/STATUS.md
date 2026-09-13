@@ -4,57 +4,66 @@ Atualizado em 13/09/2026.
 
 ## Frente ativa — P0 Visual #5 / PR #8
 
-A única frente visual ativa é a **Home V2 em clean room** no PR #8 (`codex/5-v2-clean-room`). O PR permanece em draft e não deve ser mesclado automaticamente.
+O PR #8 (`codex/5-v2-clean-room`) continua como a única frente visual V2 e permanece em **draft**. Não fazer merge automático.
+
+A **Home V2 está VISUAL DIRECTION APPROVED**. Isso libera a migração sequencial das superfícies diretamente alcançadas pela Home, mas não significa que o PR esteja pronto para merge nem que a Fundação Visual V2 #5 esteja concluída.
 
 ### Progresso confirmado
 
 - V2 visual isolada em `src/v2/`, sem usar a arquitetura visual V1 como autoridade;
 - fluxo Visual Builder formalizado: `HIPÓTESE -> EXPERIMENTO -> OBSERVAÇÃO -> CORREÇÃO`;
 - regra Android adaptativa alinhada entre `AGENTS.md` e `docs/DESIGN_SUPERVISION_WORKFLOW.md`;
-- primeiro render real da Home V2 produzido no viewport-âncora de 390 px e anexado ao PR;
-- implementação inicial inclui saudação, aula em foco, ações contextuais, agenda em timeline e bottom navigation;
-- `pnpm run check:v2-boundary`, `pnpm build` e `pnpm run test:v2-responsive` foram aprovados após a integração;
-- `test:v2-responsive` exercita 320 / 360 / 390 / 412 / 432 / 480 / 600 px e verifica overflow/truncamento básico.
-- Home principal já recebe perfil, turma, planos do dia, frequência e agenda local por adapter V2; o Visual Lab continua usando apenas fixture sintética para evidência pública.
-- O avatar abre o perfil, as linhas da agenda são controles acessíveis e o CI do PR foi publicado.
+- Home V2 renderizada e refinada no viewport-âncora de 390 px com evidência pública no PR;
+- Home principal conectada a perfil, turma, planos do dia, frequência e agenda local por adapter V2; fixtures sintéticas permanecem restritas ao Visual Lab/evidência pública;
+- avatar e itens da agenda possuem ação/semântica interativa real;
+- `pnpm run check:v2-boundary`, testes Vitest, `pnpm run test:v2-responsive` e build aprovados;
+- matriz responsiva validada em 320 / 360 / 390 / 412 / 432 / 480 / 600 px;
+- Android sync/Gradle/APK QA já passaram na rodada funcional;
+- workflow `V2 validation` do head anterior aprovado e o PR retornou a estado mergeable;
+- Gate adicional de aparelho real documentado em `docs/ANDROID_REAL_DEVICE_QA.md`, usando POCO X7 Pro como referência física de aceitação sem transformá-lo em breakpoint de layout.
 
-### Bloqueios do gate visual
+### Gate de produção/merge ainda pendente
 
-A Home V2 **ainda não está pronta para aprovação**.
+A aprovação visual da Home não fecha o Gate B. Antes de `PRODUCTION GATE READY`, ainda é obrigatório:
 
-1. O head atual do PR #8 não possui CI/status publicado no GitHub e o PR continua `mergeable: false`.
-2. Existe apenas o primeiro render anexado; ainda falta a sequência exigida de comparação explícita com o target/baseline, lista das 3–5 maiores diferenças, correção e nova screenshot após o refinamento.
-3. A Home já está conectada aos dados locais do controlador/repositórios existentes, mas a persistência das ações iniciadas pela Home e a matriz completa de estados ainda precisam de QA específico.
-4. O teste responsivo atual não cobre crescimento de texto 115/130/150%, embora isso seja requisito de gate. Também não verifica automaticamente touch targets >= 48 px.
-5. A agenda renderiza chevrons em rows não interativas; se esses itens representam navegação, devem ser controles acessíveis reais. O botão de avatar também precisa ter ação real quando sair do harness visual.
-6. A tipografia da bottom navigation chega a ~10,7 px e ~9,8 px abaixo de 360 px; precisa ser revista junto com o teste de crescimento de texto para não sacrificar legibilidade.
-7. A Issue #5 exige a fundação aplicada em mais de um contexto real antes de ser considerada concluída; não avançar P1/P2 nem Growth #6 enquanto o gate P0 visual não fechar.
+1. fechar a matriz relevante de estados (pressed/focus/loading/error/offline/success quando aplicável);
+2. validar crescimento de texto 115/130/150% sem sacrificar copy, hierarquia ou navegação;
+3. validar touch targets, safe areas e comportamento de teclado nas superfícies aplicáveis;
+4. validar motion e Reduced Motion;
+5. remover/ajustar qualquer sombra difusa que conflite com a física tátil V2 ou registrar exceção deliberada;
+6. executar QA de edge cases e persistência das ações reais;
+7. executar QA em aparelho Android real conforme `docs/ANDROID_REAL_DEVICE_QA.md` quando o POCO X7 Pro estiver disponível, sem inventar evidência se não houver acesso físico;
+8. manter CI verde no head que vier a ser candidato ao Gate B.
 
-## Próxima rodada obrigatória do Codex
+## Próxima superfície P0 — Frequência / Fazer chamada
 
-Sem expandir para outra tela:
+A próxima tela liberada pela direção visual da Home é **Frequência / Fazer chamada**. Não abrir P1/P2 nem uma segunda frente visual paralela.
 
-1. comparar o primeiro render da Home V2 lado a lado com o target aprovado;
-2. registrar as 3–5 diferenças perceptivas de maior impacto;
-3. aplicar um experimento visual pequeno para a diferença principal;
-4. anexar nova screenshot real ao PR;
-5. repetir o ciclo enquanto houver diferenças grandes;
-6. adicionar cobertura de crescimento de texto e validar touch targets/safe areas;
-7. conectar dados e estados reais sem destruir a composição aprovada;
-8. publicar CI/status antes de `READY FOR DESIGN REVIEW — HOME V2`.
+Fluxo obrigatório do Codex:
+
+1. abrir Frequência a partir da Home V2 real;
+2. formular uma hipótese visual pequena;
+3. implementar o mínimo necessário;
+4. renderizar cedo no viewport-âncora;
+5. anexar screenshot real ao PR;
+6. registrar 3–5 diferenças perceptivas em relação à direção V2/Home;
+7. corrigir primeiro a maior diferença e anexar nova screenshot;
+8. durante iteração visual ativa, repetir o ciclo aproximadamente a cada 5–10 minutos quando viável;
+9. antes do gate visual da tela, validar matriz Android, texto ampliado e estados relevantes;
+10. somente após `VISUAL DIRECTION APPROVED — FREQUÊNCIA` avançar para Registrar observação.
 
 ## Prioridade e dependências
 
 - **P0 técnico / segurança / privacidade / integridade de dados** continuam acima de refinamento visual.
-- **P0 Visual #5** é o gate visual atual.
-- **P0 Growth #6** permanece bloqueado até a Fundação Visual V2 estar aprovada e a base de billing estar estável.
-- Splash/Onboarding e demais fluxos não devem abrir uma frente visual paralela enquanto a Home V2 estiver no gate atual.
+- **P0 Visual #5** continua aberto até a fundação estar demonstrada nos contextos reais exigidos e os gates de produção estarem fechados.
+- **P0 Growth #6** permanece bloqueado até a Fundação Visual V2 estar aprovada no nível exigido pela issue e a base de billing estar estável.
+- Splash/Onboarding, P1 e P2 não devem atropelar a fila sequencial do primeiro anel da Home.
 
 ## Baseline funcional preservado
 
-A branch base já contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.
+A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.
 
-Guardrails que permanecem imutáveis:
+Guardrails imutáveis:
 
 - LGPD e privacidade;
 - nenhum dado pedagógico/aluno em analytics;
@@ -63,7 +72,7 @@ Guardrails que permanecem imutáveis:
 - billing/entitlements reais;
 - backup/restauração/exportação/exclusão;
 - acessibilidade e Reduced Motion;
-- nenhuma credencial, segredo ou dado real usado em evidência visual.
+- nenhuma credencial, segredo ou dado real em evidência visual.
 
 ## Release
 
