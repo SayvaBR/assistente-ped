@@ -22,19 +22,18 @@ import { HomeV2 } from "../v2/screens/HomeV2";
 import { createHomeV2Data } from "../v2/adapters/home-v2-adapter";
 import { FrequencyV2 } from "../v2/screens/FrequencyV2";
 import { createFrequencyV2Data } from "../v2/adapters/frequency-v2-adapter";
+import { ObservationV2 } from "../v2/screens/ObservationV2";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
 import * as ReactHooks from "react";
 import { NewStudentScreen } from "../screens/NewStudentScreen.js";
 import { NotificationsScreen } from "../screens/NotificationsScreen.js";
-import { ObservationScreen } from "../screens/ObservationScreen.js";
 import { Ol } from "../core/recovered.js";
 import { PedagogicalPlanningScreen } from "../screens/PedagogicalPlanningScreen.js";
 import { PlanningScreen } from "../screens/PlanningScreen.jsx";
 import { SequenceScreen } from "../screens/SequenceScreen";
 import { PrivacyScreen } from "../screens/PrivacyScreen.js";
-import { QuickRecordScreen } from "../screens/QuickRecordScreen.js";
 import { SettingsScreen } from "../screens/SettingsScreen.js";
 import { SetupWizard } from "../screens/SetupWizard.js";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
@@ -53,6 +52,7 @@ import { colors } from "../core/recovered.js";
 import { createId } from "../core/recovered.js";
 import { dateKey } from "../core/recovered.js";
 import { loadClasses } from "../data/classes.js";
+import { deleteMedia, saveMedia } from "../data/files.js";
 import { Cp } from "../data/agenda-camera.js";
 import { migrateLegacyClassData } from "../data/classes.js";
 import React from "react";
@@ -720,6 +720,41 @@ function App() {
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
     ...props,
   });
+  const saveObservationV2 = async (studentId, payload) => {
+    let audio = null;
+    try {
+      if (payload.audioDataUrl) {
+        audio = await saveMedia({
+          dataUrl: payload.audioDataUrl,
+          tipo: "audio",
+          proprietarioId: studentId,
+          id: createId("audio"),
+        });
+      }
+      const observations = await repository.carregarObservacoes(studentId);
+      observations.unshift({
+        id: createId("obs"),
+        data: new Date().toLocaleDateString("pt-BR"),
+        criadoEm: nowISO(),
+        humor: payload.humor,
+        texto: payload.texto,
+        audio,
+      });
+      await repository.salvarObservacoes(studentId, observations);
+    } catch (error) {
+      if (audio) await deleteMedia(audio).catch(() => {});
+      throw error;
+    }
+  };
+  const observationV2 = (props = {}) => React.createElement(ObservationV2, {
+    students: Ka.map((student) => ({ id: student.id, name: student.nome, color: student.cor })),
+    className: M?.nome || "Sua turma",
+    activeTab: "turmas",
+    onBack: _t,
+    onSave: saveObservationV2,
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    ...props,
+  });
   const Ot = () => {
       (pe(!1), En());
     },
@@ -883,9 +918,9 @@ function App() {
                       turma: M,
                     }))
                   : (Re == null ? void 0 : Re.name) === "observacao"
-                    ? (ht = React.createElement(ObservationScreen, {
-                        crianca: Re.data,
-                        onBack: _t,
+                    ? (ht = observationV2({
+                        selectedStudentId: Re.data?.id,
+                        onChangeStudent: () => zt("registro-rapido"),
                         onDirtyChange: pe,
                       }))
                     : (Re == null ? void 0 : Re.name) === "biblioteca" ||
@@ -1135,21 +1170,17 @@ function App() {
                                                                       Qa,
                                                                   },
                                                                 ))
-                                                            : (Re == null
-                                                                  ? void 0
-                                                                  : Re.name) ===
+                                                              : (Re == null
+                                                                    ? void 0
+                                                                    : Re.name) ===
                                                                 "registro-rapido"
-                                                              ? (ht =
-                                                                  React.createElement(
-                                                                    QuickRecordScreen,
-                                                                    {
-                                                                      alunos:
-                                                                        Ka,
-                                                                      onBack:
-                                                                        _t,
-                                                                      goTo: zt,
-                                                                    },
-                                                                  ))
+                                                              ? (ht = observationV2({
+                                                                  onDirtyChange: pe,
+                                                                  onSelectStudent: (studentId) => {
+                                                                    const student = Ka.find((item) => item.id === studentId);
+                                                                    student && zt("observacao", student);
+                                                                  },
+                                                                }))
                                                               : (Re == null
                                                                     ? void 0
                                                                     : Re.name) ===

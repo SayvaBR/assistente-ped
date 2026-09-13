@@ -31,7 +31,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 ## Foco atual
 
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
-2. Registrar observação — `TODO`
+2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `TODO`
 4. Planejamento Dia/Semana/Mês — `TODO`
 5. Turmas — `TODO`
@@ -43,7 +43,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 - Home V2 — `VISUAL DIRECTION APPROVED`
 - Frequência — `READY FOR DESIGN REVIEW`
-- Registrar observação — `TODO`
+- Registrar observação — `READY FOR DESIGN REVIEW`
 - Compromissos / Agenda — `TODO`
 - Planejamento diário — `TODO`
 - Planejamento semanal — `TODO`
@@ -190,12 +190,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `f0991d9` + hardening local ainda não commitado
-- Tela/fluxo: Frequência / Fazer chamada V2
-- Screenshot/evidência: `docs/qa/clean-room/frequency-v2-clean-room-390.png`; `frequency-v2-stress-320-150.png`
-- Testes executados: boundary, TypeScript, matriz Home/Frequência, touch targets, texto 115/130/150%
-- Resultado: `READY FOR DESIGN REVIEW — FREQUÊNCIA V2`; Gate B ainda pendente
-- Próxima ação: checkpoint Git e iniciar Observação V2 mantendo a revisão visual da Frequência em paralelo
+- HEAD: `159112e` + Observação V2 local ainda não commitada
+- Tela/fluxo: Observação V2 — picker e formulário real
+- Screenshot/evidência: `docs/qa/clean-room/observation-picker-412.png`; `observation-form-412.png`
+- Testes executados: boundary, TypeScript, matriz V2, E2E picker/form/save e texto 130%
+- Resultado: `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: checkpoint Git e iniciar Compromissos/Agenda, mantendo as revisões visuais em paralelo
 
 ## Dívida visual conhecida
 

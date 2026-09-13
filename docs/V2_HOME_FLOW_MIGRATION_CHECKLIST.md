@@ -11,7 +11,7 @@ A Home V2 é a direção visual aprovada. Esta checklist registra a continuidade
 | --- | --- | --- | --- |
 | Fazer chamada | `chamada` | **READY FOR DESIGN REVIEW — FREQUÊNCIA V2** | revisão visual externa + Gate B |
 | Ver plano | `plano` / `LessonPlanScreen` | V1 | Planejamento Dia |
-| Registrar observação | `registro-rapido` / `QuickRecordScreen` | V1 | Registrar observação V2 |
+| Registrar observação | `registro-rapido` / `observacao` | **READY FOR DESIGN REVIEW — ObservationV2** | revisão visual + hardening Android/Gate A |
 | Compromissos / agenda | `plano` hoje; agenda local abre pelo contexto | V1 | Compromissos / Agenda V2 |
 | Abrir turma | aba `turma` / `ClassScreen` | V1 | Turmas V2 |
 | Avatar / perfil | `perfil-professor` / `TeacherProfileScreen` | V1 | Perfil V2 |

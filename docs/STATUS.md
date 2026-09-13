@@ -59,6 +59,12 @@ Gate B da Frequência continuará exigindo motion/Reduced Motion, QA Android rea
 - **P0 Growth #6** permanece bloqueado até a Fundação Visual V2 estar aprovada no nível exigido pela issue e a base de billing estar estável.
 - Splash/Onboarding, P1 e P2 não devem atropelar a fila sequencial do primeiro anel da Home.
 
+## Superfície em construção — Registrar observação V2
+
+O fluxo `registro-rapido` agora monta `ObservationV2` em `src/v2/`: picker de aluno, contexto da turma, participação semântica, anotação livre, áudio opcional, salvamento com feedback confirmado e navegação V2. O controlador preserva `repository.carregarObservacoes` / `salvarObservacoes` e grava áudio através do armazenamento de mídia existente quando o professor opta por usar o microfone.
+
+Evidências locais: `docs/qa/clean-room/observation-picker-412.png` e `observation-form-412.png`. O E2E `e2e/v2-observation-flow.pw.ts` cobre escolha, preenchimento, salvamento e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, estados finais e revisão visual externa.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

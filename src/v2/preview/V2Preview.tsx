@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { HomeV2, type HomeV2Data } from '../screens/HomeV2';
 import { FrequencyV2, type FrequencyV2Data } from '../screens/FrequencyV2';
+import { ObservationV2 } from '../screens/ObservationV2';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -61,11 +62,15 @@ const frequencyPreviewData: FrequencyV2Data = {
   ],
 };
 
+const observationPreviewStudents = frequencyPreviewData.students.map(({ id, name, color }) => ({ id, name, color }));
+
 export function V2Preview() {
   const width = useMemo(readWidth, []);
   const screen = new URLSearchParams(window.location.search).get('v2-preview') || 'home';
   const previewState = new URLSearchParams(window.location.search).get('state');
+  const initialObservationStudent = new URLSearchParams(window.location.search).get('student') || undefined;
   const [activeScreen, setActiveScreen] = useState(screen);
+  const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
   const frequencyStateData: FrequencyV2Data = {
     ...frequencyPreviewData,
     status: previewState === 'loading' || previewState === 'error' || previewState === 'empty' ? previewState : 'ready',
@@ -98,8 +103,18 @@ export function V2Preview() {
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
           {activeScreen === 'attendance' ? (
             <FrequencyV2 data={frequencyStateData} onBack={() => setActiveScreen('home')} onRetry={() => undefined} onSave={() => undefined} />
+          ) : activeScreen === 'observation' ? (
+            <ObservationV2
+              students={observationPreviewStudents}
+              selectedStudentId={observationStudentId}
+              className="5º Ano A"
+              onBack={() => observationStudentId ? setObservationStudentId(undefined) : setActiveScreen('home')}
+              onChangeStudent={() => setObservationStudentId(undefined)}
+              onSelectStudent={setObservationStudentId}
+              onSave={() => undefined}
+            />
           ) : (
-            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' && setActiveScreen('attendance')} />
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : undefined} />
           )}
         </div>
       </div>

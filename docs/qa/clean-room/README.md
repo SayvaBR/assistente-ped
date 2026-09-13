@@ -41,3 +41,10 @@ A captura pública não usa os dados locais do aparelho. A auditoria dos destino
 Estados exercitados no mesmo harness: [loading](frequency-v2-loading-390.png), [erro recuperável](frequency-v2-error-390.png), [offline](frequency-v2-offline-390.png) e [vazio](frequency-v2-empty-390.png).
 
 Após o hardening adaptativo, também foi capturada a composição em [320px com texto ampliado a 150%](frequency-v2-stress-320-150.png). O teste usa a mesma composição fluida, reorganizando tabs, rows e ações sem quebrar palavras essenciais.
+
+## Observação V2 — segundo fluxo do anel
+
+A primeira composição em 412px cobre o picker de aluno e o formulário de observação: humor da participação, anotação livre, áudio opcional, CTA de salvamento e confirmação após a persistência. O fluxo E2E valida a escolha do aluno, preenchimento e feedback de salvamento.
+
+![Observação V2 — escolha do aluno em 412px](observation-picker-412.png)
+![Observação V2 — formulário em 412px](observation-form-412.png)
