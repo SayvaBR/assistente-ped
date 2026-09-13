@@ -45,6 +45,7 @@ import { SubscriptionV2 } from "../v2/screens/SubscriptionV2";
 import { PrivacyV2 } from "../v2/screens/PrivacyV2";
 import { BackupV2 } from "../v2/screens/BackupV2";
 import { NotificationsV2 } from "../v2/screens/NotificationsV2";
+import { ToolsV2 } from "../v2/screens/ToolsV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1223,7 +1224,7 @@ function App() {
                                                           )
                                                         ? (ht =
                                                             React.createElement(
-                                                              ToolsScreen,
+                                                              ToolsV2,
                                                               {
                                                                 onBack: _t,
                                                               },

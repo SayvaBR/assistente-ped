@@ -114,7 +114,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 - Perfil profissional — `TODO`
 - Gerenciar turmas — `TODO`
-- Ferramentas de sala — `TODO`
+- Ferramentas de sala — `IN PROGRESS`
 - Notificações — `IN PROGRESS`
 - Mais hub — `TODO`
 - Configurações — `IN PROGRESS`

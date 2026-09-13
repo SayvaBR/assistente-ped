@@ -183,3 +183,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - `src/v2/screens/NotificationsV2.tsx` preserva `data/notifications` para listar, criar e cancelar lembretes locais, solicitando permissão apenas no primeiro agendamento.
 - A tela cobre loading, erro recuperável, vazio, validação do horário e feedback de criação/cancelamento sem toast falso.
 - Estado: `IN PROGRESS`; requer validação em Android físico com permissão de notificações e canal local.
+
+## Android 1.0 — ferramentas de sala V2 em andamento
+
+- `src/v2/screens/ToolsV2.tsx` substitui visualmente o destino V1 e preserva temporizador, cronômetro, calculadora e lanterna nativa.
+- A composição usa tabs, estados de ação, foco visível, alvos de toque de 48px e feedback de erro sem cenografia.
+- Evidência: `docs/qa/android-1.0/tools-v2-390.png`; E2E `e2e/v2-tools-flow.pw.ts` cobre alternância e overflow compacto.
+- Estado: `IN PROGRESS`; falta validação no Android físico para disponibilidade e permissão da lanterna.

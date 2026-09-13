@@ -22,6 +22,7 @@ import { SubscriptionV2 } from '../screens/SubscriptionV2';
 import { PrivacyV2 } from '../screens/PrivacyV2';
 import { BackupV2 } from '../screens/BackupV2';
 import { NotificationsV2 } from '../screens/NotificationsV2';
+import { ToolsV2 } from '../screens/ToolsV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -142,7 +143,9 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          {activeScreen === 'notifications' ? (
+          {activeScreen === 'tools' ? (
+            <ToolsV2 onBack={() => setActiveScreen('more')} />
+          ) : activeScreen === 'notifications' ? (
             <NotificationsV2 onBack={() => setActiveScreen('more')} />
           ) : activeScreen === 'backup' ? (
             <BackupV2 storage={previewStorage} onBack={() => setActiveScreen('privacy')} />
@@ -183,7 +186,7 @@ export function V2Preview() {
           ) : activeScreen === 'files' ? (
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
-            <MoreV2 goTo={(route) => route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : route === 'tema' ? setActiveScreen('appearance') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
+            <MoreV2 goTo={(route) => route === 'ferramentas' ? setActiveScreen('tools') : route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : route === 'tema' ? setActiveScreen('appearance') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
           ) : activeScreen === 'plan-editor' ? (
             <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
