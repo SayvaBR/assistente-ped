@@ -10,7 +10,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "test:e2e": "playwright test --config playwright.config.ts",
-    "test:v2-responsive": "playwright test e2e/v2-responsive.pw.ts e2e/v2-frequency-responsive.pw.ts e2e/v2-observation-flow.pw.ts e2e/v2-commitments-flow.pw.ts e2e/v2-planning-day-flow.pw.ts e2e/v2-classes-flow.pw.ts e2e/v2-profile-flow.pw.ts e2e/v2-files-flow.pw.ts e2e/v2-more-flow.pw.ts e2e/v2-plan-editor-flow.pw.ts --config playwright.config.ts",
+    "test:v2-responsive": "playwright test e2e/v2-responsive.pw.ts e2e/v2-frequency-responsive.pw.ts e2e/v2-observation-flow.pw.ts e2e/v2-commitments-flow.pw.ts e2e/v2-planning-day-flow.pw.ts e2e/v2-classes-flow.pw.ts e2e/v2-profile-flow.pw.ts e2e/v2-files-flow.pw.ts e2e/v2-more-flow.pw.ts e2e/v2-plan-editor-flow.pw.ts e2e/v2-bncc-flow.pw.ts --config playwright.config.ts",
     "android:sync": "node scripts/android-sync.mjs",
     "android:qa": "node scripts/android-qa.mjs",
     "android:device:check": "node scripts/android-device-check.mjs",

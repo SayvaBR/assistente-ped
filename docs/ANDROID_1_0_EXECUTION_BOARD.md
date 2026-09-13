@@ -38,6 +38,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
 8. Mais — `IN PROGRESS`
+9. BNCC — `IN PROGRESS`
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -62,7 +63,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Planejamento overview — `TODO`
 - Criar plano — `IN PROGRESS`
 - Editar plano — `IN PROGRESS`
-- BNCC — `TODO`
+- BNCC — `IN PROGRESS`
 - Criar atividade — `TODO`
 - Autosave — `TODO`
 - Status rascunho/pronto/concluído/arquivado — `TODO`
@@ -190,12 +191,18 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `9efd2df`
-- Tela/fluxo: Mais V2 integrado e `plano-aula` migrado para `LessonPlanV2`
-- Screenshot/evidência: `docs/qa/clean-room/plan-editor-v2-412-full.png`; `files-v2-412-full.png`; `more-v2-412-full.png`; `profile-v2-412-full.png`; `classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
-- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil/Arquivos/Mais/Editor, texto ampliado; 35 E2E passaram antes do editor e editor específico 2/2 verde
-- Resultado: `IN PROGRESS`; Criar/Editar plano entra em construção V2; Perfil, Arquivos e Mais continuam em construção; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: commit/push do editor, atualizar CI e continuar com BNCC/atividades
+- HEAD: `c7572d8` (checkpoint anterior; BNCC segue em trabalho local)
+- Tela/fluxo: BNCC V2 integrada à rota real `bncc`; busca, detalhe, favoritos e histórico usando catálogo/persistência locais
+- Screenshot/evidência: render real no Visual Lab em 412px; evidência versionada será capturada no próximo checkpoint
+- Testes executados: boundary, TypeScript e suíte V2 ampliada para 39 testes; BNCC cobre detalhe, busca em 320/360/390/412/432/480/600px e reduced motion
+- Resultado: `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: ligar seleção assistida BNCC ao editor e continuar a próxima superfície segura da fila
+
+### BNCC — evidência e contratos
+
+- A tela V2 não importa `BnccCatalogScreen`, `SkillPicker`, `ScreenHeader`, `Input` ou `Select`.
+- A fonte curricular é `src/domain/bncc.ts`; favoritos e histórico permanecem em `bncc:favoritos`/`bncc:historico`.
+- Nenhum código BNCC foi inventado; o catálogo é preservado localmente e funciona offline.
 
 ## Dívida visual conhecida
 

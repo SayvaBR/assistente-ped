@@ -74,6 +74,7 @@ import { ClassesV2 } from "../v2/screens/ClassesV2";
 import { ProfileV2 } from "../v2/screens/ProfileV2";
 import { FilesV2 } from "../v2/screens/FilesV2";
 import { MoreV2 } from "../v2/screens/MoreV2";
+import { BnccV2 } from "../v2/screens/BnccV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1071,10 +1072,10 @@ function App() {
                               systemDark: xe,
                             }))
                           : (Re == null ? void 0 : Re.name) === "bncc"
-                            ? (ht = React.createElement(BnccScreen, {
+                            ? (ht = React.createElement(BnccV2, {
                                 etapa: M?.etapa,
+                                storage,
                                 onBack: _t,
-                                goTo: zt,
                               }))
                             : (Re == null ? void 0 : Re.name) ===
                                 "bncc-infantil"

@@ -99,6 +99,10 @@ O destino `plano-aula` agora monta `LessonPlanV2` em `src/v2/`, preservando o co
 
 Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes-flow.pw.ts` cobre render, entrada em Frequência e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real e revisão visual externa.
 
+## Superfície em construção — BNCC V2
+
+O destino `bncc` agora monta `BnccV2` em `src/v2/`, com catálogo real de `src/domain/bncc.ts`, etapa, busca por código/descrição, favoritos, histórico, detalhe, loading, erro recuperável, vazio e offline. A persistência usa `bncc:favoritos` e `bncc:historico` através do `StoragePort`; nenhum código curricular é inventado e nenhuma UI legada é importada. A seleção assistida dentro do editor de plano ainda é a próxima integração.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.
