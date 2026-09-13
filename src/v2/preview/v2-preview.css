@@ -1,0 +1,117 @@
+.v2-preview-shell {
+  min-height: 100dvh;
+  background: #0f1720;
+  color: #fff;
+  font-family: var(--v2-font-family);
+}
+
+.v2-preview-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 16px;
+  background: #121d28;
+  border-bottom: 1px solid #2b3a48;
+}
+
+.v2-preview-toolbar strong {
+  margin-right: auto;
+}
+
+.v2-preview-toolbar__screen {
+  color: #a9bdd0;
+}
+
+.v2-preview-toolbar__widths {
+  display: flex;
+  gap: 6px;
+}
+
+.v2-preview-toolbar button {
+  min-width: 48px;
+  min-height: 36px;
+  border: 1px solid #405365;
+  border-radius: 10px;
+  background: #1a2835;
+  color: #dceaf5;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.v2-preview-toolbar button.is-active {
+  background: var(--v2-color-primary);
+  border-color: var(--v2-color-primary);
+  color: #fff;
+}
+
+.v2-preview-stage {
+  display: grid;
+  place-items: start center;
+  min-height: calc(100dvh - 56px);
+  padding: 24px;
+  overflow: auto;
+}
+
+.v2-preview-device {
+  min-height: 780px;
+  background: var(--v2-color-bg);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+}
+
+.v2-preview-empty {
+  display: grid;
+  place-items: center;
+  min-height: 780px;
+  padding: 24px;
+}
+
+.v2-preview-empty__content {
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  background: var(--v2-color-surface);
+  border: 1px solid var(--v2-color-border);
+  border-radius: var(--v2-radius-lg);
+  color: var(--v2-color-text);
+}
+
+.v2-preview-empty__content p {
+  color: var(--v2-color-text-muted);
+  line-height: 1.5;
+}
+
+.v2-preview-empty__content code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--v2-color-primary-depth);
+}
+
+.v2-preview-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--v2-color-primary-depth);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .v2-preview-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .v2-preview-stage {
+    padding: 0;
+  }
+
+  .v2-preview-device {
+    border-radius: 0;
+  }
+}
