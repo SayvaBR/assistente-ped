@@ -42,6 +42,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 10. Relatórios — `IN PROGRESS`
 11. Configurações — `IN PROGRESS`
 12. Aparência — `IN PROGRESS`
+13. Onboarding — `IN PROGRESS`
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -97,7 +98,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 ## Milestone M5 — Onboarding, conta e monetização
 
 - Splash — `TODO`
-- Onboarding — `TODO`
+- Onboarding — `IN PROGRESS`
 - Cadastro — `TODO`
 - Login / recuperação — `TODO`
 - Configuração professor — `TODO`
@@ -194,12 +195,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `2235960`
-- Tela/fluxo: BNCC → editor por `prefill`, Relatórios V2 e Configurações/Aparência V2 integrados às rotas reais
-- Screenshot/evidência: renders reais no Visual Lab em 412px: `?v2-preview=bncc`, `?v2-preview=reports`, `?v2-preview=settings`, `?v2-preview=appearance`
-- Testes executados: boundary, TypeScript, 46 E2E V2, 50 testes unitários, build, `android-sync` e `android:qa`; APK QA gerado
+- HEAD: `cad9d6f`
+- Tela/fluxo: BNCC → editor por `prefill`, Relatórios V2, Configurações/Aparência V2 e onboarding V2 iniciado
+- Screenshot/evidência: render real no Visual Lab em 390px: `?v2-preview=onboarding&width=390`; demais renders em 412px: `?v2-preview=bncc`, `?v2-preview=reports`, `?v2-preview=settings`, `?v2-preview=appearance`
+- Testes executados: boundary, TypeScript, suíte E2E V2 com onboarding, 50 testes unitários, build, `android-sync` e `android:qa`; APK QA gerado
 - Resultado: `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: migrar subfluxos de conta/dados e planejamento restante sem regressão funcional
+- Próxima ação: concluir hardening do onboarding e migrar splash/cadastro/primeiro uso sem regressão funcional
 
 ### BNCC — evidência e contratos
 

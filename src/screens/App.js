@@ -49,6 +49,7 @@ import { TrashScreen } from "../screens/TrashScreen.js";
 import { TutorialsScreen } from "../screens/TutorialsScreen.js";
 import { App as Vf } from "@capacitor/app";
 import { WelcomeScreen } from "../screens/Onboarding";
+import { OnboardingV2 } from "../v2/screens/OnboardingV2";
 import { Check as Zr } from "lucide-react";
 import { colors } from "../core/recovered.js";
 import { createId } from "../core/recovered.js";
@@ -1508,7 +1509,7 @@ function App() {
             onDone: () => u(yt ? "home" : dt ? "wizard" : "onboarding"),
           }),
         o === "onboarding" &&
-          React.createElement(WelcomeScreen, {
+          React.createElement(OnboardingV2, {
             onDone: (plan) => {
               storage
                 .set("assinatura:interesse", plan || "gratuito")

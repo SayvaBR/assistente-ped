@@ -133,3 +133,9 @@ Guardrails imutáveis:
 ## Release
 
 Ainda não há release comercial pronta. Não gerar expectativa de produção até existirem, no mínimo, assinatura de release, billing real validado, revisão de privacidade/jurídica, QA Android final e gates P0 concluídos.
+## Android 1.0 — onboarding V2 em andamento
+
+- `src/v2/screens/OnboardingV2.tsx` iniciou a migração da apresentação de primeiro uso sem mascote e sem o grid visual legado.
+- As cinco etapas, escolha `gratuito`/`pro`, persistência de `assinatura:interesse`, pular, voltar e entrada no wizard permanecem conectadas ao fluxo existente.
+- O Visual Lab expõe `?v2-preview=onboarding&width=390` para comparação em larguras Android.
+- Estado: `IN PROGRESS`; falta validar o fluxo completo de primeiro uso com o wizard, conta e billing reais.
