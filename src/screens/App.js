@@ -85,6 +85,7 @@ import { ws } from "../core/recovered.js";
 import { z0 } from "../screens/z0.js";
 import { PlanningDayV2 } from "../v2/screens/PlanningDayV2";
 import { PlanningCalendarV2 } from "../v2/screens/PlanningCalendarV2";
+import { PlanningOverviewV2 } from "../v2/screens/PlanningOverviewV2";
 import { ClassesV2 } from "../v2/screens/ClassesV2";
 import { ProfileV2 } from "../v2/screens/ProfileV2";
 import { FilesV2 } from "../v2/screens/FilesV2";
@@ -684,14 +685,14 @@ function App() {
           : kn(ae));
     };
   ReactHooks.useEffect(() => {
-    if (!["planejamento-dia", "planejamento-semana", "planejamento-mes"].includes(Re?.name) || !M?.id) return undefined;
+    if (!(f === "plano" || ["planejamento-dia", "planejamento-semana", "planejamento-mes"].includes(Re?.name)) || !M?.id) return undefined;
     let active = true;
     setPlanningV2State((state) => ({ ...state, status: "loading", error: "" }));
     listPlans(M.id)
       .then((plans) => active && setPlanningV2State({ status: plans.length ? "ready" : "empty", plans, error: "" }))
       .catch((error) => active && setPlanningV2State({ status: "error", plans: [], error: error?.message || "Não foi possível carregar o planejamento." }));
     return () => { active = false; };
-  }, [Re?.name, M?.id, planningV2Date, planningV2Reload]);
+  }, [f, Re?.name, M?.id, planningV2Date, planningV2Reload]);
   const frequencyV2DateKey =
     Re?.name === "chamada" ? Re.data?.dataKey || yn : yn;
   ReactHooks.useEffect(() => {
@@ -836,7 +837,7 @@ function App() {
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onDateChange: (offset) => setPlanningV2Date((value) => shiftDateKey(value, offset)),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
-    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
+    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const planningCalendarV2 = (mode) => React.createElement(PlanningCalendarV2, {
@@ -852,7 +853,20 @@ function App() {
     onDateChange: (value) => setPlanningV2Date(value),
     onViewChange: (next) => zt(next === "day" ? "planejamento-dia" : next === "week" ? "planejamento-semana" : "planejamento-mes"),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
-    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
+    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
+  });
+  const planningOverviewV2 = () => React.createElement(PlanningOverviewV2, {
+    className: M?.nome || "Sua turma",
+    plans: planningV2State.plans,
+    loading: planningV2State.status === "loading",
+    error: planningV2State.error,
+    offline: !homeIsOnline,
+    onBack: () => kn("inicio"),
+    onRetry: () => setPlanningV2Reload((value) => value + 1),
+    onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
+    onViewChange: (view) => zt(view === "day" ? "planejamento-dia" : view === "week" ? "planejamento-semana" : "planejamento-mes", { dataKey: planningV2Date }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const classesV2 = () => React.createElement(ClassesV2, {
@@ -1269,6 +1283,10 @@ function App() {
                                                                       null
                                                                         ? void 0
                                                                         : _a.plano,
+                                                                    isNew:
+                                                                      (Re.data == null
+                                                                        ? void 0
+                                                                        : Re.data.isNew) || false,
                                                                     prefill:
                                                                       (bt =
                                                                         Re.data) ==
@@ -1397,36 +1415,7 @@ function App() {
                                                                           ))
                                                                       : f ===
                                                                           "plano"
-                                                                        ? (ht =
-                                                                            React.createElement(
-                                                                              PlanningScreen,
-                                                                              {
-                                                                                goTo: zt,
-                                                                                turmaId:
-                                                                                  M ==
-                                                                                  null
-                                                                                    ? void 0
-                                                                                    : M.id,
-                                                                                formDirty:
-                                                                                  J,
-                                                                                onDirtyChange:
-                                                                                  pe,
-                                                                                onAbrirPlano:
-                                                                                  (
-                                                                                    ae,
-                                                                                    qe,
-                                                                                  ) =>
-                                                                                    zt(
-                                                                                      "plano-aula",
-                                                                                      {
-                                                                                        plano:
-                                                                                          ae,
-                                                                                        dataKey:
-                                                                                          qe,
-                                                                                      },
-                                                                                    ),
-                                                                              },
-                                                                            ))
+                                                                        ? (ht = planningOverviewV2())
                                                                         : f ===
                                                                             "turmas-v2"
                                                                           ? (ht = classesV2())
@@ -1554,6 +1543,7 @@ function App() {
             ),
             !Re &&
               f !== "inicio" &&
+              !["plano", "turmas-v2", "biblioteca", "mais"].includes(f) &&
               React.createElement(BottomNavigation, {
                 tab: f,
                 setTab: xr,

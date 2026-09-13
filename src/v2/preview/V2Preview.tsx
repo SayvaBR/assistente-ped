@@ -5,6 +5,7 @@ import { ObservationV2 } from '../screens/ObservationV2';
 import { CommitmentsV2, type CommitmentV2Event } from '../screens/CommitmentsV2';
 import { PlanningDayV2 } from '../screens/PlanningDayV2';
 import { PlanningCalendarV2 } from '../screens/PlanningCalendarV2';
+import { PlanningOverviewV2 } from '../screens/PlanningOverviewV2';
 import { ClassesV2 } from '../screens/ClassesV2';
 import { ProfileV2 } from '../screens/ProfileV2';
 import { FilesV2 } from '../screens/FilesV2';
@@ -190,6 +191,8 @@ export function V2Preview() {
             />
           ) : activeScreen === 'commitments' ? (
             <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} onPeriodChange={(period) => setActiveScreen(period === 'week' ? 'planning-week' : 'planning-month')} />
+          ) : activeScreen === 'planning-overview' ? (
+            <PlanningOverviewV2 plans={planningPreviewPlans} className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-day' ? (
             <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
