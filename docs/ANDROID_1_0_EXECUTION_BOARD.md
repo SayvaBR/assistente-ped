@@ -193,14 +193,16 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 13/09/2026
+- Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `cad9d6f`
-- Tela/fluxo: BNCC → editor por `prefill`, Relatórios V2, Configurações/Aparência V2 e onboarding V2 iniciado
-- Screenshot/evidência: render real no Visual Lab em 390px: `?v2-preview=onboarding&width=390`; demais renders em 412px: `?v2-preview=bncc`, `?v2-preview=reports`, `?v2-preview=settings`, `?v2-preview=appearance`
-- Testes executados: boundary, TypeScript, suíte E2E V2 com onboarding, 50 testes unitários, build, `android-sync` e `android:qa`; APK QA gerado
-- Resultado: `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: concluir hardening do onboarding e migrar splash/cadastro/primeiro uso sem regressão funcional
+- HEAD: `cb14a1b`
+- Tela/fluxo: Notificações, Ferramentas, Perfil do aluno, Gerenciar turmas, Ajuda, Termos e Lixeira V2 integrados ao app e ao Visual Lab
+- Screenshot/evidência: `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`
+- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (73/73), boundary, TypeScript, `pnpm build`, `node scripts/android-sync.mjs` e `pnpm run android:qa`; APK QA gerado
+- PR #8: aberto, draft, checks `validate` 2/2 SUCCESS, merge state `CLEAN`
+- Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
+- Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
+- Próxima ação: migrar as superfícies restantes de primeiro uso, organização e planejamento/atividade; depois executar QA final de lifecycle, estados e dispositivo
 
 ### BNCC — evidência e contratos
 
