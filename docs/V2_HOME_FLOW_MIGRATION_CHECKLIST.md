@@ -21,6 +21,7 @@ A Home V2 é a direção visual aprovada. Esta checklist registra a continuidade
 | Mais | aba `mais` / `MoreV2` | V2 em construção | hardening + migração das preferências secundárias |
 | BNCC | `bncc` / `BnccV2` | V2 em construção | seleção assistida no editor de plano |
 | Relatórios | `relatorios` / `ReportsV2` | V2 em construção | exportação PDF e hardening dos filtros |
+| Configurações | `configuracoes` / `SettingsV2` | V2 em construção | aparência e subfluxos de conta/dados |
 
 ## Frequência V2 — contratos preservados
 

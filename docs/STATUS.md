@@ -107,6 +107,10 @@ O destino `bncc` agora monta `BnccV2` em `src/v2/`, com catálogo real de `src/d
 
 O destino `relatorios` agora monta `ReportsV2` em `src/v2/`, com leitura de chamadas reais via `StoragePort`, recorte por turma/aluno/período, estados sem registros/sem turma/loading/erro, cálculo usando `buildAttendanceReport` e exportação CSV via `exportText`. A tela não importa componentes visuais V1; exportação PDF e hardening de filtros/estados continuam na fila.
 
+## Superfície em construção — Configurações V2
+
+O destino `configuracoes` agora monta `SettingsV2` em `src/v2/`, com grupos de perfil/trabalho, preferências, dados/segurança, ajuda e experiência. Sons continuam ligados ao estado persistido do App; cada item mantém seu callback de rota existente. A aparência e os subfluxos acessados permanecem na fila de migração individual.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

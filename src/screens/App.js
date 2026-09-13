@@ -76,6 +76,7 @@ import { FilesV2 } from "../v2/screens/FilesV2";
 import { MoreV2 } from "../v2/screens/MoreV2";
 import { BnccV2 } from "../v2/screens/BnccV2";
 import { ReportsV2 } from "../v2/screens/ReportsV2";
+import { SettingsV2 } from "../v2/screens/SettingsV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1080,6 +1081,14 @@ function App() {
                                   }))
                                 : (Re == null ? void 0 : Re.name) ===
                                     "configuracoes"
+                                  ? (ht = React.createElement(SettingsV2, {
+                                      onBack: _t,
+                                      goTo: zt,
+                                      sonsAtivados: Ga,
+                                      setSonsAtivados: Ca,
+                                    }))
+                                  : (Re == null ? void 0 : Re.name) ===
+                                      "configuracoes-v1"
                                   ? (ht = React.createElement(SettingsScreen, {
                                       onBack: _t,
                                       goTo: zt,
