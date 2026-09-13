@@ -218,3 +218,9 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - A tela mantém loading, vazio, erro recuperável, restauração e confirmação explícita antes da exclusão irreversível.
 - Evidência: `docs/qa/android-1.0/trash-v2-390.png`; E2E `e2e/v2-trash-flow.pw.ts` cobre vazio e 320px.
 - Estado: `IN PROGRESS`; validação de dados realmente removidos e lifecycle Android ainda pendente.
+
+## Android 1.0 — organização V2 em andamento
+
+- `src/v2/screens/OrganizationV2.tsx` substitui o subfluxo V1 de escolas e anos letivos, mantendo `organizationRepository` e autosave de rascunho em memória até o CTA explícito.
+- Evidência: `docs/qa/android-1.0/organization-v2-390.png`; E2E `e2e/v2-organization-flow.pw.ts` cobre carregamento, adição e 320px.
+- Estado: `IN PROGRESS`; validação de vínculos em turmas e arquivamento real seguirá no hardening de organização.

@@ -51,6 +51,7 @@ import { ClassManagerV2 } from "../v2/screens/ClassManagerV2";
 import { HelpV2 } from "../v2/screens/HelpV2";
 import { LegalV2 } from "../v2/screens/LegalV2";
 import { TrashV2 } from "../v2/screens/TrashV2";
+import { OrganizationV2 } from "../v2/screens/OrganizationV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1023,7 +1024,7 @@ function App() {
             : Re?.name === "assinatura"
               ? (ht = React.createElement(SubscriptionV2, { onBack: _t, goTo: zt }))
               : Re?.name === "organizacao"
-                ? (ht = React.createElement(OrganizationScreen, {
+                ? (ht = React.createElement(OrganizationV2, {
                     onBack: _t,
                     onDirtyChange: pe,
                   }))

@@ -103,7 +103,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Login / recuperação — `TODO`
 - Configuração professor — `IN PROGRESS`
 - Primeira turma — `IN PROGRESS`
-- Personalização — `TODO`
+- Personalização — `IN PROGRESS`
 - Escolha de plano — `IN PROGRESS`
 - Paywall — `TODO`
 - Purchase/trial/restore — `TODO`
