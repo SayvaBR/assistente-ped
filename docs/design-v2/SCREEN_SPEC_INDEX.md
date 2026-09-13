@@ -27,6 +27,25 @@ Antes de implementar uma tela, o Codex deve:
 7. executar os testes indicados;
 8. anexar screenshots reais de Android/mobile ao PR.
 
+## Regra especial para entrada/onboarding/assinatura
+
+Para telas 2–11, também é obrigatório ler:
+
+- `GROWTH_MONETIZATION_SYSTEM.md`;
+- `ONBOARDING_ACTIVATION_SPEC.md`;
+- `PAYWALL_SUBSCRIPTION_SPEC.md`;
+- `ANALYTICS_EXPERIMENTATION_RETENTION.md`;
+- `MONETIZATION_ETHICS.md`.
+
+Esses documentos registram decisões comerciais mais recentes e **prevalecem sobre trechos antigos do Volume 1 quando houver conflito**. Em especial:
+
+- o baseline V1 usa hard paywall após ativação guiada;
+- não há plano gratuito funcional do núcleo no lançamento;
+- o plano anual é recomendado, com mensal visível como alternativa;
+- preço/trial/discount exibidos vêm sempre da loja/RevenueCat;
+- nenhum dado de aluno/pedagógico/free text entra em analytics;
+- nenhuma técnica comercial proibida pelo documento de ética pode ser usada em experimento.
+
 ## Volumes
 
 ### Volume 1 — Entrada, identidade e monetização
@@ -43,6 +62,8 @@ Arquivo: `SCREEN_SPEC_01_ENTRY_ACCOUNT_SUBSCRIPTION.md`
 9. Paywall / assinatura
 10. Confirmação de assinatura
 11. Primeiro sucesso / entrada na Home
+
+**Nota:** telas 2, 5–11 devem ser implementadas em conjunto com as specs de Growth acima; o onboarding final é adaptativo e mais rico que o blueprint inicial resumido deste volume.
 
 ### Volume 2 — Home e rotina do dia
 Arquivo: `SCREEN_SPEC_02_HOME_DAILY_WORK.md`
@@ -134,9 +155,12 @@ Arquivo: `SCREEN_SPEC_06_SETTINGS_LIFECYCLE_SYSTEM_STATES.md`
 - Não enviar nomes, notas, frequência, observações, turmas ou conteúdo pedagógico a analytics.
 - Reusar repositories/domain existentes antes de criar nova camada paralela.
 - Migração de schema deve ser explícita e testada.
-- O núcleo continua utilizável sem internet.
-- Preços/compras vêm da loja/RevenueCat quando disponível; nunca hardcode comercial como verdade.
+- O núcleo continua utilizável sem internet para assinante com entitlement válido/cache seguro.
+- Preços/compras vêm da loja/RevenueCat; nunca hardcode comercial como verdade.
+- Expiração/cancelamento não autoriza apagar dados.
 
 ## Teste obrigatório de identidade
 
 Uma tela falha no gate se estiver funcional, mas puder ser confundida com um template genérico de produtividade. O Codex deve demonstrar hierarquia, assinatura visual e adequação à rotina docente, além de screenshots reais.
+
+Uma tela comercial também falha se preço, trial, renovação, cancelamento ou benefício dependerem de interpretação ambígua ou de persuasão manipulativa.
