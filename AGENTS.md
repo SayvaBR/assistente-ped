@@ -74,17 +74,22 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 13. Manter o Design System e o Motion System consistentes em todas as telas.
 14. Recursos específicos da Educação Infantil não devem aparecer indevidamente em Fundamental ou Médio.
 15. O núcleo do aplicativo deve continuar utilizável sem internet.
-16. Para trabalho visual, seguir `docs/DESIGN_SUPERVISION_WORKFLOW.md` e `docs/VISUAL_IDENTITY_V2.md`.
+16. Para qualquer trabalho visual, ler `docs/DESIGN_SUPERVISION_WORKFLOW.md`, `docs/VISUAL_IDENTITY_V2.md` e `docs/design-v2/README.md`.
+17. Antes de implementar ou redesenhar uma tela, localizar a tela em `docs/design-v2/SCREEN_SPEC_INDEX.md`, ler o volume `SCREEN_SPEC_*` correspondente e consultar `docs/design-v2/RUNTIME_RESOURCE_MAP.md`.
+18. Não implementar UI importante apenas a partir de mockup/imagem. A especificação de tela define layout, comportamento, dados, estados, recursos, acessibilidade e critérios de aceite.
+19. Se a implementação real exigir divergir da especificação, registrar a divergência e justificativa no PR; não reinterpretar silenciosamente.
 
 ## Fluxo esperado para cada tarefa
 
 1. Ler a issue e os documentos relevantes.
-2. Criar branch `codex/<numero-issue>-<slug>` ou equivalente.
-3. Implementar em mudanças pequenas e rastreáveis.
-4. Rodar build, lint e testes disponíveis.
-5. Atualizar documentação afetada.
-6. Abrir PR contra `main` com resumo, testes executados, riscos e screenshots quando houver UI.
-7. Não fazer merge por conta própria salvo instrução explícita.
+2. Para UI, localizar a especificação exata da tela antes de codificar.
+3. Criar branch `codex/<numero-issue>-<slug>` ou equivalente.
+4. Identificar quais componentes V2, repositories, domain modules e plugins nativos serão reutilizados.
+5. Implementar em mudanças pequenas e rastreáveis.
+6. Rodar build, lint e testes disponíveis.
+7. Atualizar documentação afetada.
+8. Abrir PR contra `main` com resumo, testes executados, riscos e screenshots quando houver UI.
+9. Não fazer merge por conta própria salvo instrução explícita.
 
 ## Severidade
 
@@ -120,6 +125,9 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 ## Evidência obrigatória no PR
 
 - o que mudou;
+- especificação `SCREEN_SPEC_*` usada;
+- componentes V2 utilizados/criados;
+- repositories/domain/plugins utilizados;
 - arquivos/módulos principais;
 - comandos/testes executados;
 - resultado do build;
