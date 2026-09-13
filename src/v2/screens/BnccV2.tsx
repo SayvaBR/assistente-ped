@@ -17,9 +17,9 @@ function meta(skill: Skill) {
   return parts.filter(Boolean).join(' · ');
 }
 
-type Props = { etapa?: EducationStage; storage?: StoragePort; onBack: () => void; onOpenPlan?: () => void };
+type Props = { etapa?: EducationStage; storage?: StoragePort; onBack: () => void; onOpenPlan?: (skill: Skill) => void };
 
-export function BnccV2({ etapa, storage, onBack }: Props) {
+export function BnccV2({ etapa, storage, onBack, onOpenPlan }: Props) {
   const [stage, setStage] = useState<EducationStage>(etapa ?? 'fundamental_anos_iniciais');
   const [query, setQuery] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -85,7 +85,7 @@ export function BnccV2({ etapa, storage, onBack }: Props) {
       {offline && <div className="v2-bncc__offline"><WifiOff size={18} /> Catálogo disponível offline neste aparelho.</div>}
       <article className="v2-bncc__detail v2-surface"><div className="v2-bncc__detail-code">{selected.codigo}</div><h2>{selected.componente || selected.campo || selected.area || 'Objetivo de aprendizagem'}</h2><p className="v2-bncc__meta">{meta(selected) || 'Base Nacional Comum Curricular'}</p><p className="v2-bncc__description">{selected.texto}</p>{selected.pagina && <p className="v2-bncc__source">Fonte: BNCC/MEC · página {selected.pagina - 2}</p>}<div className="v2-bncc__detail-note"><BookOpenCheck size={20} /><span>Use este código no plano de aula para manter o objetivo curricular ligado à atividade.</span></div></article>
       {feedback && <p className="v2-bncc__feedback" role="status" aria-live="polite">{feedback}</p>}
-      <button type="button" className="v2-primary-action v2-bncc__bottom-action v2-pressable" onClick={onBack}>Voltar ao seu espaço</button>
+      <button type="button" className="v2-primary-action v2-bncc__bottom-action v2-pressable" onClick={() => onOpenPlan ? onOpenPlan(selected) : onBack()}>{onOpenPlan ? 'Abrir no editor de plano' : 'Voltar ao seu espaço'}</button>
     </div></main>;
   }
 

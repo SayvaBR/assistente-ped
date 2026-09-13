@@ -9,6 +9,8 @@ test('BNCC V2 consulta catálogo real e abre detalhe', async ({ page }) => {
   await device.getByRole('button', { name: /EF15LP01 Identificar/ }).click();
   await expect(device.getByRole('heading', { name: 'EF15LP01', exact: true })).toBeVisible();
   await expect(device.getByText(/Identificar a função social/)).toBeVisible();
+  await device.getByRole('button', { name: 'Abrir no editor de plano' }).click();
+  await expect(device.getByRole('heading', { name: 'Editar plano', exact: true })).toBeVisible();
 });
 
 test('BNCC V2 preserva busca nas larguras Android previstas', async ({ page }) => {

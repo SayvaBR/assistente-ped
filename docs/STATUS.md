@@ -101,7 +101,7 @@ Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes
 
 ## Superfície em construção — BNCC V2
 
-O destino `bncc` agora monta `BnccV2` em `src/v2/`, com catálogo real de `src/domain/bncc.ts`, etapa, busca por código/descrição, favoritos, histórico, detalhe, loading, erro recuperável, vazio e offline. A persistência usa `bncc:favoritos` e `bncc:historico` através do `StoragePort`; nenhum código curricular é inventado e nenhuma UI legada é importada. A seleção assistida dentro do editor de plano ainda é a próxima integração.
+O destino `bncc` agora monta `BnccV2` em `src/v2/`, com catálogo real de `src/domain/bncc.ts`, etapa, busca por código/descrição, favoritos, histórico, detalhe, loading, erro recuperável, vazio e offline. A persistência usa `bncc:favoritos` e `bncc:historico` através do `StoragePort`; nenhum código curricular é inventado e nenhuma UI legada é importada. O detalhe pode abrir o editor de plano com o código real selecionado via `prefill`; descrição estruturada e seleção múltipla seguem como hardening do editor.
 
 ## Baseline funcional preservado
 

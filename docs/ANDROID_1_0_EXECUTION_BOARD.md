@@ -196,7 +196,7 @@ Atualizar a cada rodada significativa:
 - Screenshot/evidência: render real no Visual Lab em 412px; evidência versionada será capturada no próximo checkpoint
 - Testes executados: boundary, TypeScript e suíte V2 ampliada para 39 testes; BNCC cobre detalhe, busca em 320/360/390/412/432/480/600px e reduced motion
 - Resultado: `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: ligar seleção assistida BNCC ao editor e continuar a próxima superfície segura da fila
+- Próxima ação: validar seleção assistida no editor e continuar a próxima superfície segura da fila
 
 ### BNCC — evidência e contratos
 

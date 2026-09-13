@@ -1076,6 +1076,10 @@ function App() {
                                 etapa: M?.etapa,
                                 storage,
                                 onBack: _t,
+                                onOpenPlan: (skill) => zt("plano-aula", {
+                                  dataKey: dateKey(),
+                                  prefill: { bncc: { habilidades: [skill.codigo] } },
+                                }),
                               }))
                             : (Re == null ? void 0 : Re.name) ===
                                 "bncc-infantil"

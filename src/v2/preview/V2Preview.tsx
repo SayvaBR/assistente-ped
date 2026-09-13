@@ -154,7 +154,7 @@ export function V2Preview() {
           ) : activeScreen === 'plan-editor' ? (
             <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
-            <BnccV2 etapa="fundamental_anos_iniciais" storage={previewStorage} onBack={() => setActiveScreen('more')} />
+            <BnccV2 etapa="fundamental_anos_iniciais" storage={previewStorage} onBack={() => setActiveScreen('more')} onOpenPlan={() => setActiveScreen('plan-editor')} />
           ) : (
             <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} />
           )}
