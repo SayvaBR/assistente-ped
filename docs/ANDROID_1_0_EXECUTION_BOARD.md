@@ -32,7 +32,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
-3. Compromissos / Agenda — `IN PROGRESS`
+3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
@@ -49,7 +49,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Home V2 — `VISUAL DIRECTION APPROVED`
 - Frequência — `READY FOR DESIGN REVIEW`
 - Registrar observação — `READY FOR DESIGN REVIEW`
-- Compromissos / Agenda — `IN PROGRESS`
+- Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 - Planejamento diário — `IN PROGRESS`
 - Planejamento semanal — `IN PROGRESS`
 - Planejamento mensal — `IN PROGRESS`
@@ -195,11 +195,11 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `5e5d3a4`
-- Tela/fluxo: Notificações, Ferramentas, Perfil do aluno, Gerenciar turmas, Ajuda, Termos, Lixeira e Organização V2 integrados ao app e ao Visual Lab
-- Screenshot/evidência: `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`
+- HEAD: `ebc7154`
+- Tela/fluxo: Compromissos V2 agora encaminha Dia/Semana/Mês para as superfícies de planejamento correspondentes; os demais fluxos V2 listados abaixo permanecem integrados ao app e ao Visual Lab
+- Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
 - Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (75/75), boundary, TypeScript, `pnpm build`, `node scripts/android-sync.mjs` e `pnpm run android:qa`; APK QA gerado
-- PR #8: aberto, draft, checks `validate` 2/2 SUCCESS, merge state `CLEAN`
+- PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
 - Próxima ação: migrar as superfícies restantes de primeiro uso, organização e planejamento/atividade; depois executar QA final de lifecycle, estados e dispositivo
