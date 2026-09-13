@@ -1,0 +1,32 @@
+name: V2 validation
+
+on:
+  pull_request:
+    branches:
+      - codex/1-import-baseline
+  push:
+    branches:
+      - codex/5-v2-clean-room
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm run check:v2-boundary
+      - run: pnpm test
+      - run: pnpm run test:v2-responsive
+      - run: pnpm build
