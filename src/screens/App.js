@@ -42,6 +42,7 @@ import { SetupWizardV2 } from "../v2/screens/SetupWizardV2";
 import { NewStudentV2 } from "../v2/screens/NewStudentV2";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
 import { SubscriptionV2 } from "../v2/screens/SubscriptionV2";
+import { PrivacyV2 } from "../v2/screens/PrivacyV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1103,7 +1104,7 @@ function App() {
                                     }))
                                   : (Re == null ? void 0 : Re.name) ===
                                       "privacidade"
-                                    ? (ht = React.createElement(PrivacyScreen, {
+                                    ? (ht = React.createElement(PrivacyV2, {
                                         onBack: _t,
                                         goTo: zt,
                                       }))

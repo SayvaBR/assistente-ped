@@ -119,7 +119,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Mais hub — `TODO`
 - Configurações — `IN PROGRESS`
 - Aparência/acessibilidade — `IN PROGRESS`
-- Privacidade/segurança — `TODO`
+- Privacidade/segurança — `IN PROGRESS`
 - Backup/sync — `TODO`
 - Ajuda/suporte — `TODO`
 - Sobre — `TODO`

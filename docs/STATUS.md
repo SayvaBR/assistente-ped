@@ -165,3 +165,9 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - `src/v2/screens/SubscriptionV2.tsx` substitui o paywall visual V1 e mantém a fonte de verdade em `getSubscriptionBilling()`/RevenueCat, incluindo ofertas, compra, cancelamento, restore e preferência gratuita.
 - Preços, trial e disponibilidade continuam vindo da loja; quando não há oferta real, a tela informa “em breve/indisponível” e não simula uma compra.
 - Estado: `IN PROGRESS`; faltam credenciais/loja real para fechar o gate de billing e validar a confirmação no Android físico.
+
+## Android 1.0 — privacidade V2 em andamento
+
+- `src/v2/screens/PrivacyV2.tsx` substitui a composição V1 e preserva o controle local `config:analytics`, desativado por padrão; nenhum dado de aluno é enviado.
+- A tela mantém os caminhos para backup e exclusão local com confirmação no fluxo de dados, além de comunicar os limites do armazenamento no aparelho.
+- Estado: `IN PROGRESS`; backup seguro e exclusão de conta ainda precisam de seus lotes próprios e QA de lifecycle.
