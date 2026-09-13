@@ -45,7 +45,11 @@ Depois da fundação, cada fluxo funcional deve ser migrado de forma controlada 
 - navegação previsível sem aparência de template;
 - estados pressed/focus/disabled/loading/error/success quando aplicável;
 - contraste, foco e alvo de toque acessíveis;
-- teste em 360, 390 e 430 px para fluxos móveis relevantes.
+- teste em matriz Android adaptativa: 320, 360, 384/390, 411/412, 432, 480 e 600+ px quando a superfície tiver suporte relevante a tablet/foldable;
+- teste de crescimento de texto equivalente a 100%, 115%, 130% e 150% nas superfícies críticas;
+- nenhuma copy essencial cortada por `ellipsis`, `line-clamp`, `nowrap` ou altura rígida;
+- nenhuma safe area cobrindo conteúdo ou interação;
+- alvos de toque com pelo menos 48×48 px.
 
 ## Evidência obrigatória
 
@@ -55,11 +59,14 @@ Todo PR visual relevante precisa conter:
 - screenshots depois;
 - estados relevantes;
 - viewport/resolução;
+- viewport-âncora usada para comparação e matriz Android adaptativa exercitada;
 - problemas do legado que foram resolvidos;
 - decisões de arquitetura visual/UX;
 - componentes/tokens novos, reutilizados ou aposentados;
 - build/testes;
 - limitações conhecidas.
+
+Para a matriz adaptativa, executar também `pnpm run test:v2-responsive`. Os pontos de largura são stress tests de uma composição fluida, não layouts independentes.
 
 Caminhos locais sem imagem anexada não contam como evidência suficiente.
 
