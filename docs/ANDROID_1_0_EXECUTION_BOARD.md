@@ -60,8 +60,8 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 ## Milestone M2 — Planejamento profissional completo
 
 - Planejamento overview — `TODO`
-- Criar plano — `TODO`
-- Editar plano — `TODO`
+- Criar plano — `IN PROGRESS`
+- Editar plano — `IN PROGRESS`
 - BNCC — `TODO`
 - Criar atividade — `TODO`
 - Autosave — `TODO`
@@ -190,12 +190,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `9dfcf91` + Mais V2 em construção local
-- Tela/fluxo: Arquivos V2 com storage local, filtros e estados; Mais V2 com hub de rotas secundárias
-- Screenshot/evidência: `docs/qa/clean-room/files-v2-412-full.png`; `docs/qa/clean-room/more-v2-412-full.png`; `profile-v2-412-full.png`; `classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
-- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil/Arquivos/Mais, texto ampliado; Arquivos e Mais específicos 2/2 verdes
-- Resultado: `IN PROGRESS`; Perfil, Arquivos e Mais em construção V2; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: commit/push de Mais V2 e iniciar hardening dos destinos secundários do hub
+- HEAD: `de20f7b` + editor de plano V2 em construção local
+- Tela/fluxo: Mais V2 integrado e `plano-aula` migrado para `LessonPlanV2`
+- Screenshot/evidência: `docs/qa/clean-room/plan-editor-v2-412-full.png`; `files-v2-412-full.png`; `more-v2-412-full.png`; `profile-v2-412-full.png`; `classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
+- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil/Arquivos/Mais/Editor, texto ampliado; 35 E2E passaram antes do editor e editor específico 2/2 verde
+- Resultado: `IN PROGRESS`; Criar/Editar plano entra em construção V2; Perfil, Arquivos e Mais continuam em construção; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: commit/push do editor, atualizar CI e continuar com BNCC/atividades
 
 ## Dívida visual conhecida
 

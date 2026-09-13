@@ -9,6 +9,7 @@ import { ClassesV2 } from '../screens/ClassesV2';
 import { ProfileV2 } from '../screens/ProfileV2';
 import { FilesV2 } from '../screens/FilesV2';
 import { MoreV2 } from '../screens/MoreV2';
+import { LessonPlanV2 } from '../screens/LessonPlanV2';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
 import '../styles/foundation.css';
@@ -138,9 +139,9 @@ export function V2Preview() {
           ) : activeScreen === 'commitments' ? (
             <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} />
           ) : activeScreen === 'planning-day' ? (
-            <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
+            <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
-            <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
+            <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'classes' ? (
             <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => undefined} onNewStudent={() => undefined} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} />
           ) : activeScreen === 'profile' ? (
@@ -149,6 +150,8 @@ export function V2Preview() {
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
             <MoreV2 goTo={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
+          ) : activeScreen === 'plan-editor' ? (
+            <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : (
             <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} />
           )}

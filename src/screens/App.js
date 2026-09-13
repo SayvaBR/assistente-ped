@@ -25,6 +25,7 @@ import { createFrequencyV2Data } from "../v2/adapters/frequency-v2-adapter";
 import { ObservationV2 } from "../v2/screens/ObservationV2";
 import { CommitmentsV2 } from "../v2/screens/CommitmentsV2";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
+import { LessonPlanV2 } from "../v2/screens/LessonPlanV2";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
 import * as ReactHooks from "react";
@@ -1242,7 +1243,7 @@ function App() {
                                                               "plano-aula"
                                                             ? (ht =
                                                                 React.createElement(
-                                                                  LessonPlanScreen,
+                                                                  LessonPlanV2,
                                                                   {
                                                                     etapa:
                                                                       M?.etapa,
