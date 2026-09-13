@@ -1,34 +1,26 @@
 # Codex Lovable Mode — V2 Clean Room
 
 > **Status:** regra operacional obrigatória para trabalho visual V2
-> **Objetivo:** fazer o Codex trabalhar visual-first, com o mesmo princípio que torna builders como Lovable rápidos: alvo claro, primeira renderização cedo, comparação visual imediata e integração profunda somente depois que a composição estiver correta.
+> **Objetivo:** fazer o Codex trabalhar visual-first: alvo claro, primeira renderização cedo, comparação imediata e integração profunda somente depois que a composição estiver correta.
 
 ## 1. Decisão
 
-O legado do Assistente Pedagógico deixa de ser autoridade visual.
+O legado do Assistente Pedagógico deixa de ser autoridade visual. Ele é tratado como **backend funcional local**: dados, regras de domínio, persistência, integrações e contratos.
 
-A partir desta regra, o legado é tratado como **backend funcional local**: fonte de dados, regras de domínio, persistência, integrações e contratos. Layouts, componentes, CSS, shell, composição e padrões visuais antigos não devem ser preservados por inércia.
-
-A V2 deve ser construída em **clean room** dentro da stack atual.
+A V2 é construída em clean room dentro da stack atual.
 
 ## 2. Stack
-
-A stack permanece:
 
 - React;
 - TypeScript;
 - Vite;
 - Capacitor Android.
 
-Não migrar para React Native, Flutter, SwiftUI ou outra stack apenas para obter uma mudança visual. A stack atual é suficiente para reproduzir os targets aprovados.
-
-O ganho de velocidade virá da arquitetura e do fluxo de trabalho, não de uma migração total.
+Não migrar apenas para obter mudança visual. Lovable também trabalha no ecossistema React; o diferencial que queremos reproduzir é o ciclo de design/preview, não copiar seu backend.
 
 ## 3. Diretório V2 isolado
 
-Toda nova interface V2 deve nascer em `src/v2/`.
-
-Estrutura esperada:
+Toda nova interface V2 nasce em `src/v2/`.
 
 ```text
 src/v2/
@@ -41,31 +33,15 @@ src/v2/
   assets/
 ```
 
-### Permitido reutilizar do legado
+Pode reutilizar `src/domain/**`, `src/data/**`, repositories, persistência, adapters nativos/Capacitor, billing real, BNCC, modelos, validações e utilitários sem responsabilidade visual.
 
-- `src/domain/**`;
-- `src/data/**`;
-- repositories e serviços de persistência;
-- adapters nativos/Capacitor;
-- billing real;
-- regras BNCC;
-- modelos e validações;
-- utilitários sem responsabilidade visual.
+Não usar como dependência visual da V2 `src/screens/**`, `src/components/**` legados, `src/core/recovered.js` para UI, CSS/tokens V1, `Card`, `IconTile` e abstrações visuais equivalentes.
 
-### Proibido como dependência visual da V2
+Se regra de negócio estiver presa a componente V1, extrair para camada neutra.
 
-- `src/screens/**`;
-- `src/components/**` legados;
-- `src/core/recovered.js` para composição/UI;
-- classes CSS antigas;
-- tokens visuais antigos;
-- `Card`, `IconTile` ou abstrações equivalentes quando vierem da camada visual V1.
+## 4. Git é obrigatório
 
-Se uma regra de negócio estiver presa a um componente legado, extrair a lógica para uma camada neutra e conectá-la à V2.
-
-## 4. Git é obrigatório, não opcional
-
-Antes de qualquer sessão de implementação:
+Antes de implementar:
 
 ```bash
 git status
@@ -75,36 +51,56 @@ git log -1 --oneline
 git log -1 --oneline origin/<branch-atual>
 ```
 
-O agente deve confirmar que está trabalhando na branch correta e que conhece o estado remoto mais recente.
+Sincronizar se estiver atrás. Antes de encerrar, registrar `git status`, `git diff --stat`, branch e commit usados nas evidências.
 
-Se a branch local estiver atrás, sincronizar antes de implementar. Não trabalhar horas em estado local obsoleto.
+## 5. O que significa “390 px”
 
-Antes de encerrar a rodada:
+390 px **não é a largura alvo do aplicativo**.
 
-```bash
-git status
-git diff --stat
-git log -1 --oneline
-```
+É apenas um **viewport-âncora de comparação** quando a referência aprovada foi produzida nessa largura. Ele acelera o loop de fidelidade porque target e implementação podem ser comparados na mesma geometria.
 
-O PR/issue deve informar branch e commit usados nas evidências.
+A UI real precisa se adaptar continuamente ao Android.
 
-## 5. Fluxo visual-first obrigatório
+### Matriz de stress antes do Design Review
 
-Para tela com screenshot/mockup aprovado:
+Validar pelo menos:
+
+- 320 px;
+- 360 px;
+- 384/390 px;
+- 411/412 px;
+- 432 px;
+- 480 px;
+- 600+ px quando houver suporte relevante a tablet/foldable.
+
+Não construir sete versões. Construir **uma composição fluida** e usar esses pontos para encontrar falhas.
+
+### Copy sem cortes
+
+Conteúdo essencial deve sobreviver a telas estreitas e texto ampliado:
+
+- sem `ellipsis`/`line-clamp` para título, CTA, label ou mensagem essencial;
+- sem altura rígida em containers de copy;
+- permitir wrap natural;
+- adaptar disposição de ações quando faltar espaço;
+- não usar fonte minúscula para fazer texto caber;
+- truncar apenas metadata secundária quando houver acesso à informação completa;
+- testar crescimento de texto em 100%, 115%, 130% e 150% nas superfícies críticas.
+
+## 6. Fluxo visual-first obrigatório
 
 ```text
 TARGET
   ↓
 COMPOSIÇÃO V2 CLEAN ROOM
   ↓
-PRIMEIRO RENDER 390px
+RENDER NO VIEWPORT-ÂNCORA DO TARGET
   ↓
 COMPARAÇÃO LADO A LADO
   ↓
 CORRIGIR AS 5 MAIORES DIFERENÇAS
   ↓
-RENDER 360 / 390 / 430
+VALIDAR MATRIZ ANDROID RESPONSIVA
   ↓
 CONECTAR DADOS REAIS
   ↓
@@ -112,72 +108,30 @@ ESTADOS / OFFLINE / ERROS
   ↓
 MOTION / HAPTICS
   ↓
-TESTES / ANDROID
+TESTES / ANDROID REAL
   ↓
 DESIGN REVIEW
 ```
 
-### Proibido
+Durante iteração rápida não é necessário recapturar toda a matriz a cada ajuste. Use o viewport-âncora para velocidade; rode a matriz após mudanças estruturais e antes do gate.
 
-Não executar primeiro uma maratona de:
+Não iniciar com maratona de refatoração ampla, abstrações para dezenas de telas, migração global ou Design System especulativo. Primeiro provar uma tela.
 
-- refatoração ampla;
-- criação de abstrações para dezenas de telas;
-- migração de todos os componentes;
-- auditoria estética do legado inteiro;
-- criação de Design System completo antes de existir uma tela convincente.
+## 7. Screenshot aprovado é target
 
-Primeiro provar uma tela. Generalizar somente o que a tela provar ser necessário.
+Reproduzir com alta fidelidade proporção, hierarquia, densidade, balanço de cor, superfícies, radius, tipografia, escala de ícones, profundidade, posição relativa, sensação tátil e personalidade.
 
-## 6. Screenshot aprovado é target
+Não reinterpretar como fintech, dashboard corporativo, minimalismo editorial, Material default, starter Tailwind ou grid SaaS.
 
-Quando o usuário fornecer uma referência aprovada, ela é a autoridade positiva da composição.
+A referência define a linguagem; responsividade preserva essa linguagem em outros tamanhos, não congela pixels.
 
-Reproduzir com alta fidelidade:
+## 8. Primeiro render antes de abstração
 
-- proporção;
-- hierarquia;
-- densidade;
-- balanço de branco/azul;
-- superfícies;
-- radius;
-- tipografia;
-- escala de ícones;
-- profundidade;
-- posição relativa;
-- sensação tátil;
-- personalidade.
+A primeira implementação pode ser específica da tela, desde que limpa e acessível. Depois de validada, extrair apenas primitives realmente provadas pelo uso.
 
-Não é permitido reinterpretar o target como:
+## 9. Uma tela por vez
 
-- fintech;
-- dashboard corporativo;
-- minimalismo editorial;
-- Material default;
-- Tailwind starter;
-- grid SaaS.
-
-A referência ganha de um padrão genérico da biblioteca.
-
-## 7. Primeiro render antes de abstração
-
-A primeira implementação pode ser específica da tela, desde que limpa e acessível.
-
-Depois que o visual for aprovado:
-
-1. identificar padrões realmente repetidos;
-2. extrair primitives;
-3. tokenizar;
-4. conectar estados reais;
-5. reutilizar nas próximas telas.
-
-Não criar abstração especulativa.
-
-## 8. Uma tela por vez
-
-Enquanto a Home V2 não passar pelo Design Review, não fazer rollout visual em massa.
-
-Sequência atual:
+Enquanto a Home V2 não passar pelo Design Review:
 
 1. Home V2;
 2. Frequência;
@@ -186,29 +140,17 @@ Sequência atual:
 5. Planejamento diário;
 6. Planejamento mensal.
 
-Cada tela validada alimenta o sistema de componentes da seguinte.
-
-## 9. Regra de composição positiva
-
-A linguagem deve ser:
+## 10. Linguagem positiva
 
 > **Friendly Professional + Candy UI + Tactile + Educational + Motion-led**
 
-Balanço visual:
+Balanço: fundo azul-claro, superfícies de trabalho majoritariamente brancas, azul vivo para foco/ação e navy para texto.
 
-> **fundo azul-claro + superfícies de trabalho majoritariamente brancas + azul vivo para foco/ação + navy para texto**
+Anti-card não significa anti-surface. Profissional não significa corporativo. Playful não significa infantil.
 
-Anti-card não significa anti-surface.
+## 11. Velocidade com qualidade
 
-Profissional não significa corporativo.
-
-Playful não significa infantil.
-
-## 10. Velocidade com qualidade
-
-A prioridade de uma rodada visual é reduzir tempo até algo revisável.
-
-Não gastar esforço com detalhes invisíveis antes de validar:
+Ordem de correção visual:
 
 1. composição;
 2. proporção;
@@ -220,49 +162,40 @@ Não gastar esforço com detalhes invisíveis antes de validar:
 8. spacing;
 9. microdetalhes.
 
-Se composição estiver errada, refazer a composição. Não tentar salvá-la com CSS fino.
+Se a composição estiver errada, refazer. Não salvar arquitetura ruim com CSS fino.
 
-## 11. Legado após equivalência V2
+## 12. Legado após equivalência V2
 
-Quando uma tela V2 for aprovada e funcionalmente equivalente:
+Quando tela V2 for aprovada e funcionalmente equivalente, a V1 correspondente entra em `deprecated`. Remover apenas após navegação, persistência, testes e migração estarem confirmados.
 
-- a tela V1 correspondente entra em estado `deprecated`;
-- nenhuma nova feature visual deve ser adicionada à V1;
-- correções críticas podem ser feitas enquanto a migração não terminou;
-- remover V1 somente após confirmar navegação, persistência, testes e migração.
+## 13. Segurança funcional
 
-Não fazer big-bang destrutivo dos dados ou regras de negócio.
+Clean room visual não autoriza quebrar dados, storage, offline, billing/RevenueCat, LGPD, segurança, backup, exportação, acessibilidade, BNCC ou regras pedagógicas.
 
-## 12. Segurança funcional continua obrigatória
+## 14. Ferramentas de feedback
 
-Clean room visual NÃO autoriza quebrar:
+Preferir ciclos automatizados de browser/render. O projeto já usa Playwright e deve evoluir para:
 
-- dados;
-- storage;
-- offline;
-- billing;
-- RevenueCat;
-- LGPD;
-- segurança;
-- backup;
-- exportação;
-- acessibilidade;
-- BNCC;
-- regras pedagógicas.
+- captura rápida do viewport-âncora;
+- matriz de viewports Android;
+- detecção de overflow horizontal;
+- detecção de truncamento indevido em copy essencial;
+- screenshots de estados;
+- comparação visual antes/depois.
 
-A liberdade é sobre a camada de experiência e apresentação.
+Ferramentas externas/skills podem complementar esse loop, mas não substituem `DESIGN_AUTHORITY`, os targets aprovados e os contratos do produto.
 
-## 13. Definition of Ready para Design Review
-
-Para tela importante:
+## 15. Definition of Ready para Design Review
 
 - target identificado;
-- screenshot 390px;
-- screenshots 360px e 430px;
+- screenshot no viewport-âncora;
+- matriz Android responsiva sem quebra importante;
+- nenhuma copy essencial truncada;
+- ausência de overflow horizontal;
 - comparação visual executada;
-- dados reais conectados ou claramente delimitados como protótipo visual da rodada;
-- estados essenciais implementados quando a fase já for de integração;
-- build e testes relevantes;
+- dados reais conectados ou protótipo claramente delimitado;
+- estados essenciais implementados na fase de integração;
+- build/testes relevantes;
 - sem imports visuais proibidos do legado em `src/v2`;
 - branch/commit informados.
 
@@ -272,10 +205,8 @@ Finalizar com:
 
 Nunca declarar aprovação por conta própria.
 
-## 14. Princípio final
+## 16. Princípio final
 
-A V2 não deve parecer uma versão mais bonita da aplicação antiga.
+A V2 não deve parecer uma versão mais bonita da aplicação antiga. Ela deve parecer um produto novo construído com a maturidade funcional existente por baixo.
 
-Ela deve parecer um produto novo construído com a maturidade funcional que já existe por baixo.
-
-> **Preservar os motores. Construir uma carroceria nova.**
+> **Preservar os motores. Construir uma carroceria nova — adaptativa em qualquer Android.**
