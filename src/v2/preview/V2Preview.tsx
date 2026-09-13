@@ -7,7 +7,9 @@ import { PlanningDayV2 } from '../screens/PlanningDayV2';
 import { PlanningCalendarV2 } from '../screens/PlanningCalendarV2';
 import { ClassesV2 } from '../screens/ClassesV2';
 import { ProfileV2 } from '../screens/ProfileV2';
+import { FilesV2 } from '../screens/FilesV2';
 import type { LessonPlan } from '../../domain/models';
+import type { StoragePort } from '../../domain/models';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -81,6 +83,7 @@ const planningPreviewPlans: LessonPlan[] = [
 const classesPreview = [{ id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' }, { id: 'class-b', nome: '4º Ano B', nivel: 'Ensino Fundamental', turno: 'Vespertino' }];
 const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id, name, color }) => ({ id, nome: name, cor: color }));
 const profilePreview = { id: 'teacher-preview', nome: 'Marina Souza', tratamento: 'professora', escola: 'Escola Horizonte', cidade: 'São Paulo', uf: 'SP', etapaEnsino: 'Ensino Fundamental' };
+const previewStorage: StoragePort = { get: async (key) => key === 'biblioteca:pessoal:pastas:v1' ? { value: JSON.stringify([{ id: 'folder-plans', nome: 'Planos de aula', pastaPaiId: 'root', cor: 'primary', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : key === 'documentos:app:v2' ? { value: JSON.stringify([{ id: 'doc-bncc', nome: 'BNCC_2024.pdf', mime: 'application/pdf', tamanho: 245760, pastaId: 'root', path: 'documentos/BNCC_2024.pdf', uri: 'file:///documentos/BNCC_2024.pdf', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : { value: '[]' }, set: async () => undefined, delete: async () => undefined, list: async () => ({ keys: [] }) };
 
 export function V2Preview() {
   const width = useMemo(readWidth, []);
@@ -140,9 +143,11 @@ export function V2Preview() {
           ) : activeScreen === 'classes' ? (
             <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => undefined} onNewStudent={() => undefined} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} />
           ) : activeScreen === 'profile' ? (
-            <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
+            <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
+          ) : activeScreen === 'files' ? (
+            <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : (
-            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : undefined} />
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
           )}
         </div>
       </div>

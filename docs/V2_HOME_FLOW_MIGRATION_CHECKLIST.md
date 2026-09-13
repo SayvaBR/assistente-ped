@@ -17,7 +17,7 @@ A Home V2 é a direção visual aprovada. Esta checklist registra a continuidade
 | Avatar / perfil | `perfil-professor` / `ProfileV2` | V2 em construção | evidência + revisão visual |
 | Planejamento | aba `plano` / `PlanningScreen` | V1 | Planejamento Dia, Semana, Mês |
 | Turmas | aba `turmas-v2` | V2 em construção | cadastro/perfil de aluno |
-| Arquivos | aba `biblioteca` / `LibraryScreen` | V1 | Arquivos V2 |
+| Arquivos | aba `biblioteca` / `FilesV2` | V2 em construção | lixeira/visualização e hardening |
 | Mais | aba `mais` / `MoreScreen` | V1 | Mais V2 |
 
 ## Frequência V2 — contratos preservados

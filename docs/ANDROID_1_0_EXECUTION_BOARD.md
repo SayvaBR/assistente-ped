@@ -36,7 +36,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
-7. Arquivos — `TODO`
+7. Arquivos — `IN PROGRESS`
 8. Mais — `TODO`
 
 ## Milestone M1 — Primeiro anel da Home
@@ -50,7 +50,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Planejamento mensal — `IN PROGRESS`
 - Turmas — `IN PROGRESS`
 - Perfil — `IN PROGRESS`
-- Arquivos — `TODO`
+- Arquivos — `IN PROGRESS`
 - Mais — `TODO`
 
 ### Critério M1
@@ -190,12 +190,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `a04dbb4` + Perfil V2 em construção local
-- Tela/fluxo: Turmas V2 endurecida e Perfil profissional V2 conectado à rota real
-- Screenshot/evidência: `docs/qa/clean-room/classes-v2-412.png`; `docs/qa/clean-room/profile-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
-- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil, texto ampliado; CI verde no commit anterior e nova suíte local verde
-- Resultado: `IN PROGRESS`; Perfil entra em construção V2; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: commit/push do Perfil V2 e iniciar Arquivos sem migrar telas em massa
+- HEAD: `6d8d532` + Arquivos V2 em construção local
+- Tela/fluxo: Perfil V2 conectado à rota real e Arquivos V2 com storage local, filtros e estados
+- Screenshot/evidência: `docs/qa/clean-room/profile-v2-412-full.png`; `docs/qa/clean-room/files-v2-412-full.png`; `classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
+- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas/Perfil/Arquivos, texto ampliado; Arquivos específico 2/2 verde
+- Resultado: `IN PROGRESS`; Perfil e Arquivos em construção V2; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: commit/push de Arquivos V2 e iniciar Mais após hardening da biblioteca
 
 ## Dívida visual conhecida
 

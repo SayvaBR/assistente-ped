@@ -83,7 +83,11 @@ O destino do BottomNavigation `turmas-v2` agora monta `ClassesV2` em `src/v2/`, 
 
 ## Superfície em construção — Perfil profissional V2
 
-O destino `perfil-professor` agora monta `ProfileV2` em `src/v2/`, com identidade do professor, tratamento, escola, cidade/UF e etapa de ensino em composição V2. O salvamento continua usando `repository.salvarPerfil`; troca de foto preserva o `PhotoCropper` e o armazenamento local de mídia existentes, incluindo limpeza da mídia anterior quando aplicável. O fluxo ainda está em construção e não é aprovação visual.
+O destino `perfil-professor` agora monta `ProfileV2` em `src/v2/`, com identidade do professor, tratamento, escola, cidade/UF e etapa de ensino em composição V2. O salvamento continua usando `repository.salvarPerfil`; troca de foto usa seletor nativo do Android e o armazenamento local de mídia existente, incluindo limpeza da mídia anterior quando aplicável. O fluxo ainda está em construção e não é aprovação visual.
+
+## Superfície em construção — Arquivos V2
+
+O destino `biblioteca` agora monta `FilesV2` em `src/v2/`, com biblioteca local, pastas, busca, filtros, favoritos, importação, captura e lixeira em composição V2. A leitura e escrita usam os contratos locais de `data/files.js` (`Ch`, `bs`, `Jf`, `$l`, `gp`, `trashDocument`), sem importar a UI legada. O overview está em construção; visualização/compartilhamento e hardening Android continuam na fila.
 
 Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes-flow.pw.ts` cobre render, entrada em Frequência e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real e revisão visual externa.
 
