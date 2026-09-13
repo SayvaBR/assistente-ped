@@ -159,3 +159,9 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - `src/v2/screens/NewStudentV2.tsx` substitui o destino visual V1 do botão `Cadastrar primeiro aluno` e preserva `onSalvo`, `onConcluido` e `onDirtyChange`.
 - Nome e nascimento são obrigatórios; responsável e telefone são opcionais, com validação real do contrato de dados antes de delegar a persistência ao App.
 - Estado: `IN PROGRESS`; foto do aluno, perfil/histórico e importação seguem como unidades posteriores da jornada de turmas.
+
+## Android 1.0 — assinatura V2 em andamento
+
+- `src/v2/screens/SubscriptionV2.tsx` substitui o paywall visual V1 e mantém a fonte de verdade em `getSubscriptionBilling()`/RevenueCat, incluindo ofertas, compra, cancelamento, restore e preferência gratuita.
+- Preços, trial e disponibilidade continuam vindo da loja; quando não há oferta real, a tela informa “em breve/indisponível” e não simula uma compra.
+- Estado: `IN PROGRESS`; faltam credenciais/loja real para fechar o gate de billing e validar a confirmação no Android físico.

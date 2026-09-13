@@ -18,6 +18,7 @@ import { OnboardingV2 } from '../screens/OnboardingV2';
 import { SplashV2 } from '../screens/SplashV2';
 import { SetupWizardV2 } from '../screens/SetupWizardV2';
 import { NewStudentV2 } from '../screens/NewStudentV2';
+import { SubscriptionV2 } from '../screens/SubscriptionV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -138,7 +139,9 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          {activeScreen === 'new-student' ? (
+          {activeScreen === 'subscription' ? (
+            <SubscriptionV2 onBack={() => setActiveScreen('more')} goTo={() => undefined} />
+          ) : activeScreen === 'new-student' ? (
             <NewStudentV2 turmaId="preview" onBack={() => setActiveScreen('wizard')} onConcluido={() => setActiveScreen('classes')} onSalvo={() => undefined} />
           ) : activeScreen === 'wizard' ? (
             <SetupWizardV2 storage={previewStorage} onDone={() => undefined} onBack={() => setActiveScreen('onboarding')} onFinish={(destination) => setActiveScreen(destination === 'aluno' ? 'classes' : 'home')} />

@@ -41,6 +41,7 @@ import { SetupWizard } from "../screens/SetupWizard.js";
 import { SetupWizardV2 } from "../v2/screens/SetupWizardV2";
 import { NewStudentV2 } from "../v2/screens/NewStudentV2";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
+import { SubscriptionV2 } from "../v2/screens/SubscriptionV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1001,7 +1002,7 @@ function App() {
                 onDirtyChange: pe,
               }))
             : Re?.name === "assinatura"
-              ? (ht = React.createElement(SubscriptionScreen, { onBack: _t, goTo: zt }))
+              ? (ht = React.createElement(SubscriptionV2, { onBack: _t, goTo: zt }))
               : Re?.name === "organizacao"
                 ? (ht = React.createElement(OrganizationScreen, {
                     onBack: _t,
