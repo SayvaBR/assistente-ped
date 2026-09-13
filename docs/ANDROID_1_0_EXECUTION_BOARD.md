@@ -195,10 +195,10 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `cb14a1b`
-- Tela/fluxo: Notificações, Ferramentas, Perfil do aluno, Gerenciar turmas, Ajuda, Termos e Lixeira V2 integrados ao app e ao Visual Lab
+- HEAD: `5e5d3a4`
+- Tela/fluxo: Notificações, Ferramentas, Perfil do aluno, Gerenciar turmas, Ajuda, Termos, Lixeira e Organização V2 integrados ao app e ao Visual Lab
 - Screenshot/evidência: `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`
-- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (73/73), boundary, TypeScript, `pnpm build`, `node scripts/android-sync.mjs` e `pnpm run android:qa`; APK QA gerado
+- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (75/75), boundary, TypeScript, `pnpm build`, `node scripts/android-sync.mjs` e `pnpm run android:qa`; APK QA gerado
 - PR #8: aberto, draft, checks `validate` 2/2 SUCCESS, merge state `CLEAN`
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
