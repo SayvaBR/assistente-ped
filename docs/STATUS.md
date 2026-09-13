@@ -204,3 +204,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - A persistência continua usando `data/classes` e `data/localStore`; a tela V1 não é mais a composição principal desse fluxo.
 - Evidência: `docs/qa/android-1.0/class-manager-v2-390.png`; E2E `e2e/v2-class-manager-flow.pw.ts` cobre criação, validação e 320px.
 - Estado: `IN PROGRESS`; arquivamento, filtros de organização e hardening de lifecycle seguem para a próxima unidade do fluxo de turmas.
+
+## Android 1.0 — suporte e termos V2 em andamento
+
+- `src/v2/screens/HelpV2.tsx` preserva rascunho local e compartilhamento explícito de feedback sem incluir dados de alunos.
+- `src/v2/screens/LegalV2.tsx` migra Termos de uso e Privacidade para a linguagem V2, mantendo o conteúdo legal existente.
+- Evidências: `docs/qa/android-1.0/help-v2-390.png` e `docs/qa/android-1.0/legal-v2-320.png`; E2E `e2e/v2-help-legal-flow.pw.ts` cobre validação, privacidade e compacto.
+- Estado: `IN PROGRESS`; revisão legal final e validação de compartilhamento no Android seguem bloqueadas pela configuração do canal comercial, não pela UI.

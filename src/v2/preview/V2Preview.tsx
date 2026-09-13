@@ -25,6 +25,8 @@ import { NotificationsV2 } from '../screens/NotificationsV2';
 import { ToolsV2 } from '../screens/ToolsV2';
 import { StudentProfileV2 } from '../screens/StudentProfileV2';
 import { ClassManagerV2 } from '../screens/ClassManagerV2';
+import { HelpV2 } from '../screens/HelpV2';
+import { LegalV2 } from '../screens/LegalV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -146,7 +148,11 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          {activeScreen === 'tools' ? (
+          {activeScreen === 'help' ? (
+            <HelpV2 onBack={() => setActiveScreen('more')} />
+          ) : activeScreen === 'legal' ? (
+            <LegalV2 onBack={() => setActiveScreen('more')} />
+          ) : activeScreen === 'tools' ? (
             <ToolsV2 onBack={() => setActiveScreen('more')} />
           ) : activeScreen === 'notifications' ? (
             <NotificationsV2 onBack={() => setActiveScreen('more')} />

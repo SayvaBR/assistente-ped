@@ -48,6 +48,8 @@ import { NotificationsV2 } from "../v2/screens/NotificationsV2";
 import { ToolsV2 } from "../v2/screens/ToolsV2";
 import { StudentProfileV2 } from "../v2/screens/StudentProfileV2";
 import { ClassManagerV2 } from "../v2/screens/ClassManagerV2";
+import { HelpV2 } from "../v2/screens/HelpV2";
+import { LegalV2 } from "../v2/screens/LegalV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -1126,18 +1128,12 @@ function App() {
                                         onBack: _t,
                                         goTo: zt,
                                       }))
-                                    : (Re == null ? void 0 : Re.name) ===
-                                        "ajuda-feedback"
-                                      ? (ht = React.createElement(
-                                          HelpFeedbackScreen,
-                                          { onBack: _t },
-                                        ))
                                       : (Re == null ? void 0 : Re.name) ===
-                                          "termos"
-                                        ? (ht = React.createElement(
-                                            LegalScreen,
-                                            { onBack: _t },
-                                          ))
+                                          "ajuda-feedback"
+                                      ? (ht = React.createElement(HelpV2, { onBack: _t }))
+                                        : (Re == null ? void 0 : Re.name) ===
+                                            "termos"
+                                          ? (ht = React.createElement(LegalV2, { onBack: _t }))
                                         : (Re == null ? void 0 : Re.name) ===
                                             "backup"
                                           ? (ht = React.createElement(
