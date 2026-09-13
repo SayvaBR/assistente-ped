@@ -1161,6 +1161,8 @@ function App() {
                                                                                     return Za.length
                                                                                       ? zt("registro-rapido")
                                                                                       : zt("novo-aluno");
+                                                                                  if (action === "profile")
+                                                                                    return zt("perfil-professor");
                                                                                   return xr("plano");
                                                                                 },
                                                                               onTabChange:

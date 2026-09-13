@@ -43,7 +43,7 @@ export type HomeV2Data = {
   pendingCount: number;
 };
 
-type HomeAction = 'attendance' | 'plan' | 'observation' | 'commitments';
+type HomeAction = 'attendance' | 'plan' | 'observation' | 'commitments' | 'profile';
 
 type HomeV2Props = {
   data: HomeV2Data;
@@ -78,7 +78,7 @@ export function HomeV2({
             </h1>
             <p className="v2-home__date">{data.dateLabel}</p>
           </div>
-          <button className="v2-home__avatar v2-pressable" type="button" aria-label="Abrir meu perfil">
+          <button className="v2-home__avatar v2-pressable" type="button" aria-label="Abrir meu perfil" onClick={() => onAction('profile')}>
             {data.teacherName.charAt(0).toUpperCase()}
           </button>
         </header>
@@ -193,14 +193,14 @@ export function HomeV2({
               {data.agenda.map((item) => (
                 <li key={`${item.time}-${item.title}`} className="v2-home__timeline-item">
                   <span className={`v2-home__timeline-dot v2-home__timeline-dot--${item.tone}`} aria-hidden="true" />
-                  <div className="v2-home__agenda-row">
+                  <button className="v2-home__agenda-row v2-pressable" type="button" onClick={() => onAction('commitments')} aria-label={`Abrir ${item.title}`}>
                     <time>{item.time}</time>
                     <div className="v2-home__agenda-copy">
                       <strong>{item.title}</strong>
                       <span>{item.detail}</span>
                     </div>
                     <ChevronRight size={20} aria-hidden="true" />
-                  </div>
+                  </button>
                 </li>
               ))}
             </ol>
