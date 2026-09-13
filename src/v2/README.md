@@ -1,66 +1,41 @@
 # V2 Clean Room
 
-`src/v2/` é a nova camada de experiência do Assistente Pedagógico.
+Esta pasta é a superfície visual nova do Assistente Pedagógico.
 
-Ela existe para impedir que decisões visuais da V1 contaminem a V2.
+Ela pode consumir domínio, dados, repositories, persistência, adapters nativos, BNCC e billing reais, mas não deve herdar a arquitetura visual V1.
 
 ## Estrutura
 
 ```text
 src/v2/
-  components/   primitives e componentes visuais V2
-  screens/      telas V2
-  styles/       tokens e foundations V2
-  motion/       recipes de motion/haptics
-  hooks/        hooks específicos de experiência V2
-  adapters/     tradução entre domain/data e view models V2
-  assets/       recursos visuais V2 aprovados
+  adapters/     -> traduz contratos/dados existentes para view models V2
+  components/   -> primitives comprovadas por telas reais
+  preview/      -> Visual Lab para iteração rápida
+  screens/      -> telas V2 novas
+  styles/       -> tokens/foundation V2
 ```
 
-## Regra de dependência
+## Android responsivo
 
-Fluxo permitido:
+A largura de `390px` no Visual Lab é apenas um viewport-âncora para comparar com targets produzidos nessa geometria.
 
-```text
-src/domain + src/data + adapters nativos
-                 ↓
-            src/v2/adapters
-                 ↓
-          src/v2/screens/hooks
-                 ↓
-          src/v2/components
-```
+A UI real deve adaptar-se continuamente a Androids diferentes. O Visual Lab oferece stress points em 320, 360, 390, 412, 432, 480 e 600 px.
 
-Fluxo proibido:
+Regras:
 
-```text
-src/screens (V1) ─┐
-src/components V1 ├──> src/v2
-recovered.js UI ──┘
-```
+- sem root de app fixo em 390 px;
+- sem truncamento de copy essencial;
+- sem scroll horizontal acidental;
+- alturas de cards/hero devem crescer com texto;
+- ações devem reorganizar quando faltar espaço;
+- safe areas e touch targets precisam sobreviver em todos os tamanhos.
 
-A V2 pode consumir contratos e dados reais. Não pode consumir a arquitetura visual antiga.
+Antes de Design Review, rode `pnpm run test:v2-responsive`.
 
-## Princípios
+## Regra visual
 
-- screenshot aprovado é target;
-- primeira renderização cedo;
-- 390px primeiro, depois 360/430;
-- composição antes de abstração;
-- primitives só são extraídas depois que uma tela comprova a necessidade;
-- nenhuma nova feature visual entra na V1 quando já existe equivalente V2 aprovado;
-- lógica presa a componente legado deve ser extraída para camada neutra.
+Target aprovado é referência positiva prioritária. Use o viewport correspondente para comparação lado a lado, corrija composição/hierarquia primeiro e só depois valide a matriz responsiva.
 
-## CSS
+## Fronteira
 
-Os tokens V2 começam em `styles/tokens.css`.
-
-Evite importar estilos V1 em componentes V2. Se um reset global existente for inevitável durante a transição, não use seus tokens/component classes como autoridade de design.
-
-## Revisão
-
-Toda tela importante deve terminar em:
-
-`READY FOR DESIGN REVIEW — <TELA>`
-
-Nunca fazer rollout em massa antes da tela piloto passar pelo gate visual.
+O build executa `pnpm run check:v2-boundary` para impedir imports visuais proibidos do legado em `src/v2/`.
