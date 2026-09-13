@@ -822,6 +822,7 @@ function App() {
     onRetry: () => loadHomeV2Agenda(M?.id),
     onSave: saveCommitmentV2,
     onDelete: deleteCommitmentV2,
+    onPeriodChange: (period) => zt(period === "week" ? "planejamento-semana" : "planejamento-mes", { dataKey: planningV2Date }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const planningDayV2 = () => React.createElement(PlanningDayV2, {

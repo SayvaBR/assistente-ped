@@ -41,6 +41,7 @@ type CommitmentsV2Props = {
   onRetry?: () => void;
   onSave?: (event: CommitmentV2Event, previous?: CommitmentV2Event) => Promise<void | CommitmentV2Event> | void;
   onDelete?: (event: CommitmentV2Event) => Promise<void> | void;
+  onPeriodChange?: (period: 'day' | 'week' | 'month') => void;
   onTabChange?: (tab: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais') => void;
   activeTab?: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais';
 };
@@ -82,6 +83,7 @@ export function CommitmentsV2({
   onRetry = () => undefined,
   onSave = () => undefined,
   onDelete = () => undefined,
+  onPeriodChange = () => undefined,
   onTabChange = () => undefined,
   activeTab = 'planejamento',
 }: CommitmentsV2Props) {
@@ -181,8 +183,8 @@ export function CommitmentsV2({
 
         <div className="v2-commitments__tabs" role="tablist" aria-label="Período da agenda">
           <button className="is-selected" type="button" role="tab" aria-selected="true">Dia</button>
-          <button type="button" role="tab" aria-selected="false" onClick={() => setFeedback('A visão semanal estará disponível no próximo passo do Planejamento.')}>Semana</button>
-          <button type="button" role="tab" aria-selected="false" onClick={() => setFeedback('A visão mensal estará disponível no próximo passo do Planejamento.')}>Mês</button>
+          <button type="button" role="tab" aria-selected="false" onClick={() => onPeriodChange('week')}>Semana</button>
+          <button type="button" role="tab" aria-selected="false" onClick={() => onPeriodChange('month')}>Mês</button>
         </div>
 
         <div className="v2-commitments__date-strip" aria-label="Escolher dia">

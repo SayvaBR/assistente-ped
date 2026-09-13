@@ -24,3 +24,13 @@ test('Compromissos V2 preserva copy e layout em texto ampliado', async ({ page }
   }));
   expect(result).toEqual({ overflow: false, hasTitle: true, hasAgenda: true });
 });
+
+test('Compromissos V2 leva os períodos para o planejamento correspondente', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=commitments&width=412');
+  const device = page.locator('.v2-preview-device');
+  await device.getByRole('tab', { name: 'Semana' }).click();
+  await expect(device.getByRole('heading', { name: 'Planejamento semanal' })).toBeVisible();
+  await device.getByRole('tab', { name: 'Mês' }).click();
+  await expect(device.getByRole('heading', { name: /2024/ })).toBeVisible();
+});

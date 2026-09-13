@@ -189,7 +189,7 @@ export function V2Preview() {
               onSave={() => undefined}
             />
           ) : activeScreen === 'commitments' ? (
-            <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} />
+            <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} onPeriodChange={(period) => setActiveScreen(period === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-day' ? (
             <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
