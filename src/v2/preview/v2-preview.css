@@ -28,6 +28,7 @@
 
 .v2-preview-toolbar__widths {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
@@ -59,6 +60,7 @@
 
 .v2-preview-device {
   min-height: 780px;
+  max-width: 100%;
   background: var(--v2-color-bg);
   border-radius: 28px;
   overflow: hidden;
@@ -104,7 +106,14 @@
 
 @media (max-width: 640px) {
   .v2-preview-toolbar {
+    align-items: flex-start;
     flex-wrap: wrap;
+  }
+
+  .v2-preview-toolbar strong,
+  .v2-preview-toolbar__screen,
+  .v2-preview-toolbar__widths {
+    width: 100%;
   }
 
   .v2-preview-stage {
