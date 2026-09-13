@@ -8,6 +8,8 @@ test('Mais V2 organiza recursos, conta, preferências e suporte', async ({ page 
   await expect(device.getByRole('button', { name: /Meu perfil/ })).toBeVisible();
   await expect(device.getByRole('button', { name: /Configurações/ })).toBeVisible();
   await expect(device.getByRole('button', { name: /Ajuda e feedback/ })).toBeVisible();
+  await device.getByRole('button', { name: /Ferramentas de sala/ }).click();
+  await expect(device.locator('h1', { hasText: 'Ferramentas' })).toBeVisible();
 });
 
 test('Mais V2 preserva copy em texto ampliado', async ({ page }) => {
