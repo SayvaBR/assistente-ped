@@ -21,6 +21,7 @@ O código atual é baseline funcional, não baseline visual. Componentes existen
 - `COMPONENTS.md` — catálogo de primitives e componentes de produto, anatomia, variantes, comportamento e anti-patterns.
 - `SCREEN_PATTERNS_AND_FLOWS.md` — arquitetura dos fluxos, padrões de tela e blueprint das áreas principais.
 - `IMPLEMENTATION_PLAYBOOK.md` — como o Codex deve migrar o app, organização de código, testes, evidências e gate de aprovação.
+- `VISUAL_QA_CHECKLIST.md` — checklist obrigatória de revisão visual, acessibilidade, estados, privacidade, billing e aprovação.
 
 ## Objetivo de identidade
 
