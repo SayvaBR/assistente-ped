@@ -25,7 +25,10 @@ As capturas foram feitas em Chrome isolado, com dados sintéticos locais e `colo
 | Chamada pendente | `home-after-pending-top.png` |
 | Chamada concluída, plano e agenda | `home-after-data-top.png`, `home-after-data-agenda.png`, `home-after-data-plans.png`, `home-after-data-recent.png`, `home-after-data-end.png` |
 | Agenda carregada com eventos fora da semana | `home-after-other-week-agenda.png` |
+| Agenda com erro e recuperação por retry | `home-after-agenda-error.png`, `home-after-agenda-retry.png` |
+| Chamada pendente com agenda e atalhos | `home-after-pending-top.png`, `home-after-pending-agenda.png`, `home-after-pending-end.png` |
 | Viewport menor 375×812 | `home-after-data-small-end.png` |
+| Foco, zoom de texto e reduced-motion | `home-after-large-text.png` |
 
 Viewports principais: `393×873` (aproximação CSS para o Poco X7) e `375×812` (regressão de viewport menor). A navegação inferior foi verificada no fim da rolagem, sem ultrapassar a largura do viewport.
 
@@ -38,6 +41,8 @@ Viewports principais: `393×873` (aproximação CSS para o Poco X7) e `375×812`
 - `pnpm test:e2e` — aprovado: 25 testes.
 - Auditoria DOM: 7 títulos de seção com IDs únicos; cartões de turma, frequência e foco com fundo branco e acento azul; rolagem `scrollHeight` maior que o viewport e `paddingBottom` para a barra inferior.
 - Fluxo de agenda: abrir confirmação, concluir compromisso, exibir “Compromisso concluído.” e renderizar ação “Reabrir” após salvar.
+- Falha de agenda: alerta visível com retry; após corrigir a fixture, o mesmo retry renderizou o evento recuperado.
+- Acessibilidade: elemento de plano focado exibiu outline azul de 3 px, `tabIndex=0`; com reduced-motion, transição/animação computadas em `0.01ms`; zoom de 125% não criou overflow horizontal.
 
 ## Limites da evidência
 
