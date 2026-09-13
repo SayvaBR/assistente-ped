@@ -89,6 +89,10 @@ O destino `perfil-professor` agora monta `ProfileV2` em `src/v2/`, com identidad
 
 O destino `biblioteca` agora monta `FilesV2` em `src/v2/`, com biblioteca local, pastas, busca, filtros, favoritos, importação, captura e lixeira em composição V2. A leitura e escrita usam os contratos locais de `data/files.js` (`Ch`, `bs`, `Jf`, `$l`, `gp`, `trashDocument`), sem importar a UI legada. O overview está em construção; visualização/compartilhamento e hardening Android continuam na fila.
 
+## Superfície em construção — Mais V2
+
+O destino `mais` agora monta `MoreV2` em `src/v2/`, com hub organizado por sala, conta, preferências, dados e suporte. Cada item mantém o callback para a rota funcional existente; a navegação inferior também permanece na linguagem V2. As telas secundárias ainda serão migradas sequencialmente e o hub não é aprovação visual.
+
 Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes-flow.pw.ts` cobre render, entrada em Frequência e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real e revisão visual externa.
 
 ## Baseline funcional preservado

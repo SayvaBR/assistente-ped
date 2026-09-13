@@ -71,6 +71,8 @@ import { PlanningDayV2 } from "../v2/screens/PlanningDayV2";
 import { PlanningCalendarV2 } from "../v2/screens/PlanningCalendarV2";
 import { ClassesV2 } from "../v2/screens/ClassesV2";
 import { ProfileV2 } from "../v2/screens/ProfileV2";
+import { FilesV2 } from "../v2/screens/FilesV2";
+import { MoreV2 } from "../v2/screens/MoreV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1023,7 +1025,8 @@ function App() {
                         ["musica", "videos", "links"].includes(
                           Re == null ? void 0 : Re.name,
                         )
-                      ? (ht = React.createElement(LibraryScreen, {
+                      ? (ht = React.createElement(FilesV2, {
+                          storage,
                           onBack: _t,
                           onDirtyChange: pe,
                           setBackHandler: Ie,
@@ -1312,8 +1315,10 @@ function App() {
                                                                       "biblioteca"
                                                                     ? (ht =
                                                                         React.createElement(
-                                                                          LibraryScreen,
+                                                                          FilesV2,
                                                                           {
+                                                                            storage,
+                                                                            onBack: _t,
                                                                             onDirtyChange:
                                                                               pe,
                                                                            setBackHandler:
@@ -1440,9 +1445,19 @@ function App() {
                                                                               "mais" &&
                                                                             (ht =
                                                                               React.createElement(
-                                                                                MoreScreen,
+                                                                                MoreV2,
                                                                                 {
                                                                                   goTo: zt,
+                                                                                  onTabChange: (tab) =>
+                                                                                    xr(
+                                                                                      {
+                                                                                        inicio: "inicio",
+                                                                                        planejamento: "plano",
+                                                                                        turmas: "turmas-v2",
+                                                                                        arquivos: "biblioteca",
+                                                                                        mais: "mais",
+                                                                                      }[tab],
+                                                                                    ),
                                                                                 },
                                                                               )),
     React.createElement(
