@@ -4,6 +4,7 @@ import { FrequencyV2, type FrequencyV2Data } from '../screens/FrequencyV2';
 import { ObservationV2 } from '../screens/ObservationV2';
 import { CommitmentsV2, type CommitmentV2Event } from '../screens/CommitmentsV2';
 import { PlanningDayV2 } from '../screens/PlanningDayV2';
+import { PlanningCalendarV2 } from '../screens/PlanningCalendarV2';
 import type { LessonPlan } from '../../domain/models';
 import '../styles/foundation.css';
 import './v2-preview.css';
@@ -128,7 +129,9 @@ export function V2Preview() {
           ) : activeScreen === 'commitments' ? (
             <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} />
           ) : activeScreen === 'planning-day' ? (
-            <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
+            <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
+          ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
+            <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => undefined} onCreatePlan={() => undefined} />
           ) : (
             <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : undefined} />
           )}

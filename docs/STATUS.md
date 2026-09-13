@@ -75,7 +75,7 @@ Evidência local: `docs/qa/clean-room/commitments-v2-412.png`. O E2E `e2e/v2-com
 
 O destino `Home V2 -> Ver plano` agora monta `PlanningDayV2` em `src/v2/`, com timeline de momentos, troca de dia, estados loading/empty/error/offline, abertura do editor de plano existente e criação pelo domínio `newLessonPlan`. A leitura usa `loadPlansByDate`; Dia/Semana/Mês permanecem explicitamente em migração sequencial.
 
-Evidência local: `docs/qa/clean-room/planning-day-v2-412.png`. O E2E `e2e/v2-planning-day-flow.pw.ts` cobre render e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta integrar Semana/Mês, hardening Android real e revisão visual externa.
+Evidências locais: `docs/qa/clean-room/planning-day-v2-412.png`, `planning-week-v2-412.png` e `planning-month-v2-412.png`. O E2E `e2e/v2-planning-day-flow.pw.ts` cobre render, Dia/Semana/Mês e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, validação completa de edição/autosave e revisão visual externa.
 
 ## Baseline funcional preservado
 

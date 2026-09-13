@@ -60,3 +60,5 @@ A primeira composição em 412px usa uma timeline diária com contexto de turma,
 A primeira composição do planejamento usa uma timeline de momentos, troca de dia, abertura do plano existente e criação de novo plano, com os dados reais do repositório de planejamento.
 
 ![Planejamento diário V2 — 412px](planning-day-v2-412.png)
+
+Também foram capturadas as composições de continuidade: [Semana](planning-week-v2-412.png) e [Mês](planning-month-v2-412.png).

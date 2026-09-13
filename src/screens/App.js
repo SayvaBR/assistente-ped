@@ -55,7 +55,7 @@ import { dateKey } from "../core/recovered.js";
 import { loadClasses } from "../data/classes.js";
 import { deleteMedia, saveMedia } from "../data/files.js";
 import { Cp, Xf } from "../data/agenda-camera.js";
-import { loadPlansByDate } from "../data/planRepository";
+import { listPlans } from "../data/planRepository";
 import { migrateLegacyClassData } from "../data/classes.js";
 import React from "react";
 import { nowISO } from "../core/recovered.js";
@@ -68,6 +68,7 @@ import { u0 } from "../core/recovered.js";
 import { ws } from "../core/recovered.js";
 import { z0 } from "../screens/z0.js";
 import { PlanningDayV2 } from "../v2/screens/PlanningDayV2";
+import { PlanningCalendarV2 } from "../v2/screens/PlanningCalendarV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -659,10 +660,10 @@ function App() {
           : kn(ae));
     };
   ReactHooks.useEffect(() => {
-    if (Re?.name !== "planejamento-dia" || !M?.id) return undefined;
+    if (!["planejamento-dia", "planejamento-semana", "planejamento-mes"].includes(Re?.name) || !M?.id) return undefined;
     let active = true;
     setPlanningV2State((state) => ({ ...state, status: "loading", error: "" }));
-    loadPlansByDate(M.id, planningV2Date)
+    listPlans(M.id)
       .then((plans) => active && setPlanningV2State({ status: plans.length ? "ready" : "empty", plans, error: "" }))
       .catch((error) => active && setPlanningV2State({ status: "error", plans: [], error: error?.message || "Não foi possível carregar o planejamento." }));
     return () => { active = false; };
@@ -801,13 +802,29 @@ function App() {
   const planningDayV2 = () => React.createElement(PlanningDayV2, {
     className: M?.nome || "Sua turma",
     dateKey: planningV2Date,
-    plans: planningV2State.plans,
+    plans: planningV2State.plans.filter((plan) => plan.dataKey === planningV2Date),
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
     offline: !homeIsOnline,
     onBack: _t,
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onDateChange: (offset) => setPlanningV2Date((value) => shiftDateKey(value, offset)),
+    onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+  });
+  const planningCalendarV2 = (mode) => React.createElement(PlanningCalendarV2, {
+    className: M?.nome || "Sua turma",
+    mode,
+    dateKey: planningV2Date,
+    plans: planningV2State.plans,
+    loading: planningV2State.status === "loading",
+    error: planningV2State.error,
+    offline: !homeIsOnline,
+    onBack: _t,
+    onRetry: () => setPlanningV2Reload((value) => value + 1),
+    onDateChange: (value) => setPlanningV2Date(value),
+    onViewChange: (next) => zt(next === "day" ? "planejamento-dia" : next === "week" ? "planejamento-semana" : "planejamento-mes"),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
@@ -974,6 +991,10 @@ function App() {
                       onEditar: Ho,
                       turma: M,
                     }))
+                    : (Re == null ? void 0 : Re.name) === "planejamento-semana"
+                    ? (ht = planningCalendarV2("week"))
+                    : (Re == null ? void 0 : Re.name) === "planejamento-mes"
+                    ? (ht = planningCalendarV2("month"))
                     : (Re == null ? void 0 : Re.name) === "planejamento-dia"
                     ? (ht = planningDayV2())
                     : (Re == null ? void 0 : Re.name) === "compromissos"

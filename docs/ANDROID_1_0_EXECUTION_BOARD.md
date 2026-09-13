@@ -192,7 +192,7 @@ Atualizar a cada rodada significativa:
 - Branch: `codex/5-v2-clean-room`
 - HEAD: `159112e` + Observação V2 local ainda não commitada
 - Tela/fluxo: Planejamento diário V2 — timeline de momentos
-- Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412.png`; Agenda `commitments-v2-412.png`
+- Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`; Agenda `commitments-v2-412.png`
 - Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento, texto ampliado
 - Resultado: `IN PROGRESS`; Agenda continua `IN PROGRESS`; Observação `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
 - Próxima ação: fechar integração/estados de Planejamento Dia, checkpoint Git e iniciar Semana/Mês
