@@ -65,6 +65,12 @@ O fluxo `registro-rapido` agora monta `ObservationV2` em `src/v2/`: picker de al
 
 Evidências locais: `docs/qa/clean-room/observation-picker-412.png` e `observation-form-412.png`. O E2E `e2e/v2-observation-flow.pw.ts` cobre escolha, preenchimento, salvamento e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, estados finais e revisão visual externa.
 
+## Superfície em construção — Compromissos / Agenda V2
+
+O destino contextual `compromissos` da Home agora monta `CommitmentsV2` em `src/v2/`: timeline diária, seletor de semana, estados sem agenda/loading/erro/offline, criação/edição, conclusão/reabertura e exclusão. A persistência usa os contratos locais `Cp`/`Xf` por turma; o Planejamento legado continua acessível separadamente pela navegação enquanto o próximo lote migra Dia/Semana/Mês.
+
+Evidência local: `docs/qa/clean-room/commitments-v2-412.png`. O E2E `e2e/v2-commitments-flow.pw.ts` cobre render, criação e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, revisão completa de estados e revisão visual externa.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

@@ -23,6 +23,7 @@ import { createHomeV2Data } from "../v2/adapters/home-v2-adapter";
 import { FrequencyV2 } from "../v2/screens/FrequencyV2";
 import { createFrequencyV2Data } from "../v2/adapters/frequency-v2-adapter";
 import { ObservationV2 } from "../v2/screens/ObservationV2";
+import { CommitmentsV2 } from "../v2/screens/CommitmentsV2";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
@@ -53,7 +54,7 @@ import { createId } from "../core/recovered.js";
 import { dateKey } from "../core/recovered.js";
 import { loadClasses } from "../data/classes.js";
 import { deleteMedia, saveMedia } from "../data/files.js";
-import { Cp } from "../data/agenda-camera.js";
+import { Cp, Xf } from "../data/agenda-camera.js";
 import { migrateLegacyClassData } from "../data/classes.js";
 import React from "react";
 import { nowISO } from "../core/recovered.js";
@@ -755,6 +756,33 @@ function App() {
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
     ...props,
   });
+  const saveCommitmentV2 = async (event) => {
+    if (!M?.id) throw new Error("Selecione uma turma para usar a agenda.");
+    const current = await Cp(storage, M.id);
+    const persisted = { ...event, id: event.id || createId("evento"), turmaId: M.id };
+    const next = event.id ? current.map((item) => item.id === event.id ? persisted : item) : [...current, persisted];
+    const saved = await Xf(storage, M.id, next);
+    await loadHomeV2Agenda(M.id);
+    return saved.find((item) => item.id === persisted.id) || persisted;
+  };
+  const deleteCommitmentV2 = async (event) => {
+    if (!M?.id) throw new Error("Selecione uma turma para usar a agenda.");
+    const current = await Cp(storage, M.id);
+    await Xf(storage, M.id, current.filter((item) => item.id !== event.id));
+    await loadHomeV2Agenda(M.id);
+  };
+  const commitmentsV2 = () => React.createElement(CommitmentsV2, {
+    className: M?.nome || "Sua turma",
+    events: homeAgendaState.items,
+    status: homeAgendaState.status,
+    error: homeAgendaState.error,
+    offline: !homeIsOnline,
+    onBack: _t,
+    onRetry: () => loadHomeV2Agenda(M?.id),
+    onSave: saveCommitmentV2,
+    onDelete: deleteCommitmentV2,
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+  });
   const Ot = () => {
       (pe(!1), En());
     },
@@ -917,7 +945,9 @@ function App() {
                       onEditar: Ho,
                       turma: M,
                     }))
-                  : (Re == null ? void 0 : Re.name) === "observacao"
+                    : (Re == null ? void 0 : Re.name) === "compromissos"
+                    ? (ht = commitmentsV2())
+                    : (Re == null ? void 0 : Re.name) === "observacao"
                     ? (ht = observationV2({
                         selectedStudentId: Re.data?.id,
                         onChangeStudent: () => zt("registro-rapido"),
@@ -1246,6 +1276,8 @@ function App() {
                                                                                     return Za.length
                                                                                       ? zt("registro-rapido")
                                                                                       : zt("novo-aluno");
+                                                                                  if (action === "commitments")
+                                                                                    return zt("compromissos");
                                                                                   if (action === "profile")
                                                                                     return zt("perfil-professor");
                                                                                   return xr("plano");

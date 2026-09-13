@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { HomeV2, type HomeV2Data } from '../screens/HomeV2';
 import { FrequencyV2, type FrequencyV2Data } from '../screens/FrequencyV2';
 import { ObservationV2 } from '../screens/ObservationV2';
+import { CommitmentsV2, type CommitmentV2Event } from '../screens/CommitmentsV2';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -63,6 +64,11 @@ const frequencyPreviewData: FrequencyV2Data = {
 };
 
 const observationPreviewStudents = frequencyPreviewData.students.map(({ id, name, color }) => ({ id, name, color }));
+const commitmentsPreviewEvents: CommitmentV2Event[] = [
+  { id: 'math', titulo: 'Aula de Matemática', tipo: 'evento', data: '2024-08-28', hora: '08:00', observacoes: '5º Ano A · Sala 1' },
+  { id: 'meeting', titulo: 'Reunião pedagógica', tipo: 'reuniao', data: '2024-08-28', hora: '10:00', observacoes: 'Sala dos professores' },
+  { id: 'family', titulo: 'Atendimento à família', tipo: 'lembrete', data: '2024-08-28', hora: '15:00', observacoes: 'João Pedro' },
+];
 
 export function V2Preview() {
   const width = useMemo(readWidth, []);
@@ -113,8 +119,10 @@ export function V2Preview() {
               onSelectStudent={setObservationStudentId}
               onSave={() => undefined}
             />
+          ) : activeScreen === 'commitments' ? (
+            <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} />
           ) : (
-            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : undefined} />
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : undefined} />
           )}
         </div>
       </div>

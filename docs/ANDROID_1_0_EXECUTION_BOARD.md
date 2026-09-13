@@ -32,7 +32,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
-3. Compromissos / Agenda — `TODO`
+3. Compromissos / Agenda — `IN PROGRESS`
 4. Planejamento Dia/Semana/Mês — `TODO`
 5. Turmas — `TODO`
 6. Perfil do professor — `TODO`
@@ -44,7 +44,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Home V2 — `VISUAL DIRECTION APPROVED`
 - Frequência — `READY FOR DESIGN REVIEW`
 - Registrar observação — `READY FOR DESIGN REVIEW`
-- Compromissos / Agenda — `TODO`
+- Compromissos / Agenda — `IN PROGRESS`
 - Planejamento diário — `TODO`
 - Planejamento semanal — `TODO`
 - Planejamento mensal — `TODO`
@@ -191,11 +191,11 @@ Atualizar a cada rodada significativa:
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
 - HEAD: `159112e` + Observação V2 local ainda não commitada
-- Tela/fluxo: Observação V2 — picker e formulário real
-- Screenshot/evidência: `docs/qa/clean-room/observation-picker-412.png`; `observation-form-412.png`
-- Testes executados: boundary, TypeScript, matriz V2, E2E picker/form/save e texto 130%
-- Resultado: `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: checkpoint Git e iniciar Compromissos/Agenda, mantendo as revisões visuais em paralelo
+- Tela/fluxo: Compromissos / Agenda V2 — timeline e editor local
+- Screenshot/evidência: `docs/qa/clean-room/commitments-v2-412.png`; Observação `observation-picker-412.png` / `observation-form-412.png`
+- Testes executados: boundary, TypeScript, matriz V2, E2E Home/Frequência/Observação/Agenda, texto ampliado
+- Resultado: `IN PROGRESS`; Observação `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: fechar QA de estados/persistência da Agenda, checkpoint Git e iniciar Planejamento Dia
 
 ## Dívida visual conhecida
 

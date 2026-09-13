@@ -48,3 +48,9 @@ A primeira composição em 412px cobre o picker de aluno e o formulário de obse
 
 ![Observação V2 — escolha do aluno em 412px](observation-picker-412.png)
 ![Observação V2 — formulário em 412px](observation-form-412.png)
+
+## Compromissos / Agenda V2 — primeiro render
+
+A primeira composição em 412px usa uma timeline diária com contexto de turma, seletor de data, compromissos semânticos, concluir/reabrir, excluir e editor de novo compromisso. A integração de produção preserva os contratos locais `Cp`/`Xf`.
+
+![Compromissos V2 — 412px](commitments-v2-412.png)
