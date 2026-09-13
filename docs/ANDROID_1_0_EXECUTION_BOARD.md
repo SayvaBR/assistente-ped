@@ -113,7 +113,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 ## Milestone M6 — Mais, configurações e lifecycle
 
 - Perfil profissional — `TODO`
-- Gerenciar turmas — `TODO`
+- Gerenciar turmas — `IN PROGRESS`
 - Ferramentas de sala — `IN PROGRESS`
 - Notificações — `IN PROGRESS`
 - Mais hub — `TODO`

@@ -47,6 +47,7 @@ import { BackupV2 } from "../v2/screens/BackupV2";
 import { NotificationsV2 } from "../v2/screens/NotificationsV2";
 import { ToolsV2 } from "../v2/screens/ToolsV2";
 import { StudentProfileV2 } from "../v2/screens/StudentProfileV2";
+import { ClassManagerV2 } from "../v2/screens/ClassManagerV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -861,6 +862,15 @@ function App() {
     onObservation: () => zt("registro-rapido"),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
+  const classManagerV2 = () => React.createElement(ClassManagerV2, {
+    classes: se,
+    activeClass: M,
+    onBack: _t,
+    onAtualizar: Pa,
+    onAtivar: dr,
+    goTo: zt,
+    onDirtyChange: pe,
+  });
   const Ot = () => {
       (pe(!1), En());
     },
@@ -1194,18 +1204,7 @@ function App() {
                                                         ? void 0
                                                         : Re.name) ===
                                                       "gerenciar-turmas"
-                                                    ? (ht = React.createElement(
-                                                        ClassesScreen,
-                                                        {
-                                                          onBack: _t,
-                                                          goTo: zt,
-                                                          turmas: se,
-                                                          turmaAtiva: M,
-                                                          onAtualizar: Pa,
-                                                          onAtivar: dr,
-                                                          onDirtyChange: pe,
-                                                        },
-                                                      ))
+                                                    ? (ht = classManagerV2())
                                                     : (Re == null
                                                           ? void 0
                                                           : Re.name) ===

@@ -24,6 +24,7 @@ import { BackupV2 } from '../screens/BackupV2';
 import { NotificationsV2 } from '../screens/NotificationsV2';
 import { ToolsV2 } from '../screens/ToolsV2';
 import { StudentProfileV2 } from '../screens/StudentProfileV2';
+import { ClassManagerV2 } from '../screens/ClassManagerV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -181,6 +182,8 @@ export function V2Preview() {
             <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
             <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
+          ) : activeScreen === 'class-manager' ? (
+            <ClassManagerV2 classes={classesPreview} activeClass={classesPreview[0]} onBack={() => setActiveScreen('more')} onAtualizar={() => undefined} onAtivar={async () => undefined} goTo={() => undefined} />
           ) : activeScreen === 'student-profile' ? (
             <StudentProfileV2 student={studentProfilePreview} className="5º Ano A" onBack={() => setActiveScreen('classes')} onEditar={async () => undefined} onExcluir={async () => undefined} loadObservations={async () => [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade e explicou sua estratégia para o grupo.' }]} />
           ) : activeScreen === 'classes' ? (

@@ -197,3 +197,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - A navegação parte de Turmas/Frequência e preserva as ações de nova observação e chamada; registros continuam vindo do repository existente.
 - Evidência: `docs/qa/android-1.0/student-profile-v2-390.png`; E2E `e2e/v2-student-profile-flow.pw.ts` cobre contexto, registros, edição e 320px.
 - Estado: `IN PROGRESS`; galeria/foto do aluno e hardening de lifecycle ainda precisam de uma unidade própria.
+
+## Android 1.0 — gerenciamento de turmas V2 em andamento
+
+- `src/v2/screens/ClassManagerV2.tsx` assume o destino `gerenciar-turmas`, com criação/edição local, busca, seleção da turma ativa e acesso à organização.
+- A persistência continua usando `data/classes` e `data/localStore`; a tela V1 não é mais a composição principal desse fluxo.
+- Evidência: `docs/qa/android-1.0/class-manager-v2-390.png`; E2E `e2e/v2-class-manager-flow.pw.ts` cobre criação, validação e 320px.
+- Estado: `IN PROGRESS`; arquivamento, filtros de organização e hardening de lifecycle seguem para a próxima unidade do fluxo de turmas.
