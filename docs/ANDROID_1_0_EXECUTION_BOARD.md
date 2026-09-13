@@ -64,7 +64,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 ## Milestone M2 — Planejamento profissional completo
 
-- Planejamento overview — `TODO`
+- Planejamento overview — `READY FOR DESIGN REVIEW`
 - Criar plano — `IN PROGRESS`
 - Editar plano — `IN PROGRESS`
 - BNCC — `IN PROGRESS`
@@ -195,10 +195,10 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `ebc7154`
-- Tela/fluxo: Compromissos V2 agora encaminha Dia/Semana/Mês para as superfícies de planejamento correspondentes; os demais fluxos V2 listados abaixo permanecem integrados ao app e ao Visual Lab
-- Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (75/75), boundary, TypeScript, `pnpm build`, `node scripts/android-sync.mjs` e `pnpm run android:qa`; APK QA gerado
+- HEAD: `23cf1e7`
+- Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planejamento overview V2 substitui o tab principal V1, abre/cria planos reais e mantém editor com estado novo/edição sem arquivamento prematuro
+- Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
+- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (78/78), fluxo Planejamento/Editor (4/4), boundary e TypeScript; build, sync Android e APK QA permanecem verdes no checkpoint anterior e serão repetidos após este lote
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
