@@ -17,9 +17,9 @@ A **Home V2 está VISUAL DIRECTION APPROVED**. Isso libera a migração sequenci
 - Home principal conectada a perfil, turma, planos do dia, frequência e agenda local por adapter V2; fixtures sintéticas permanecem restritas ao Visual Lab/evidência pública;
 - avatar e itens da agenda possuem ação/semântica interativa real;
 - `pnpm run check:v2-boundary`, testes Vitest, `pnpm run test:v2-responsive` e build aprovados;
-- matriz responsiva validada em 320 / 360 / 390 / 412 / 432 / 480 / 600 px;
+- matriz responsiva da Home validada em 320 / 360 / 390 / 412 / 432 / 480 / 600 px;
 - Android sync/Gradle/APK QA já passaram na rodada funcional;
-- workflow `V2 validation` do head anterior aprovado e o PR retornou a estado mergeable;
+- workflow `V2 validation` está verde no head `8e8a2e1`;
 - Gate adicional de aparelho real documentado em `docs/ANDROID_REAL_DEVICE_QA.md`, usando POCO X7 Pro como referência física de aceitação sem transformá-lo em breakpoint de layout.
 
 ### Gate de produção/merge ainda pendente
@@ -35,22 +35,25 @@ A aprovação visual da Home não fecha o Gate B. Antes de `PRODUCTION GATE READ
 7. executar QA em aparelho Android real conforme `docs/ANDROID_REAL_DEVICE_QA.md` quando o POCO X7 Pro estiver disponível, sem inventar evidência se não houver acesso físico;
 8. manter CI verde no head que vier a ser candidato ao Gate B.
 
-## Próxima superfície P0 — Frequência / Fazer chamada
+## Superfície P0 em Design Review — Frequência / Fazer chamada
 
-A próxima tela liberada pela direção visual da Home é **Frequência / Fazer chamada**. Não abrir P1/P2 nem uma segunda frente visual paralela.
+A Frequência V2 foi implementada e possui evidência pública de 390 px, before/after Home→Frequência e estados loading/error/offline/empty. O head `8e8a2e1` está com `V2 validation` verde. **Ainda não está `VISUAL DIRECTION APPROVED`.**
 
-Fluxo obrigatório do Codex:
+Bloqueios confirmados na revisão:
 
-1. abrir Frequência a partir da Home V2 real;
-2. formular uma hipótese visual pequena;
-3. implementar o mínimo necessário;
-4. renderizar cedo no viewport-âncora;
-5. anexar screenshot real ao PR;
-6. registrar 3–5 diferenças perceptivas em relação à direção V2/Home;
-7. corrigir primeiro a maior diferença e anexar nova screenshot;
-8. durante iteração visual ativa, repetir o ciclo aproximadamente a cada 5–10 minutos quando viável;
-9. antes do gate visual da tela, validar matriz Android, texto ampliado e estados relevantes;
-10. somente após `VISUAL DIRECTION APPROVED — FREQUÊNCIA` avançar para Registrar observação.
+1. `Configurar turma` e a seta `Mais detalhes de <aluno>` são controles focáveis sem ação real;
+2. tabs de contexto dependem de `onContextChange`, mas a integração real em `App.js` não fornece esse handler;
+3. opções do seletor de status usam `min-height: 44px`, abaixo do mínimo obrigatório de 48 px;
+4. abaixo de 360 px a composição reduz tabs/status/bottom nav para `0.65rem` / `0.64rem` / `0.61rem`, sacrificando legibilidade em vez de adaptar layout;
+5. `e2e/v2-frequency-responsive.pw.ts` existe e foi reportado como aprovado localmente, mas `pnpm run test:v2-responsive`/CI executa apenas `e2e/v2-responsive.pw.ts` e portanto não cobre a Frequência;
+6. a suíte específica ainda não mede touch targets >=48 px nem crescimento de texto 115/130/150%;
+7. após as correções, anexar nova evidência representativa em 390 px e 320 px com texto ampliado.
+
+Próximo ciclo obrigatório:
+
+`CORRIGIR AFFORDANCES -> TOUCH TARGETS -> LEGIBILIDADE -> RENDER -> SCREENSHOT 390 -> SCREENSHOT 320/150% -> OBSERVAÇÃO -> CORREÇÃO -> NOVA SCREENSHOT`
+
+Não avançar para **Registrar observação** antes de `VISUAL DIRECTION APPROVED — FREQUÊNCIA`.
 
 ## Prioridade e dependências
 
