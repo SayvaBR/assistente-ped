@@ -4,151 +4,286 @@ Este arquivo contém regras obrigatórias para qualquer agente de código que tr
 
 ## Missão
 
-Levar o Assistente Pedagógico até uma versão Android 1.0 funcional, estável, segura, publicável e com identidade própria. A base atual usa React, TypeScript, Vite e Capacitor Android.
+Levar o Assistente Pedagógico até Android 1.0 funcional, estável, seguro, publicável e com identidade visual própria forte.
 
-O estado visual atual é **baseline funcional, não baseline de design**. O aplicativo está em processo de reformulação de identidade e agentes têm autorização explícita para substituir padrões visuais, layouts, navegação, componentes e arquitetura de interface quando isso produzir uma experiência claramente melhor.
+A aplicação legada é **baseline funcional, não baseline de design**.
 
-## O que deve ser preservado
+A partir da V2, o objetivo é trabalhar em modo **visual-first + clean room**, seguindo `docs/CODEX_LOVABLE_MODE.md` e as skills do projeto.
 
-Estas regras não são negociáveis:
+## Stack
 
-- integridade e migração dos dados existentes;
-- privacidade/LGPD e proteção de dados pedagógicos e de alunos;
-- segurança, billing e contratos de persistência;
-- funcionamento offline do núcleo do aplicativo;
-- regras pedagógicas e diferenciação correta por etapa de ensino;
-- acessibilidade, áreas de toque, foco, contraste e reduced motion;
-- stack principal, salvo decisão explícita de produto;
-- nenhuma feature falsa, CTA sem comportamento ou dado comercial inventado.
+- React
+- TypeScript
+- Vite
+- Capacitor Android
 
-## O que PODE mudar profundamente
+Não migrar de stack sem decisão explícita de produto.
 
-Não preservar por inércia:
+A stack atual é suficiente para reproduzir os targets visuais aprovados. Não usar a stack como justificativa para manter layout antigo ou UI genérica.
 
-- layout atual;
-- estrutura de cards;
-- navegação visual;
-- shell do aplicativo;
-- tokens antigos;
-- tipografia visual;
-- iconografia;
-- hierarquia das telas;
-- padrões de componentes existentes;
-- motion antigo;
-- composição de fluxos;
-- densidade, agrupamento e ordem das ações.
+## Autoridade
 
-`src/styles/design-system.css`, componentes atuais e documentos visuais legados são referências de implementação, **não autoridade estética**. Podem ser substituídos ou refatorados quando incompatíveis com `docs/DESIGN_AUTHORITY.md`.
+Para UI/UX, obedecer nesta ordem:
 
-## Antes de alterar código
+1. decisão explícita mais recente do usuário/produto;
+2. `docs/DESIGN_AUTHORITY.md`;
+3. este `AGENTS.md`;
+4. `docs/CODEX_LOVABLE_MODE.md`;
+5. skills `.agents/skills/assistente-pedagogico-rapid-ui/` e `.agents/skills/assistente-pedagogico-ui-screen-craft/`;
+6. `docs/design-v2/` e screen spec correspondente;
+7. `docs/VISUAL_IDENTITY_V2.md`;
+8. legado.
 
-1. Leia `README.md`, `docs/STATUS.md`, `docs/ROADMAP-DE-LANCAMENTO.md`, `docs/ESTADO-DA-ENTREGA.md`, `docs/DESIGN_SUPERVISION_WORKFLOW.md` e `docs/DESIGN_AUTHORITY.md` quando houver UI.
-2. Identifique contratos funcionais e de dados que precisam ser preservados.
-3. Separe deliberadamente o que é requisito funcional do que é apenas legado visual.
-4. Não substitua fluxos reais por telas estáticas ou dados fictícios.
-5. Não adicione segredos, keystores privados, tokens, dados pessoais, dados de alunos ou credenciais.
+Screenshot/mockup explicitamente aprovado é **target visual**, não inspiração vaga.
 
-## Regras de execução
+## Git preflight obrigatório
 
-1. Nunca trabalhar diretamente em `main` depois do baseline.
-2. Cada milestone deve usar branch própria e PR próprio.
-3. Nenhuma feature está concluída apenas porque a tela existe.
-4. Uma feature só está pronta quando fluxo, persistência, validação, erro e testes essenciais funcionam.
-5. Funcionalidade útil do legado deve ser preservada ou substituída por solução equivalente/superior; a aparência antiga não precisa ser preservada.
-6. Toda mudança de storage/schema deve ter migração ou estratégia explícita de compatibilidade.
-7. Dados pedagógicos e dados de alunos não podem ser enviados a analytics.
-8. Analytics deve ser opcional e limitado a métricas técnicas/uso permitidas.
-9. Não adicionar SDK externo sem documentar finalidade, dados tratados e impacto em privacidade.
-10. Não adicionar botão, CTA, menu ou opção sem comportamento real.
-11. Corrigir P0 técnico, segurança, privacidade ou perda de dados antes de refinamentos P1/P2.
-12. Testar recursos nativos em Android real quando aplicável.
-13. O Design System e o Motion System podem ser substituídos como parte da nova identidade; durante a migração, evitar misturar arbitrariamente linguagem antiga e nova na mesma experiência.
-14. Recursos específicos da Educação Infantil não devem aparecer indevidamente em Fundamental ou Médio.
-15. O núcleo do aplicativo deve continuar utilizável sem internet.
-16. Não declarar como “aprovada pelo usuário” nenhuma direção visual sem aprovação explícita registrada.
-17. Não usar mascote/coruja/personagem-mascote no produto. Ilustração humana somente quando coerente com a autoridade de design.
-18. Mudanças visuais grandes são permitidas. Devem ser tratadas como reformulação sistêmica com arquitetura, evidência visual e rollout controlado — não como reskin cosmético.
+O Codex deve consultar o Git remoto antes de começar a implementar.
 
-## Regra especial: identidade visual V2
+Executar:
 
-O objetivo não é fazer o app “parecer melhor que antes”; é criar uma linguagem visual reconhecível como **Assistente Pedagógico**.
+```bash
+git status
+git branch --show-current
+git fetch origin --prune
+git log -1 --oneline
+git log -1 --oneline origin/$(git branch --show-current)
+```
 
-Uma reformulação pode alterar múltiplas fundações de uma vez — tokens, tipografia, shell, navegação, superfícies, componentes e motion — quando a issue explicitar esse escopo. Depois disso, os fluxos devem migrar de forma coordenada para evitar uma experiência híbrida permanente.
+Se a branch local estiver atrás, sincronizar primeiro.
 
-“Funciona” não é critério suficiente. Uma UI funcional pode ser rejeitada se for genérica, sem personalidade, inconsistente, excessivamente baseada em cards, parecida com template de IA ou visualmente inferior ao padrão definido.
+Não implementar por horas em estado local desatualizado.
 
-## Regras de implementação
+Antes de encerrar uma rodada:
 
-- Reutilize componentes antigos apenas quando forem compatíveis com a nova direção.
-- É permitido criar uma nova camada de tokens/componentes e aposentar gradualmente a antiga.
-- Preserve a persistência local e trate falhas de armazenamento sem apagar dados.
-- Toda ação de criação, edição ou exclusão precisa atualizar a interface e persistir o resultado.
-- Toda tela precisa ter estados de carregamento, vazio, erro e sucesso quando aplicável.
-- Controles de toque devem ter área mínima de 48 px e nome acessível.
-- Não use emojis como ícones estruturais.
-- Respeite safe areas, foco visível, contraste e `prefers-reduced-motion`.
-- Não invente preços, compras, métricas ou disponibilidade de serviços.
+```bash
+git status
+git diff --stat
+git log -1 --oneline
+```
 
-## Severidade
+Toda evidência visual deve informar branch e commit.
 
-### P0 — bloqueia release
+## V2 Clean Room
 
-- perda/corrupção de dados;
-- app não abre ou fica preso no splash;
-- crash recorrente;
-- compra cobra e não desbloqueia;
-- backup/restauração destrói dados;
-- dados de aluno enviados indevidamente;
-- cálculo acadêmico crítico incorreto;
-- fluxo essencial sem saída;
-- regressão grave de segurança ou privacidade.
+Toda nova interface V2 deve nascer em `src/v2/`.
 
-### P1 — alta prioridade
+A camada V2 pode consumir lógica/dados do legado, mas não sua arquitetura visual.
 
-- regressão importante de UX;
-- lentidão grave;
-- layout quebrado;
-- permissão tratada incorretamente;
-- erro funcional sem perda de dados;
-- inconsistência relevante durante a migração para a identidade V2.
+### Pode reutilizar
 
-### P2 — refinamento
+- `src/domain/**`;
+- `src/data/**`;
+- repositories e persistência;
+- modelos/validações;
+- adapters Capacitor;
+- BNCC;
+- billing real;
+- utilitários sem responsabilidade visual.
 
-- polish visual;
-- microanimações secundárias;
-- microcopy;
-- espaçamento isolado.
+### Não pode ser autoridade/dependência visual
 
-## Verificação obrigatória
+- `src/screens/**`;
+- `src/components/**` legados;
+- `src/core/recovered.js` para composição/UI;
+- CSS visual V1;
+- tokens V1;
+- `Card`, `IconTile` ou equivalentes herdados da V1.
 
-Antes de considerar uma alteração concluída, execute quando aplicável:
+Se lógica estiver presa a componente V1, extrair a lógica para camada neutra e conectar à V2.
+
+Não deformar a V2 para caber no legado.
+
+## Fluxo visual-first obrigatório
+
+Para tela com target claro:
 
 ```text
+TARGET
+-> PRIMEIRA COMPOSIÇÃO V2
+-> PRIMEIRO RENDER 390px
+-> COMPARAÇÃO LADO A LADO
+-> CORRIGIR AS 5 MAIORES DIFERENÇAS
+-> 360/390/430
+-> CONECTAR DADOS REAIS
+-> ESTADOS/OFFLINE/ERROS
+-> MOTION/HAPTICS
+-> TESTES/ANDROID
+-> DESIGN REVIEW
+```
+
+Não fazer antes do primeiro render:
+
+- refatoração ampla do app;
+- migração de dezenas de telas;
+- Design System completo especulativo;
+- abstrações para problemas ainda não vistos;
+- auditoria visual do legado inteiro.
+
+Primeiro fazer uma tela convincente. Depois extrair primitives comprovadas.
+
+## Uma tela por vez
+
+Enquanto a Home V2 não passar por Design Review, não fazer rollout visual em massa.
+
+Ordem atual:
+
+1. Home V2;
+2. Frequência;
+3. Registrar observação;
+4. Compromissos;
+5. Planejamento diário;
+6. Planejamento mensal.
+
+## Identidade visual V2
+
+A linguagem é:
+
+> **Friendly Professional + Candy UI + Tactile + Educational + Motion-led**
+
+Balanço:
+
+> **fundo azul-claro + superfícies majoritariamente brancas + azul vivo para foco/ação + navy para texto**
+
+Regras:
+
+- tipografia arredondada, forte e amigável;
+- superfícies táteis;
+- depth físico controlado;
+- iconografia chunky/rounded;
+- ilustrações humanas apenas quando narrativamente úteis;
+- sem mascote permanente;
+- boa densidade operacional;
+- hierarquia clara;
+- cards apenas quando representam objetos reais.
+
+Rejeitar como linguagem dominante:
+
+- dashboard SaaS;
+- fintech/editorial corporativo;
+- grid 2×N de atalhos;
+- card branco para tudo;
+- uppercase excessivo;
+- Material default;
+- Tailwind starter look;
+- glassmorphism;
+- gradiente genérico;
+- bento decorativo;
+- `ícone + título + subtítulo + chevron` repetido;
+- estética de template de IA.
+
+Anti-card não significa anti-surface.
+Profissional não significa corporativo.
+Playful não significa infantil.
+
+## Motion
+
+Para motion, consultar os documentos V2 correspondentes.
+
+Regras mínimas:
+
+- motion explica causalidade/estado;
+- nada de animação gratuita;
+- `prefers-reduced-motion` obrigatório;
+- gesto importante precisa de alternativa;
+- haptic apenas quando tem significado;
+- nunca mostrar sucesso antes de confirmação real.
+
+## O que é imutável
+
+Não quebrar:
+
+- integridade e migração de dados;
+- privacidade/LGPD;
+- segurança;
+- dados de alunos e dados pedagógicos;
+- billing/RevenueCat;
+- storage;
+- backup/restauração;
+- funcionamento offline do núcleo;
+- regras pedagógicas;
+- BNCC;
+- acessibilidade;
+- direitos de exportação/portabilidade/exclusão;
+- fluxo de assinatura legítimo.
+
+Dados pedagógicos e de alunos não podem ser enviados a analytics.
+
+## Growth/billing
+
+Seguir os documentos Growth V2 quando disponíveis.
+
+Baseline atual:
+
+- hard paywall após ativação guiada;
+- mensal e anual visíveis;
+- preço/trial vindos da store/RevenueCat, nunca hardcoded na UI;
+- sem weekly/lifetime no lançamento sem decisão explícita;
+- compra só conclui visualmente após entitlement real;
+- restore/cancelamento/gerenciamento acessíveis;
+- expiração nunca autoriza apagar dados.
+
+## Acessibilidade
+
+Obrigatório:
+
+- touch target >= 48px;
+- contraste adequado;
+- foco perceptível;
+- texto escalável;
+- estado não comunicado só por cor;
+- safe areas;
+- Reduced Motion;
+- alternativa para gesto;
+- labels acessíveis.
+
+## Testes e evidência
+
+Antes de marcar pronto, executar o que se aplicar:
+
+```text
+pnpm run check:v2-boundary
 pnpm test
 pnpm build
 node scripts/android-sync.mjs
-cd android && gradlew.bat assembleDebug
 ```
 
-Para UI, execute também os E2E relevantes e siga `docs/DESIGN_SUPERVISION_WORKFLOW.md`.
+Para UI importante, evidência mínima:
 
-## Evidência obrigatória no PR
+- target;
+- screenshot antes/depois;
+- 360px;
+- 390px;
+- 430px;
+- estados relevantes;
+- loading/empty/error/offline quando aplicável;
+- gravação de motion relevante;
+- Reduced Motion;
+- branch e commit;
+- build/testes executados.
 
-- o que mudou;
-- problemas do legado que motivaram a mudança;
-- arquitetura visual/UX adotada;
-- arquivos/módulos principais;
-- comandos/testes executados;
-- resultado do build;
-- screenshots antes/depois para UI;
-- estados relevantes e viewports testados;
-- bugs conhecidos;
-- riscos de migração/persistência;
-- impacto em LGPD/analytics/billing quando aplicável.
+## Aprovação
+
+O agente nunca aprova a própria tela.
+
+Ao chegar em uma candidata real, escrever:
+
+`READY FOR DESIGN REVIEW — <NOME DA TELA>`
+
+Depois parar expansão visual e aguardar revisão.
 
 ## Git e release
 
-- Não faça merge automático em `main`.
-- Não altere dados do usuário para facilitar testes.
-- APK debug é apenas artefato de validação; publicação exige assinatura de produção e AAB.
-- Quando houver conflito entre documentos, `docs/DESIGN_AUTHORITY.md` prevalece para decisões de design aprovadas; conflitos funcionais, de segurança ou produto devem ser sinalizados em vez de resolvidos silenciosamente.
+- não trabalhar diretamente em `main`;
+- não fazer merge automático;
+- cada milestone relevante usa branch/PR;
+- não alterar dados reais para facilitar teste;
+- não adicionar CTA falso;
+- não inventar backend, preço ou serviço;
+- APK debug não é release de produção.
+
+## Regra final
+
+> **Preservar domínio, dados e contratos. Reconstruir a experiência.**
+
+A V2 deve parecer um produto novo construído sobre uma base funcional madura — não uma maquiagem da aplicação antiga.
