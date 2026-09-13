@@ -39,6 +39,7 @@ import { PrivacyScreen } from "../screens/PrivacyScreen.js";
 import { SettingsScreen } from "../screens/SettingsScreen.js";
 import { SetupWizard } from "../screens/SetupWizard.js";
 import { SetupWizardV2 } from "../v2/screens/SetupWizardV2";
+import { NewStudentV2 } from "../v2/screens/NewStudentV2";
 import { SubscriptionScreen } from "../screens/SubscriptionScreen";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
@@ -1229,7 +1230,7 @@ function App() {
                                                             "novo-aluno"
                                                           ? (ht =
                                                               React.createElement(
-                                                                NewStudentScreen,
+                                                                NewStudentV2,
                                                                 {
                                                                   onBack: _t,
                                                                   onConcluido:

@@ -77,7 +77,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 - Visão geral de turmas — `TODO`
 - Detalhe da turma — `TODO`
-- Lista de alunos — `TODO`
+- Lista de alunos — `IN PROGRESS`
 - Perfil do aluno — `TODO`
 - Frequência — `TODO`
 - Registros pedagógicos — `TODO`
@@ -99,7 +99,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 - Splash — `IN PROGRESS`
 - Onboarding — `IN PROGRESS`
-- Cadastro — `TODO`
+- Cadastro — `IN PROGRESS`
 - Login / recuperação — `TODO`
 - Configuração professor — `IN PROGRESS`
 - Primeira turma — `IN PROGRESS`

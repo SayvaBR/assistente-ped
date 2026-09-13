@@ -153,3 +153,9 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - A conclusão continua delegada ao callback real do App, que persiste perfil/turma nos repositories existentes e mantém o caminho para cadastrar o primeiro aluno ou entrar na Home.
 - O Visual Lab expõe `?v2-preview=wizard&width=390` e a suíte cobre conclusão em 390px e compactação em 320px.
 - Estado: `IN PROGRESS`; falta validar a jornada real completa com cadastro de aluno, assinatura e reinício do aplicativo.
+
+## Android 1.0 — cadastro de aluno V2 em andamento
+
+- `src/v2/screens/NewStudentV2.tsx` substitui o destino visual V1 do botão `Cadastrar primeiro aluno` e preserva `onSalvo`, `onConcluido` e `onDirtyChange`.
+- Nome e nascimento são obrigatórios; responsável e telefone são opcionais, com validação real do contrato de dados antes de delegar a persistência ao App.
+- Estado: `IN PROGRESS`; foto do aluno, perfil/histórico e importação seguem como unidades posteriores da jornada de turmas.
