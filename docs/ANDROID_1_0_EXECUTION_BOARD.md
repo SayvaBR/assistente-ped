@@ -30,7 +30,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 ## Foco atual
 
-1. Frequência / Fazer chamada V2 — `IN PROGRESS`
+1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `TODO`
 3. Compromissos / Agenda — `TODO`
 4. Planejamento Dia/Semana/Mês — `TODO`
@@ -42,7 +42,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 ## Milestone M1 — Primeiro anel da Home
 
 - Home V2 — `VISUAL DIRECTION APPROVED`
-- Frequência — `IN PROGRESS`
+- Frequência — `READY FOR DESIGN REVIEW`
 - Registrar observação — `TODO`
 - Compromissos / Agenda — `TODO`
 - Planejamento diário — `TODO`
@@ -188,14 +188,14 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora:
-- Branch:
-- HEAD:
-- Tela/fluxo:
-- Screenshot/evidência:
-- Testes executados:
-- Resultado:
-- Próxima ação:
+- Data/hora: 13/09/2026
+- Branch: `codex/5-v2-clean-room`
+- HEAD: `f0991d9` + hardening local ainda não commitado
+- Tela/fluxo: Frequência / Fazer chamada V2
+- Screenshot/evidência: `docs/qa/clean-room/frequency-v2-clean-room-390.png`; `frequency-v2-stress-320-150.png`
+- Testes executados: boundary, TypeScript, matriz Home/Frequência, touch targets, texto 115/130/150%
+- Resultado: `READY FOR DESIGN REVIEW — FREQUÊNCIA V2`; Gate B ainda pendente
+- Próxima ação: checkpoint Git e iniciar Observação V2 mantendo a revisão visual da Frequência em paralelo
 
 ## Dívida visual conhecida
 

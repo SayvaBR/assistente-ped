@@ -692,6 +692,25 @@ function App() {
   const frequencyV2 = (props = {}) => React.createElement(FrequencyV2, {
     data: frequencyV2Data,
     onBack: _t,
+    onClassSettings: () => {
+      $n("gestao");
+      kn("turma");
+    },
+    onStudentDetails: (studentId) => {
+      const student = Ka.find((item) => item.id === studentId);
+      student && zt("perfil", student);
+    },
+    onContextChange: (context) => {
+      if (context === "frequencia") return;
+      const nextTab = {
+        dia: "dia",
+        alunos: "criancas",
+        registros: "registros",
+      }[context];
+      if (!nextTab) return;
+      $n(nextTab);
+      kn("turma");
+    },
     onRetry: retryFrequencyV2,
     onDateChange: (offset) => zt("chamada", { dataKey: shiftDateKey(frequencyV2DateKey, offset) }),
     onSave: async (attendance) => {

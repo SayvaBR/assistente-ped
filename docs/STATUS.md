@@ -37,23 +37,21 @@ A aprovação visual da Home não fecha o Gate B. Antes de `PRODUCTION GATE READ
 
 ## Superfície P0 em Design Review — Frequência / Fazer chamada
 
-A Frequência V2 foi implementada e possui evidência pública de 390 px, before/after Home→Frequência e estados loading/error/offline/empty. O head `8e8a2e1` está com `V2 validation` verde. **Ainda não está `VISUAL DIRECTION APPROVED`.**
+A Frequência V2 foi implementada, endurecida e possui evidência pública de 390 px, before/after Home→Frequência, estados loading/error/offline/empty e stress em 320px com texto 150%. O trabalho está marcado como **`READY FOR DESIGN REVIEW — FREQUÊNCIA V2`**. Isso não é `VISUAL DIRECTION APPROVED` nem fecha o Gate B.
 
-Bloqueios confirmados na revisão:
+Pendências de Gate B / revisão externa:
 
-1. `Configurar turma` e a seta `Mais detalhes de <aluno>` são controles focáveis sem ação real;
-2. tabs de contexto dependem de `onContextChange`, mas a integração real em `App.js` não fornece esse handler;
-3. opções do seletor de status usam `min-height: 44px`, abaixo do mínimo obrigatório de 48 px;
-4. abaixo de 360 px a composição reduz tabs/status/bottom nav para `0.65rem` / `0.64rem` / `0.61rem`, sacrificando legibilidade em vez de adaptar layout;
-5. `e2e/v2-frequency-responsive.pw.ts` existe e foi reportado como aprovado localmente, mas `pnpm run test:v2-responsive`/CI executa apenas `e2e/v2-responsive.pw.ts` e portanto não cobre a Frequência;
-6. a suíte específica ainda não mede touch targets >=48 px nem crescimento de texto 115/130/150%;
-7. após as correções, anexar nova evidência representativa em 390 px e 320 px com texto ampliado.
+1. validar a revisão visual externa;
+2. validar motion/reduced-motion e gravar as microinterações principais;
+3. executar QA no POCO X7 Pro e em Android compacto adicional;
+4. fechar persistência/recovery no Android real;
+5. manter a cobertura de estados e texto ampliado no Gate B.
 
 Próximo ciclo obrigatório:
 
 `CORRIGIR AFFORDANCES -> TOUCH TARGETS -> LEGIBILIDADE -> RENDER -> SCREENSHOT 390 -> SCREENSHOT 320/150% -> OBSERVAÇÃO -> CORREÇÃO -> NOVA SCREENSHOT`
 
-Não avançar para **Registrar observação** antes de `VISUAL DIRECTION APPROVED — FREQUÊNCIA`.
+O próximo trabalho seguro pode iniciar `Registrar observação V2` conforme a missão de conclusão, sem declarar aprovação visual da Frequência e sem remover suas pendências de Gate B.
 
 ## Prioridade e dependências
 

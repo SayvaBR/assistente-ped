@@ -45,6 +45,8 @@ type FrequencyV2Props = {
   data: FrequencyV2Data;
   activeTab?: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais';
   onBack?: () => void;
+  onClassSettings?: () => void;
+  onStudentDetails?: (studentId: string) => void;
   onStatusChange?: (studentId: string, status?: AttendanceStatus) => void;
   onDateChange?: (offset: -1 | 1) => void;
   onContextChange?: (context: 'dia' | 'alunos' | 'frequencia' | 'registros') => void;
@@ -99,6 +101,8 @@ export function FrequencyV2({
   data,
   activeTab = 'turmas',
   onBack = () => undefined,
+  onClassSettings = () => undefined,
+  onStudentDetails = () => undefined,
   onStatusChange = () => undefined,
   onDateChange = () => undefined,
   onContextChange,
@@ -173,7 +177,7 @@ export function FrequencyV2({
             <h1 id="frequency-v2-title">{data.className}</h1>
             <p>{data.studentCount} alunos</p>
           </div>
-          <button className="v2-frequency__round-button v2-pressable" type="button" aria-label="Configurar turma">
+          <button className="v2-frequency__round-button v2-pressable" type="button" onClick={onClassSettings} aria-label="Configurar turma">
             <Settings2 size={24} strokeWidth={2.35} aria-hidden="true" />
           </button>
         </header>
@@ -254,7 +258,7 @@ export function FrequencyV2({
                     <span className="v2-frequency__status-mark">{status === 'falta' || status === 'falta_justificada' ? <X size={15} strokeWidth={3} aria-hidden="true" /> : status ? <Check size={15} strokeWidth={3} aria-hidden="true" /> : <Clock3 size={15} strokeWidth={2.6} aria-hidden="true" />}</span>
                     {status ? statusLabels[status] : 'Pendente'}
                   </button>
-                  <button className="v2-frequency__student-arrow v2-pressable" type="button" aria-label={`Mais detalhes de ${student.name}`}><ChevronRight size={23} strokeWidth={2.25} aria-hidden="true" /></button>
+                  <button className="v2-frequency__student-arrow v2-pressable" type="button" onClick={() => onStudentDetails(student.id)} aria-label={`Mais detalhes de ${student.name}`}><ChevronRight size={23} strokeWidth={2.25} aria-hidden="true" /></button>
                   {menuOpen && (
                     <div className="v2-frequency__status-menu" role="listbox" aria-label={`Marcação de ${student.name}`}>
                       {statusOptions.map((option) => (

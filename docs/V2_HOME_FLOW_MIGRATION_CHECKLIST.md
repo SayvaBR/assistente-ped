@@ -9,7 +9,7 @@ A Home V2 é a direção visual aprovada. Esta checklist registra a continuidade
 
 | Entrada na Home | Rota/ação atual | Estado visual | Próximo passo |
 | --- | --- | --- | --- |
-| Fazer chamada | `chamada` | **V2 em implementação** | fechar Frequência V2 e Gate A |
+| Fazer chamada | `chamada` | **READY FOR DESIGN REVIEW — FREQUÊNCIA V2** | revisão visual externa + Gate B |
 | Ver plano | `plano` / `LessonPlanScreen` | V1 | Planejamento Dia |
 | Registrar observação | `registro-rapido` / `QuickRecordScreen` | V1 | Registrar observação V2 |
 | Compromissos / agenda | `plano` hoje; agenda local abre pelo contexto | V1 | Compromissos / Agenda V2 |

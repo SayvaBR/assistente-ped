@@ -319,7 +319,7 @@
 
 .v2-frequency__status-option {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 48px;
   align-items: center;
   gap: 4px;
   border: 1px solid #c6e9f9;
@@ -380,7 +380,8 @@
 
 @media (max-width: 359px) {
   .v2-frequency__screen { padding-inline: 12px; }
-  .v2-frequency__context-tab { min-height: 78px; font-size: 0.65rem; }
+  .v2-frequency__context-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v2-frequency__context-tab { min-height: 64px; font-size: 0.76rem; }
   .v2-frequency__context-tab svg { width: 20px; height: 20px; }
   .v2-frequency__date-selector { grid-template-columns: 40px auto minmax(0, 1fr) 40px; gap: 5px; padding-inline: 5px; }
   .v2-frequency__date-arrow { width: 40px; height: 48px; }
@@ -388,14 +389,15 @@
   .v2-frequency__summary-item { grid-template-columns: 1fr; justify-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
   .v2-frequency__summary-item > span:last-child { justify-items: center; }
   .v2-frequency__summary-item strong { font-size: 1.35rem; }
-  .v2-frequency__student { grid-template-columns: 44px minmax(0, 1fr) auto 28px; gap: 6px; padding-inline: 8px; }
+  .v2-frequency__student { grid-template-columns: 44px minmax(0, 1fr) 48px; grid-template-rows: auto auto; gap: 4px 8px; min-height: 88px; padding-inline: 8px; }
   .v2-frequency__avatar { width: 44px; height: 44px; }
-  .v2-frequency__status { min-width: 70px; padding-inline: 6px; font-size: 0.64rem; }
+  .v2-frequency__student-copy { grid-column: 2; grid-row: 1; }
+  .v2-frequency__status { grid-column: 2; grid-row: 2; justify-self: start; min-width: 104px; padding-inline: 8px; font-size: 0.7rem; }
   .v2-frequency__status-mark { width: 19px; height: 19px; }
-  .v2-frequency__student-arrow { width: 28px; }
+  .v2-frequency__student-arrow { grid-column: 3; grid-row: 1 / -1; width: 48px; height: 48px; }
   .v2-frequency__save-actions { grid-template-columns: 1fr; }
   .v2-frequency__save-button { order: -1; }
-  .v2-frequency__nav-item { font-size: 0.61rem; }
+  .v2-frequency__nav-item { font-size: 0.68rem; }
 }
 
 @media (min-width: 481px) {
