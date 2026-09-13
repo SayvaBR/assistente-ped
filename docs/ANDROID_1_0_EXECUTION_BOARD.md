@@ -194,12 +194,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `c7572d8` (checkpoint anterior; BNCC segue em trabalho local)
-- Tela/fluxo: BNCC V2 integrada à rota real `bncc`; busca, detalhe, favoritos e histórico usando catálogo/persistência locais
-- Screenshot/evidência: render real no Visual Lab em 412px; evidência versionada será capturada no próximo checkpoint
-- Testes executados: boundary, TypeScript e suíte V2 ampliada para 39 testes; BNCC cobre detalhe, busca em 320/360/390/412/432/480/600px e reduced motion
+- HEAD: `2235960`
+- Tela/fluxo: BNCC → editor por `prefill`, Relatórios V2 e Configurações/Aparência V2 integrados às rotas reais
+- Screenshot/evidência: renders reais no Visual Lab em 412px: `?v2-preview=bncc`, `?v2-preview=reports`, `?v2-preview=settings`, `?v2-preview=appearance`
+- Testes executados: boundary, TypeScript, 46 E2E V2, 50 testes unitários, build, `android-sync` e `android:qa`; APK QA gerado
 - Resultado: `IN PROGRESS`; Frequência/Observação continuam `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: validar seleção assistida no editor e continuar a próxima superfície segura da fila
+- Próxima ação: migrar subfluxos de conta/dados e planejamento restante sem regressão funcional
 
 ### BNCC — evidência e contratos
 
