@@ -34,7 +34,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `IN PROGRESS`
 4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
-5. Turmas — `TODO`
+5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `TODO`
 7. Arquivos — `TODO`
 8. Mais — `TODO`
@@ -46,9 +46,9 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Registrar observação — `READY FOR DESIGN REVIEW`
 - Compromissos / Agenda — `IN PROGRESS`
 - Planejamento diário — `IN PROGRESS`
-- Planejamento semanal — `TODO`
-- Planejamento mensal — `TODO`
-- Turmas — `TODO`
+- Planejamento semanal — `IN PROGRESS`
+- Planejamento mensal — `IN PROGRESS`
+- Turmas — `IN PROGRESS`
 - Perfil — `TODO`
 - Arquivos — `TODO`
 - Mais — `TODO`
@@ -190,12 +190,12 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `159112e` + Observação V2 local ainda não commitada
-- Tela/fluxo: Planejamento diário V2 — timeline de momentos
-- Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`; Agenda `commitments-v2-412.png`
-- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento, texto ampliado
-- Resultado: `IN PROGRESS`; Agenda continua `IN PROGRESS`; Observação `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
-- Próxima ação: fechar integração/estados de Planejamento Dia, checkpoint Git e iniciar Semana/Mês
+- HEAD: `dfc5801` + Turmas V2 local ainda não commitada
+- Tela/fluxo: Turmas V2 — contexto ativo, ações e alunos
+- Screenshot/evidência: `docs/qa/clean-room/classes-v2-412.png`; Planejamento `planning-day-v2-412.png`, `planning-week-v2-412.png`, `planning-month-v2-412.png`
+- Testes executados: boundary, TypeScript, E2E Home/Frequência/Observação/Agenda/Planejamento/Turmas, texto ampliado
+- Resultado: `IN PROGRESS`; Planejamento Dia/Semana/Mês continua `IN PROGRESS`; Observação `READY FOR DESIGN REVIEW — OBSERVAÇÃO V2`; Frequência continua `READY FOR DESIGN REVIEW`, Gate B ainda pendente
+- Próxima ação: fechar hardening de Turmas e iniciar Perfil/Arquivos conforme o primeiro anel
 
 ## Dívida visual conhecida
 

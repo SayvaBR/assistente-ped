@@ -77,6 +77,12 @@ O destino `Home V2 -> Ver plano` agora monta `PlanningDayV2` em `src/v2/`, com t
 
 Evidências locais: `docs/qa/clean-room/planning-day-v2-412.png`, `planning-week-v2-412.png` e `planning-month-v2-412.png`. O E2E `e2e/v2-planning-day-flow.pw.ts` cobre render, Dia/Semana/Mês e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real, validação completa de edição/autosave e revisão visual externa.
 
+## Superfície em construção — Turmas V2
+
+O destino do BottomNavigation `turmas-v2` agora monta `ClassesV2` em `src/v2/`, usando a lista real de turmas, turma ativa e alunos do controlador. A superfície oferece ações reais para chamada, observação, perfil do aluno, cadastro e ativação de outra turma, sem substituir as rotas acadêmicas existentes.
+
+Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes-flow.pw.ts` cobre render, entrada em Frequência e texto ampliado a 130%. Estado atual: **`IN PROGRESS`**; ainda falta hardening Android real e revisão visual externa.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

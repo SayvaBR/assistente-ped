@@ -62,3 +62,9 @@ A primeira composição do planejamento usa uma timeline de momentos, troca de d
 ![Planejamento diário V2 — 412px](planning-day-v2-412.png)
 
 Também foram capturadas as composições de continuidade: [Semana](planning-week-v2-412.png) e [Mês](planning-month-v2-412.png).
+
+## Turmas V2 — primeiro render
+
+O overview de Turmas usa a turma ativa e os alunos reais do controlador, com ações de chamada, observação, perfil e cadastro.
+
+![Turmas V2 — 412px](classes-v2-412.png)

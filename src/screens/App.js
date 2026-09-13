@@ -69,6 +69,7 @@ import { ws } from "../core/recovered.js";
 import { z0 } from "../screens/z0.js";
 import { PlanningDayV2 } from "../v2/screens/PlanningDayV2";
 import { PlanningCalendarV2 } from "../v2/screens/PlanningCalendarV2";
+import { ClassesV2 } from "../v2/screens/ClassesV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -734,7 +735,7 @@ function App() {
       await wi(frequencyV2DateKey, attendance);
       setFrequencyV2State({ status: "ready", attendance, error: "" });
     },
-    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
     ...props,
   });
   const saveObservationV2 = async (studentId, payload) => {
@@ -769,7 +770,7 @@ function App() {
     activeTab: "turmas",
     onBack: _t,
     onSave: saveObservationV2,
-    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
     ...props,
   });
   const saveCommitmentV2 = async (event) => {
@@ -797,7 +798,7 @@ function App() {
     onRetry: () => loadHomeV2Agenda(M?.id),
     onSave: saveCommitmentV2,
     onDelete: deleteCommitmentV2,
-    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const planningDayV2 = () => React.createElement(PlanningDayV2, {
     className: M?.nome || "Sua turma",
@@ -811,7 +812,7 @@ function App() {
     onDateChange: (offset) => setPlanningV2Date((value) => shiftDateKey(value, offset)),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
-    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const planningCalendarV2 = (mode) => React.createElement(PlanningCalendarV2, {
     className: M?.nome || "Sua turma",
@@ -827,7 +828,19 @@ function App() {
     onViewChange: (next) => zt(next === "day" ? "planejamento-dia" : next === "week" ? "planejamento-semana" : "planejamento-mes"),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date }),
-    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
+  });
+  const classesV2 = () => React.createElement(ClassesV2, {
+    classes: se,
+    activeClass: M,
+    students: Ka,
+    onBack: () => kn("inicio"),
+    onActivate: (item) => { void dr(item); },
+    onOpenStudent: (student) => zt("perfil", student),
+    onNewStudent: () => zt("novo-aluno"),
+    onAttendance: () => zt("chamada"),
+    onObservation: () => zt("registro-rapido"),
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const Ot = () => {
       (pe(!1), En());
@@ -1342,7 +1355,7 @@ function App() {
                                                                                     {
                                                                                       inicio: "inicio",
                                                                                       planejamento: "plano",
-                                                                                      turmas: "turma",
+                                                                                      turmas: "turmas-v2",
                                                                                       arquivos: "biblioteca",
                                                                                       mais: "mais",
                                                                                     }[tab],
@@ -1382,6 +1395,9 @@ function App() {
                                                                               },
                                                                             ))
                                                                         : f ===
+                                                                            "turmas-v2"
+                                                                          ? (ht = classesV2())
+                                                                          : f ===
                                                                             "turma"
                                                                           ? (ht =
                                                                               React.createElement(
