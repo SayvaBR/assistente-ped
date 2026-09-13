@@ -430,6 +430,10 @@
   border-radius: 19px;
   background: var(--v2-color-surface);
   color: var(--v2-color-text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  width: 100%;
 }
 
 .v2-home__agenda-row time {

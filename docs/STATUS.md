@@ -13,8 +13,10 @@ A única frente visual ativa é a **Home V2 em clean room** no PR #8 (`codex/5-v
 - regra Android adaptativa alinhada entre `AGENTS.md` e `docs/DESIGN_SUPERVISION_WORKFLOW.md`;
 - primeiro render real da Home V2 produzido no viewport-âncora de 390 px e anexado ao PR;
 - implementação inicial inclui saudação, aula em foco, ações contextuais, agenda em timeline e bottom navigation;
-- `pnpm run check:v2-boundary`, `pnpm build` e `pnpm run test:v2-responsive` foram reportados como aprovados na rodada do primeiro render;
+- `pnpm run check:v2-boundary`, `pnpm build` e `pnpm run test:v2-responsive` foram aprovados após a integração;
 - `test:v2-responsive` exercita 320 / 360 / 390 / 412 / 432 / 480 / 600 px e verifica overflow/truncamento básico.
+- Home principal já recebe perfil, turma, planos do dia, frequência e agenda local por adapter V2; o Visual Lab continua usando apenas fixture sintética para evidência pública.
+- O avatar abre o perfil, as linhas da agenda são controles acessíveis e o CI do PR foi publicado.
 
 ### Bloqueios do gate visual
 
@@ -22,7 +24,7 @@ A Home V2 **ainda não está pronta para aprovação**.
 
 1. O head atual do PR #8 não possui CI/status publicado no GitHub e o PR continua `mergeable: false`.
 2. Existe apenas o primeiro render anexado; ainda falta a sequência exigida de comparação explícita com o target/baseline, lista das 3–5 maiores diferenças, correção e nova screenshot após o refinamento.
-3. A Home ainda usa fixture exclusiva do Visual Lab. Repositories, persistência, offline e estados reais ainda não estão conectados.
+3. A Home já está conectada aos dados locais do controlador/repositórios existentes, mas a persistência das ações iniciadas pela Home e a matriz completa de estados ainda precisam de QA específico.
 4. O teste responsivo atual não cobre crescimento de texto 115/130/150%, embora isso seja requisito de gate. Também não verifica automaticamente touch targets >= 48 px.
 5. A agenda renderiza chevrons em rows não interativas; se esses itens representam navegação, devem ser controles acessíveis reais. O botão de avatar também precisa ter ação real quando sair do harness visual.
 6. A tipografia da bottom navigation chega a ~10,7 px e ~9,8 px abaixo de 360 px; precisa ser revista junto com o teste de crescimento de texto para não sacrificar legibilidade.
