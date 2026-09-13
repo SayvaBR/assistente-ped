@@ -46,6 +46,7 @@ import { PrivacyV2 } from "../v2/screens/PrivacyV2";
 import { BackupV2 } from "../v2/screens/BackupV2";
 import { NotificationsV2 } from "../v2/screens/NotificationsV2";
 import { ToolsV2 } from "../v2/screens/ToolsV2";
+import { StudentProfileV2 } from "../v2/screens/StudentProfileV2";
 import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
 import { LegalScreen } from "../screens/LegalScreen";
 import { SplashScreen } from "../screens/SplashScreen.js";
@@ -781,6 +782,7 @@ function App() {
       throw error;
     }
   };
+  const loadStudentObservationsV2 = async (studentId) => repository.carregarObservacoes(studentId);
   const observationV2 = (props = {}) => React.createElement(ObservationV2, {
     students: Ka.map((student) => ({ id: student.id, name: student.nome, color: student.cor })),
     className: M?.nome || "Sua turma",
@@ -1013,7 +1015,10 @@ function App() {
                     onDirtyChange: pe,
                   }))
                 : (Re == null ? void 0 : Re.name) === "perfil"
-                  ? (ht = React.createElement(StudentScreen, {
+                  ? (ht = React.createElement(StudentProfileV2, {
+                      student: Re.data,
+                      className: M?.nome,
+                      loadObservations: loadStudentObservationsV2,
                       crianca: Re.data,
                       onBack: _t,
                       goTo: zt,

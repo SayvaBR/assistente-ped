@@ -190,3 +190,10 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - A composição usa tabs, estados de ação, foco visível, alvos de toque de 48px e feedback de erro sem cenografia.
 - Evidência: `docs/qa/android-1.0/tools-v2-390.png`; E2E `e2e/v2-tools-flow.pw.ts` cobre alternância e overflow compacto.
 - Estado: `IN PROGRESS`; falta validação no Android físico para disponibilidade e permissão da lanterna.
+
+## Android 1.0 — perfil do aluno V2 em andamento
+
+- `src/v2/screens/StudentProfileV2.tsx` substitui a composição V1 do detalhe do aluno, mantendo contexto da turma, frequência, edição dos dados, registros pedagógicos e remoção via callbacks reais.
+- A navegação parte de Turmas/Frequência e preserva as ações de nova observação e chamada; registros continuam vindo do repository existente.
+- Evidência: `docs/qa/android-1.0/student-profile-v2-390.png`; E2E `e2e/v2-student-profile-flow.pw.ts` cobre contexto, registros, edição e 320px.
+- Estado: `IN PROGRESS`; galeria/foto do aluno e hardening de lifecycle ainda precisam de uma unidade própria.

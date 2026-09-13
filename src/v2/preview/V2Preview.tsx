@@ -23,6 +23,7 @@ import { PrivacyV2 } from '../screens/PrivacyV2';
 import { BackupV2 } from '../screens/BackupV2';
 import { NotificationsV2 } from '../screens/NotificationsV2';
 import { ToolsV2 } from '../screens/ToolsV2';
+import { StudentProfileV2 } from '../screens/StudentProfileV2';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -98,6 +99,7 @@ const planningPreviewPlans: LessonPlan[] = [
 ];
 const classesPreview = [{ id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' }, { id: 'class-b', nome: '4º Ano B', nivel: 'Ensino Fundamental', turno: 'Vespertino' }];
 const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id, name, color }) => ({ id, nome: name, cor: color }));
+const studentProfilePreview = { id: 'ana', nome: 'Ana Clara Souza', cor: '#1cb0f6', dataNascimento: '2015-03-12', responsavel: 'Carolina Souza', contato: '11987654321', presencas: 18, faltas: 2, atrasos: 1 };
 const reportPreviewDays: Record<string, Attendance> = { '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'presente', enzo: 'presente', fernanda: 'falta' } };
 const reportPreviewClass = { id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' };
 const profilePreview = { id: 'teacher-preview', nome: 'Marina Souza', tratamento: 'professora', escola: 'Escola Horizonte', cidade: 'São Paulo', uf: 'SP', etapaEnsino: 'Ensino Fundamental' };
@@ -179,8 +181,10 @@ export function V2Preview() {
             <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
             <PlanningCalendarV2 plans={planningPreviewPlans} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
+          ) : activeScreen === 'student-profile' ? (
+            <StudentProfileV2 student={studentProfilePreview} className="5º Ano A" onBack={() => setActiveScreen('classes')} onEditar={async () => undefined} onExcluir={async () => undefined} loadObservations={async () => [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade e explicou sua estratégia para o grupo.' }]} />
           ) : activeScreen === 'classes' ? (
-            <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => undefined} onNewStudent={() => undefined} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} />
+            <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => setActiveScreen('student-profile')} onNewStudent={() => setActiveScreen('new-student')} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} />
           ) : activeScreen === 'profile' ? (
             <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
           ) : activeScreen === 'files' ? (

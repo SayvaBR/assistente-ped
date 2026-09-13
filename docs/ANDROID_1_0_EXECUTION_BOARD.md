@@ -78,7 +78,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Visão geral de turmas — `TODO`
 - Detalhe da turma — `TODO`
 - Lista de alunos — `IN PROGRESS`
-- Perfil do aluno — `TODO`
+- Perfil do aluno — `IN PROGRESS`
 - Frequência — `TODO`
 - Registros pedagógicos — `TODO`
 - Histórico — `TODO`
