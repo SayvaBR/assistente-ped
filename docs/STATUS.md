@@ -103,6 +103,10 @@ Evidência local: `docs/qa/clean-room/classes-v2-412.png`. O E2E `e2e/v2-classes
 
 O destino `bncc` agora monta `BnccV2` em `src/v2/`, com catálogo real de `src/domain/bncc.ts`, etapa, busca por código/descrição, favoritos, histórico, detalhe, loading, erro recuperável, vazio e offline. A persistência usa `bncc:favoritos` e `bncc:historico` através do `StoragePort`; nenhum código curricular é inventado e nenhuma UI legada é importada. O detalhe pode abrir o editor de plano com o código real selecionado via `prefill`; descrição estruturada e seleção múltipla seguem como hardening do editor.
 
+## Superfície em construção — Relatórios V2
+
+O destino `relatorios` agora monta `ReportsV2` em `src/v2/`, com leitura de chamadas reais via `StoragePort`, recorte por turma/aluno/período, estados sem registros/sem turma/loading/erro, cálculo usando `buildAttendanceReport` e exportação CSV via `exportText`. A tela não importa componentes visuais V1; exportação PDF e hardening de filtros/estados continuam na fila.
+
 ## Baseline funcional preservado
 
 A branch base contém React + TypeScript + Vite + Capacitor Android, persistência/local-first, BNCC, backup, billing/RevenueCat e demais contratos funcionais. Esses motores podem ser reutilizados pela V2, mas o legado não é baseline visual.

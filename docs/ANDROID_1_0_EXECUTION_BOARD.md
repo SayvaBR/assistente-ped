@@ -39,6 +39,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 7. Arquivos — `IN PROGRESS`
 8. Mais — `IN PROGRESS`
 9. BNCC — `IN PROGRESS`
+10. Relatórios — `IN PROGRESS`
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -89,7 +90,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Importação/captura — `TODO`
 - Visualização — `TODO`
 - Lixeira — `TODO`
-- Relatórios — `TODO`
+- Relatórios — `IN PROGRESS`
 
 ## Milestone M5 — Onboarding, conta e monetização
 

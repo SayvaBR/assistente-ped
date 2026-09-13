@@ -75,6 +75,7 @@ import { ProfileV2 } from "../v2/screens/ProfileV2";
 import { FilesV2 } from "../v2/screens/FilesV2";
 import { MoreV2 } from "../v2/screens/MoreV2";
 import { BnccV2 } from "../v2/screens/BnccV2";
+import { ReportsV2 } from "../v2/screens/ReportsV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 
 const ReportsScreen = React.lazy(() =>
@@ -1041,27 +1042,14 @@ function App() {
                               : Ee == null || Ee();
                           },
                         }))
-                      : (Re == null ? void 0 : Re.name) === "relatorios"
-                        ? (ht = React.createElement(
-                            React.Suspense,
-                            {
-                              fallback: React.createElement(
-                                "div",
-                                {
-                                  className: "module-loading",
-                                  role: "status",
-                                  "aria-live": "polite",
-                                },
-                                "Carregando relatórios…",
-                              ),
-                            },
-                            React.createElement(ReportsScreen, {
-                              turma: M,
-                              onBack: _t,
-                              alunos: Za,
-                              goTo: zt,
-                            }),
-                          ))
+                        : (Re == null ? void 0 : Re.name) === "relatorios"
+                        ? (ht = React.createElement(ReportsV2, {
+                            turma: M,
+                            onBack: _t,
+                            alunos: Za,
+                            storage,
+                            onGoToClasses: () => zt("gerenciar-turmas"),
+                          }))
                         : (Re == null ? void 0 : Re.name) === "tema"
                           ? (ht = React.createElement(AppearanceScreen, {
                               onBack: _t,

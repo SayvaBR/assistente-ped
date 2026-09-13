@@ -11,6 +11,8 @@ import { FilesV2 } from '../screens/FilesV2';
 import { MoreV2 } from '../screens/MoreV2';
 import { LessonPlanV2 } from '../screens/LessonPlanV2';
 import { BnccV2 } from '../screens/BnccV2';
+import { ReportsV2 } from '../screens/ReportsV2';
+import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
 import '../styles/foundation.css';
@@ -85,6 +87,8 @@ const planningPreviewPlans: LessonPlan[] = [
 ];
 const classesPreview = [{ id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' }, { id: 'class-b', nome: '4º Ano B', nivel: 'Ensino Fundamental', turno: 'Vespertino' }];
 const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id, name, color }) => ({ id, nome: name, cor: color }));
+const reportPreviewDays: Record<string, Attendance> = { '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'presente', enzo: 'presente', fernanda: 'falta' } };
+const reportPreviewClass = { id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' };
 const profilePreview = { id: 'teacher-preview', nome: 'Marina Souza', tratamento: 'professora', escola: 'Escola Horizonte', cidade: 'São Paulo', uf: 'SP', etapaEnsino: 'Ensino Fundamental' };
 const previewStorage: StoragePort = { get: async (key) => key === 'biblioteca:pessoal:pastas:v1' ? { value: JSON.stringify([{ id: 'folder-plans', nome: 'Planos de aula', pastaPaiId: 'root', cor: 'primary', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : key === 'documentos:app:v2' ? { value: JSON.stringify([{ id: 'doc-bncc', nome: 'BNCC_2024.pdf', mime: 'application/pdf', tamanho: 245760, pastaId: 'root', path: 'documentos/BNCC_2024.pdf', uri: 'file:///documentos/BNCC_2024.pdf', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : { value: '[]' }, set: async () => undefined, delete: async () => undefined, list: async () => ({ keys: [] }) };
 
@@ -150,11 +154,13 @@ export function V2Preview() {
           ) : activeScreen === 'files' ? (
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
-            <MoreV2 goTo={(route) => route === 'bncc' ? setActiveScreen('bncc') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
+            <MoreV2 goTo={(route) => route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
           ) : activeScreen === 'plan-editor' ? (
             <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
             <BnccV2 etapa="fundamental_anos_iniciais" storage={previewStorage} onBack={() => setActiveScreen('more')} onOpenPlan={() => setActiveScreen('plan-editor')} />
+          ) : activeScreen === 'reports' ? (
+            <ReportsV2 turma={reportPreviewClass} alunos={classStudentsPreview} storage={previewStorage} initialDays={reportPreviewDays} onBack={() => setActiveScreen('more')} />
           ) : (
             <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' ? setActiveScreen('attendance') : action === 'observation' ? setActiveScreen('observation') : action === 'commitments' ? setActiveScreen('commitments') : action === 'plan' ? setActiveScreen('planning-day') : action === 'profile' ? setActiveScreen('profile') : undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} />
           )}
