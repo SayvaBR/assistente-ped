@@ -35,6 +35,9 @@ Agentes têm liberdade para reconstruir:
 - espaçamento;
 - densidade;
 - microinterações;
+- transições;
+- gestos;
+- haptics;
 - ilustrações;
 - fluxos de UX, quando houver justificativa clara e não houver perda funcional.
 
@@ -48,6 +51,8 @@ Uma implementação pode estar tecnicamente correta e ainda ser rejeitada se par
 
 O objetivo é construir uma linguagem reconhecível como Assistente Pedagógico, e não uma coleção de telas React genéricas.
 
+O mesmo vale para motion: “tem animação” não é critério de qualidade. Movimento pode ser rejeitado se for gratuito, lento, inconsistente, inacessível, pouco performático ou não explicar causalidade/estado.
+
 ## Stack obrigatória
 
 - React
@@ -55,7 +60,9 @@ O objetivo é construir uma linguagem reconhecível como Assistente Pedagógico,
 - Vite
 - Capacitor Android
 
-Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de produto.
+Não migrar para Flutter, React Native, SwiftUI ou Kotlin sem uma decisão explícita de produto.
+
+A sensação de motion nativo/polido deve ser obtida dentro da stack atual. SwiftUI é referência de princípios, não dependência/plataforma do produto Android.
 
 ## Regras de execução
 
@@ -78,18 +85,27 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 17. Antes de implementar ou redesenhar uma tela, localizar a tela em `docs/design-v2/SCREEN_SPEC_INDEX.md`, ler o volume `SCREEN_SPEC_*` correspondente e consultar `docs/design-v2/RUNTIME_RESOURCE_MAP.md`.
 18. Não implementar UI importante apenas a partir de mockup/imagem. A especificação de tela define layout, comportamento, dados, estados, recursos, acessibilidade e critérios de aceite.
 19. Se a implementação real exigir divergir da especificação, registrar a divergência e justificativa no PR; não reinterpretar silenciosamente.
+20. Para qualquer animação, transição, shared geometry, gesto, reorder, icon motion ou haptic, ler `docs/design-v2/MOTION_SYSTEM_V2.md`.
+21. Quando a interação se encaixar nas assinaturas do produto, ler `docs/design-v2/MOTION_SIGNATURE_INTERACTIONS.md` e não reinventar outra gramática.
+22. Antes de copiar/adaptar uma referência externa, consultar `docs/design-v2/MOTION_REFERENCE_MATRIX.md`; materiais marcados como corte/backlog não entram em P0/P1 sem decisão explícita.
+23. Todo PR relevante de motion deve cumprir `docs/design-v2/MOTION_QA_CHECKLIST.md`.
+24. Não adicionar dependência visual/motion sem verificar licença, bundle, compatibilidade, manutenção e ausência de telemetria indevida.
+25. Motion nunca pode antecipar sucesso: save, billing, backup, sincronização e exclusão só entram em estado visual final após confirmação real.
+26. Gestos não podem ser a única forma de executar ação importante; fornecer alternativa acessível.
+27. `prefers-reduced-motion` deve ser respeitado em toda interação espacial significativa.
 
 ## Fluxo esperado para cada tarefa
 
 1. Ler a issue e os documentos relevantes.
 2. Para UI, localizar a especificação exata da tela antes de codificar.
-3. Criar branch `codex/<numero-issue>-<slug>` ou equivalente.
-4. Identificar quais componentes V2, repositories, domain modules e plugins nativos serão reutilizados.
-5. Implementar em mudanças pequenas e rastreáveis.
-6. Rodar build, lint e testes disponíveis.
-7. Atualizar documentação afetada.
-8. Abrir PR contra `main` com resumo, testes executados, riscos e screenshots quando houver UI.
-9. Não fazer merge por conta própria salvo instrução explícita.
+3. Para motion, localizar token/receita oficial antes de criar easing/spring próprio.
+4. Criar branch `codex/<numero-issue>-<slug>` ou equivalente.
+5. Identificar quais componentes V2, repositories, domain modules e plugins nativos serão reutilizados.
+6. Implementar em mudanças pequenas e rastreáveis.
+7. Rodar build, lint e testes disponíveis.
+8. Atualizar documentação afetada.
+9. Abrir PR contra `main` com resumo, testes executados, riscos, screenshots e gravações quando houver motion.
+10. Não fazer merge por conta própria salvo instrução explícita.
 
 ## Severidade
 
@@ -103,7 +119,8 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 - dados de aluno enviados indevidamente;
 - cálculo acadêmico crítico incorreto;
 - fluxo essencial sem saída;
-- regressão visual/UX que impeça uso de fluxo essencial.
+- regressão visual/UX que impeça uso de fluxo essencial;
+- animação/transição que bloqueie fluxo essencial ou cause estado incorreto/destrutivo.
 
 ### P1 — alta prioridade
 
@@ -113,7 +130,10 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 - inconsistência visual sistêmica;
 - tela funcional porém genérica em área principal do produto;
 - permissão tratada incorretamente;
-- erro funcional sem perda de dados.
+- erro funcional sem perda de dados;
+- jank perceptível em interação principal;
+- motion sem Reduced Motion em interação espacial relevante;
+- gesto importante sem alternativa acessível.
 
 ### P2 — refinamento
 
@@ -137,10 +157,21 @@ Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de 
 - riscos de migração/persistência;
 - impacto em LGPD/analytics/billing quando aplicável.
 
-PR visual sem evidência visual suficiente não pode ser marcado como pronto.
+Quando houver motion relevante, incluir também:
+
+- gravação curta mostrando a interação real;
+- token de spring/duração utilizado;
+- comportamento Reduced Motion;
+- haptic associado, se houver;
+- ida/volta para shared transitions;
+- observação de performance em Android real quando aplicável.
+
+PR visual sem evidência visual suficiente não pode ser marcado como pronto. PR de motion sem gravação suficiente para revisar a interação também não pode ser marcado como pronto.
 
 ## Fonte de verdade
 
 Os documentos de produto e release em `docs/` devem ser respeitados. Quando houver conflito, sinalizar no PR em vez de inventar uma decisão silenciosa.
 
 A identidade visual atual do app não é fonte de verdade. A fonte de verdade visual passa a ser a especificação V2 aprovada e os componentes derivados dela.
+
+Para motion, a fonte de verdade é `docs/design-v2/MOTION_SYSTEM_V2.md`, complementada pelas receitas e pelo QA do mesmo diretório. Referências externas são repertório; não substituem a linguagem própria do produto.
