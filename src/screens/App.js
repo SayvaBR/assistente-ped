@@ -19,7 +19,8 @@ import { Cu } from "../core/recovered.js";
 import { Dn } from "../core/recovered.js";
 import { DocumentsScreen } from "../screens/DocumentsScreen.js";
 import { GuidedTour } from "../screens/GuidedTour.js";
-import { HomeScreen } from "../screens/HomeScreen.js";
+import { HomeV2 } from "../v2/screens/HomeV2";
+import { createHomeV2Data } from "../v2/adapters/home-v2-adapter";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
@@ -51,6 +52,7 @@ import { colors } from "../core/recovered.js";
 import { createId } from "../core/recovered.js";
 import { dateKey } from "../core/recovered.js";
 import { loadClasses } from "../data/classes.js";
+import { Cp } from "../data/agenda-camera.js";
 import { migrateLegacyClassData } from "../data/classes.js";
 import React from "react";
 import { nowISO } from "../core/recovered.js";
@@ -105,7 +107,15 @@ function App() {
     [He, Sa] = ReactHooks.useState({}),
     [oa, $n] = ReactHooks.useState("dia"),
     [yn, vi] = ReactHooks.useState(dateKey()),
-    [yi, ba] = ReactHooks.useState({});
+    [yi, ba] = ReactHooks.useState({}),
+    [homeAgendaState, setHomeAgendaState] = ReactHooks.useState({
+      status: "loading",
+      items: [],
+      error: "",
+    }),
+    [homeIsOnline, setHomeIsOnline] = ReactHooks.useState(
+      () => typeof navigator === "undefined" || navigator.onLine !== false,
+    );
   (ReactHooks.useEffect(() => {
     ((async () => {
       try {
@@ -176,6 +186,40 @@ function App() {
         (xa(qe), setSoundEnabled(Boolean(qe)));
       } catch {}
     })();
+  }, []);
+  const loadHomeV2Agenda = async (classId = M == null ? void 0 : M.id) => {
+    if (!classId) {
+      setHomeAgendaState({ status: "empty", items: [], error: "" });
+      return;
+    }
+    setHomeAgendaState((state) => ({ ...state, status: "loading", error: "" }));
+    try {
+      const items = await Cp(storage, classId);
+      setHomeAgendaState({
+        status: items.length ? "ready" : "empty",
+        items,
+        error: "",
+      });
+    } catch (error) {
+      setHomeAgendaState({
+        status: "error",
+        items: [],
+        error: error?.message || "Não foi possível carregar a agenda local.",
+      });
+    }
+  };
+  ReactHooks.useEffect(() => {
+    loadHomeV2Agenda(M == null ? void 0 : M.id);
+  }, [M == null ? void 0 : M.id]);
+  ReactHooks.useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const updateOnline = () => setHomeIsOnline(navigator.onLine !== false);
+    window.addEventListener("online", updateOnline);
+    window.addEventListener("offline", updateOnline);
+    return () => {
+      window.removeEventListener("online", updateOnline);
+      window.removeEventListener("offline", updateOnline);
+    };
   }, []);
   const Ca = (ae) => {
       (xa(ae),
@@ -691,6 +735,19 @@ function App() {
       ? `screen-${Re.routeKey || `${Re.name}-${v.length}`}`
       : `tab-${f}`,
     Sn = {};
+  const homeV2Data = createHomeV2Data({
+    now: new Date(),
+    perfil: yt,
+    turma: M,
+    planosDeHoje: we,
+    alunos: Za,
+    frequenciaHoje: yi,
+    agenda: homeAgendaState.items,
+    agendaStatus: homeAgendaState.status,
+    agendaError: homeAgendaState.error,
+    onRetry: () => loadHomeV2Agenda(),
+    offline: !homeIsOnline,
+  });
   let ht;
   return (
     Re?.name === "importar-alunos" && M
@@ -1090,22 +1147,33 @@ function App() {
                                                                         "inicio"
                                                                       ? (ht =
                                                                           React.createElement(
-                                                                            HomeScreen,
+                                                                            HomeV2,
                                                                             {
-                                                                              perfil:
-                                                                                yt,
-                                                                              planosDeHoje:
-                                                                                we,
-                                                                              mudarAba:
-                                                                                xr,
-                                                                              abrirTela:
-                                                                                zt,
-                                                                              turma:
-                                                                                M,
-                                                                              alunos:
-                                                                                Za,
-                                                                              frequenciaHoje:
-                                                                                yi,
+                                                                              data:
+                                                                                homeV2Data,
+                                                                              onAction:
+                                                                                (action) => {
+                                                                                  if (action === "attendance")
+                                                                                    return Za.length
+                                                                                      ? zt("chamada")
+                                                                                      : zt("novo-aluno");
+                                                                                  if (action === "observation")
+                                                                                    return Za.length
+                                                                                      ? zt("registro-rapido")
+                                                                                      : zt("novo-aluno");
+                                                                                  return xr("plano");
+                                                                                },
+                                                                              onTabChange:
+                                                                                (tab) =>
+                                                                                  xr(
+                                                                                    {
+                                                                                      inicio: "inicio",
+                                                                                      planejamento: "plano",
+                                                                                      turmas: "turma",
+                                                                                      arquivos: "biblioteca",
+                                                                                      mais: "mais",
+                                                                                    }[tab],
+                                                                                  ),
                                                                             },
                                                                           ))
                                                                       : f ===
@@ -1253,6 +1321,7 @@ function App() {
               ht,
             ),
             !Re &&
+              f !== "inicio" &&
               React.createElement(BottomNavigation, {
                 tab: f,
                 setTab: xr,

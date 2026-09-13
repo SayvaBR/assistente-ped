@@ -19,10 +19,12 @@ function setPreviewWidth(width: PreviewWidth) {
 }
 
 const homePreviewData: HomeV2Data = {
+  greeting: 'Boa noite, Professora Marina!',
   teacherName: 'Marina',
   dateLabel: 'Terça-feira, 16 de setembro',
   classLabel: '5º ano B',
   classMeta: 'Ensino Fundamental',
+  classStudentCount: 4,
   lesson: {
     status: 'Chamada pendente',
     subject: 'Matemática',

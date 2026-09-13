@@ -16,9 +16,11 @@ import './home-v2.css';
 
 export type HomeV2Data = {
   teacherName: string;
+  greeting: string;
   dateLabel: string;
   classLabel: string;
   classMeta: string;
+  classStudentCount?: number;
   lesson: {
     status: string;
     subject: string;
@@ -34,6 +36,10 @@ export type HomeV2Data = {
     detail: string;
     tone: 'primary' | 'warning' | 'success' | 'neutral';
   }>;
+  agendaStatus?: 'loading' | 'ready' | 'empty' | 'error';
+  agendaError?: string;
+  onRetry?: () => void;
+  offline?: boolean;
   pendingCount: number;
 };
 
@@ -60,18 +66,45 @@ export function HomeV2({
   onAction = () => undefined,
   onTabChange = () => undefined,
 }: HomeV2Props) {
+  const greetingParts = data.greeting.split(', ');
   return (
     <main className="v2-root v2-home" aria-labelledby="home-v2-greeting">
       <div className="v2-screen v2-home__screen">
         <header className="v2-home__header">
           <div className="v2-home__greeting">
+            <h1 id="home-v2-greeting">
+              <span>{greetingParts[0]},</span>{' '}
+              <span>{greetingParts.slice(1).join(', ')}</span>
+            </h1>
             <p className="v2-home__date">{data.dateLabel}</p>
-            <h1 id="home-v2-greeting">Bom dia, {data.teacherName}!</h1>
           </div>
           <button className="v2-home__avatar v2-pressable" type="button" aria-label="Abrir meu perfil">
             {data.teacherName.charAt(0).toUpperCase()}
           </button>
         </header>
+
+        {data.offline && (
+          <p className="v2-home__offline" role="status">
+            Você está offline. Os dados deste aparelho continuam disponíveis.
+          </p>
+        )}
+
+        <section className="v2-home__context" aria-label="Turma atual">
+          <div className="v2-home__context-mark" aria-hidden="true"><Users size={24} strokeWidth={2.5} /></div>
+          <div className="v2-home__context-copy">
+            <strong>{data.classLabel}</strong>
+            <span>{data.classMeta}</span>
+          </div>
+          {typeof data.classStudentCount === 'number' && (
+            <div className="v2-home__context-count">
+              <strong>{data.classStudentCount}</strong>
+              <span>alunos</span>
+            </div>
+          )}
+          <button className="v2-home__context-action v2-pressable" type="button" onClick={() => onTabChange('turmas')}>
+            Abrir turma <ChevronRight size={19} aria-hidden="true" />
+          </button>
+        </section>
 
         <section className="v2-home__hero" aria-labelledby="home-v2-focus-title">
           <div className="v2-home__hero-topline">
@@ -91,9 +124,9 @@ export function HomeV2({
                 </div>
               </div>
               <div className="v2-home__hero-meta" aria-label="Metadados da aula">
-                <span>{data.lesson.schedule}</span>
-                <span>{data.lesson.room}</span>
-                <span>BNCC {data.lesson.code}</span>
+                {data.lesson.schedule && <span>{data.lesson.schedule}</span>}
+                {data.lesson.room && <span>{data.lesson.room}</span>}
+                {data.lesson.code && <span>BNCC {data.lesson.code}</span>}
               </div>
               <div className="v2-home__hero-actions">
                 <button
@@ -148,7 +181,14 @@ export function HomeV2({
               Ver tudo <ChevronRight size={17} aria-hidden="true" />
             </button>
           </div>
-          {data.agenda.length ? (
+          {data.agendaStatus === 'loading' ? (
+            <div className="v2-home__empty-state" role="status"><strong>Carregando agenda…</strong></div>
+          ) : data.agendaStatus === 'error' ? (
+            <div className="v2-home__empty-state" role="alert">
+              <strong>{data.agendaError || 'Não foi possível carregar a agenda.'}</strong>
+              {data.onRetry && <button className="v2-home__text-action v2-pressable" type="button" onClick={data.onRetry}>Tentar novamente</button>}
+            </div>
+          ) : data.agenda.length ? (
             <ol className="v2-home__timeline">
               {data.agenda.map((item) => (
                 <li key={`${item.time}-${item.title}`} className="v2-home__timeline-item">
