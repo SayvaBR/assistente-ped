@@ -1,81 +1,95 @@
 # Fluxo de Supervisão de Design — Assistente Pedagógico
 
-Este documento define como Codex/Astra deve trabalhar em mudanças visuais. O objetivo é impedir que o aplicativo avance com telas apenas "funcionais", porém visualmente inconsistentes, genéricas ou fora da identidade definida.
+Este documento define como Codex/Astra deve trabalhar durante a reformulação visual do produto.
 
 ## Regra principal
 
-Nenhum fluxo visual deve ser redesenhado em massa. Trabalhar sempre em um fluxo/tela por vez, gerar evidência visual e aguardar revisão antes de avançar para a próxima área.
+A UI atual é baseline funcional, não baseline visual. Grandes mudanças são permitidas quando fazem parte de uma reformulação sistêmica e preservam dados, segurança, privacidade, acessibilidade e comportamento essencial.
+
+Não é obrigatório preservar layout, tokens, componentes, navegação visual ou padrões antigos apenas porque já existem.
+
+## Tipos de mudança
+
+### Fundação visual V2
+
+Pode alterar em conjunto tokens, tipografia, iconografia, superfícies, controles, navegação, app shell, motion e componentes estruturais.
+
+A fundação deve ser validada em mais de um contexto real antes de ser considerada pronta.
+
+### Migração de fluxo
+
+Depois da fundação, cada fluxo funcional deve ser migrado de forma controlada para evitar uma experiência permanentemente híbrida entre V1 e V2.
 
 ## Ciclo obrigatório
 
-1. Ler `AGENTS.md`, especificações de produto e este arquivo.
-2. Implementar apenas o fluxo/tela definido na issue atual.
-3. Rodar o app em viewport Android realista ou dispositivo/emulador.
-4. Capturar screenshots do estado final e, quando relevante, estados intermediários/erro/empty/loading.
-5. Anexar as screenshots diretamente no PR ou em comentário do PR para permitir revisão visual.
-6. Explicar quais referências de design foram usadas e quais decisões foram tomadas.
-7. Não iniciar outra tela importante até a revisão visual ser concluída.
+1. Ler `AGENTS.md`, `docs/DESIGN_AUTHORITY.md`, especificações funcionais e a issue.
+2. Separar requisitos funcionais de legado visual.
+3. Capturar o estado atual das áreas afetadas.
+4. Descrever a nova arquitetura quando a mudança for estrutural.
+5. Implementar no escopo definido.
+6. Rodar em viewport Android realista ou dispositivo/emulador.
+7. Capturar screenshots depois e estados relevantes.
+8. Comparar antes/depois com critérios objetivos.
+9. Corrigir até atingir o gate visual.
 
 ## Critérios visuais obrigatórios
 
-- Hierarquia clara: uma ação principal por estado.
-- Tipografia consistente e legível.
-- Espaçamento intencional e ritmo vertical coerente.
-- Não usar cards para absolutamente tudo.
-- Evitar aparência genérica de UI gerada por IA.
-- Não usar gradiente roxo/azul genérico, glassmorphism gratuito, bento decorativo, sombras excessivas ou ícone dentro de círculo em toda parte.
-- Manter identidade educacional profissional, amigável, tátil e moderna.
-- Não usar mascotes.
-- Ilustrações humanas, quando realmente úteis, podem seguir linguagem Soft 3D Educational Character Illustration.
-- Telas utilitárias devem priorizar função e clareza sobre decoração.
-- Componentes recorrentes devem obedecer o Design System.
-- Estados pressed/focus/disabled/loading/error devem ser pensados quando aplicável.
-- Respeitar acessibilidade de contraste e alvo de toque.
+- identidade perceptível e não genérica;
+- hierarquia clara;
+- personalidade amigável, profissional, tátil e educacional;
+- densidade adequada à rotina docente;
+- composição variada;
+- componentes que parecem parte do mesmo produto;
+- motion com função;
+- tipografia legível e com presença;
+- navegação previsível sem aparência de template;
+- estados pressed/focus/disabled/loading/error/success quando aplicável;
+- contraste, foco e alvo de toque acessíveis;
+- teste em 360, 390 e 430 px para fluxos móveis relevantes.
 
-## Evidência obrigatória para revisão
+## Evidência obrigatória
 
-Todo PR visual precisa conter:
+Todo PR visual relevante precisa conter:
 
-- screenshot antes;
-- screenshot depois;
-- screenshots dos estados relevantes;
-- resolução/viewport usado;
-- resumo do que mudou;
-- referências usadas;
-- limitações ou problemas conhecidos;
-- confirmação de build/testes.
+- screenshots antes;
+- screenshots depois;
+- estados relevantes;
+- viewport/resolução;
+- problemas do legado que foram resolvidos;
+- decisões de arquitetura visual/UX;
+- componentes/tokens novos, reutilizados ou aposentados;
+- build/testes;
+- limitações conhecidas.
 
-Para revisão pelo ChatGPT, preferir anexar as imagens diretamente no corpo/comentário do PR no GitHub, em vez de apenas mencionar caminhos locais.
+Caminhos locais sem imagem anexada não contam como evidência suficiente.
 
 ## Gate de aprovação
 
-Uma tela não está aprovada porque:
+Uma entrega não passa apenas porque compila, funciona, reutiliza o design system existente ou está mais bonita que antes.
 
-- compila;
-- ficou parecida com outra tela;
-- tem os componentes corretos;
-- "está melhor que antes".
+Ela passa quando função, identidade, hierarquia, acabamento, consistência, acessibilidade e experiência estiverem satisfatórios.
 
-Ela só avança quando função, hierarquia, acabamento visual, consistência e experiência estiverem satisfatórios.
+UI meramente funcional, genérica, parecida com dashboard SaaS, starter kit ou template de IA deve ser rejeitada.
 
-## Ordem recomendada de revisão visual
+## Rollout recomendado
 
-1. Splash / bootstrap / estados de carregamento
-2. Onboarding e primeiro sucesso
-3. Home
-4. Navegação principal
-5. Turmas
-6. Perfil do aluno
-7. Planejamento
-8. Chamada
-9. Notas / avaliações
-10. BNCC
-11. Arquivos
-12. Relatórios
-13. Configurações
-14. Monetização / paywall
-15. Empty, erro, offline e estados de sistema
+1. Fundação Visual V2.
+2. Splash/bootstrap/recuperação.
+3. Onboarding.
+4. Home e navegação principal.
+5. Turmas e perfil do aluno.
+6. Planejamento.
+7. Chamada.
+8. Notas/avaliações.
+9. BNCC.
+10. Arquivos.
+11. Relatórios.
+12. Configurações.
+13. Monetização.
+14. Estados vazios, erro, offline e refinamento transversal.
 
-## Regra de iteração
+P0 técnico, segurança, privacidade e integridade de dados continuam tendo prioridade sobre qualquer refinamento visual.
 
-Se a revisão pedir mudanças, o mesmo PR deve ser atualizado e novas screenshots devem ser anexadas. Não abrir um novo PR só para pequenos refinamentos da mesma tela, salvo necessidade técnica clara.
+## Iteração
+
+Quando a revisão pedir mudanças no mesmo escopo, atualizar o mesmo PR e anexar novas evidências. Abrir novo PR quando houver mudança real de milestone, fundação ou risco técnico independente.
