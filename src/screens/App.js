@@ -1,0 +1,1393 @@
+import { StudentImportScreen } from "./StudentImportScreen";
+import { NotebookScreen } from "./NotebookScreen";
+import { stageFrom } from "../domain/education";
+import { AcademicScreen } from "./AcademicScreen";
+import { OrganizationScreen } from "./OrganizationScreen";
+import { setSoundEnabled } from "../core/recovered.js";
+// Recovered from APK 0.2.0. Original behavior retained; vendor code uses npm packages.
+import { AppearanceScreen } from "../screens/AppearanceScreen.js";
+import { AttendanceScreen } from "../screens/AttendanceScreen.js";
+import { BackupScreen } from "../screens/BackupScreen.js";
+import { BnccInfantilScreen } from "../screens/BnccInfantilScreen.js";
+import { BnccScreen } from "../screens/BnccCatalogScreen.tsx";
+import { Bo } from "../core/recovered.js";
+import { BottomNavigation } from "../screens/BottomNavigation.js";
+import { ClassScreen } from "../screens/ClassScreen.js";
+import { ClassesScreen } from "../screens/ClassManager";
+import { ConfirmationDialog } from "../core/recovered.js";
+import { Cu } from "../core/recovered.js";
+import { Dn } from "../core/recovered.js";
+import { DocumentsScreen } from "../screens/DocumentsScreen.js";
+import { GuidedTour } from "../screens/GuidedTour.js";
+import { HomeScreen } from "../screens/HomeScreen.js";
+import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
+import { LibraryScreen } from "../screens/LibraryScreen.jsx";
+import { MoreScreen } from "../screens/MoreScreen.js";
+import * as ReactHooks from "react";
+import { NewStudentScreen } from "../screens/NewStudentScreen.js";
+import { NotificationsScreen } from "../screens/NotificationsScreen.js";
+import { ObservationScreen } from "../screens/ObservationScreen.js";
+import { Ol } from "../core/recovered.js";
+import { PedagogicalPlanningScreen } from "../screens/PedagogicalPlanningScreen.js";
+import { PlanningScreen } from "../screens/PlanningScreen.jsx";
+import { SequenceScreen } from "../screens/SequenceScreen";
+import { PrivacyScreen } from "../screens/PrivacyScreen.js";
+import { QuickRecordScreen } from "../screens/QuickRecordScreen.js";
+import { SettingsScreen } from "../screens/SettingsScreen.js";
+import { SetupWizard } from "../screens/SetupWizard.js";
+import { SubscriptionScreen } from "../screens/SubscriptionScreen";
+import { HelpFeedbackScreen } from "../screens/HelpFeedbackScreen";
+import { LegalScreen } from "../screens/LegalScreen";
+import { SplashScreen } from "../screens/SplashScreen.js";
+import { StudentScreen } from "../screens/StudentScreen.js";
+import { TeacherProfileScreen } from "../screens/TeacherProfileScreen.js";
+import { ToolsScreen } from "../screens/ToolsScreen.js";
+import { TrashScreen } from "../screens/TrashScreen.js";
+import { TutorialsScreen } from "../screens/TutorialsScreen.js";
+import { App as Vf } from "@capacitor/app";
+import { WelcomeScreen } from "../screens/Onboarding";
+import { Check as Zr } from "lucide-react";
+import { colors } from "../core/recovered.js";
+import { createId } from "../core/recovered.js";
+import { dateKey } from "../core/recovered.js";
+import { loadClasses } from "../data/classes.js";
+import { migrateLegacyClassData } from "../data/classes.js";
+import React from "react";
+import { nowISO } from "../core/recovered.js";
+import { p0 } from "../core/recovered.js";
+import { ph } from "../data/classes.js";
+import { repository } from "../core/recovered.js";
+import { saveClasses } from "../data/classes.js";
+import { storage } from "../core/recovered.js";
+import { u0 } from "../core/recovered.js";
+import { ws } from "../core/recovered.js";
+import { z0 } from "../screens/z0.js";
+
+const ReportsScreen = React.lazy(() =>
+  import("../screens/ReportsModule").then(({ ReportsScreen: screen }) => ({
+    default: screen,
+  })),
+);
+function App() {
+  var _a, bt, qn, xi;
+  const [o, u] = ReactHooks.useState("carregando"),
+    [f, y] = ReactHooks.useState("inicio"),
+    [v, E] = ReactHooks.useState([]),
+    [b, _] = ReactHooks.useState("tab"),
+    [D, T] = ReactHooks.useState(!1),
+    [U, R] = ReactHooks.useState(null),
+    [X, ce] = ReactHooks.useState(0),
+    [J, pe] = ReactHooks.useState(!1),
+    [ge, ue] = ReactHooks.useState(""),
+    [Se, Ce] = ReactHooks.useState(!1),
+    [ke, ye] = ReactHooks.useState(null),
+    [Ee, Ie] = ReactHooks.useState(null),
+    [Oe, ze] = ReactHooks.useState("claro"),
+    [te, Le] = ReactHooks.useState(Bo),
+    [xe, Me] = ReactHooks.useState(() => {
+      var ae;
+      return (
+        typeof window < "u" &&
+        ((ae = window.matchMedia) == null
+          ? void 0
+          : ae.call(window, "(prefers-color-scheme: dark)").matches)
+      );
+    }),
+    tt = React.useRef(!1),
+    [yt, Be] = ReactHooks.useState(null),
+    [dt, me] = ReactHooks.useState(!1),
+    [se, O] = ReactHooks.useState([]),
+    [M, ne] = ReactHooks.useState(null),
+    [We, rt] = ReactHooks.useState([]),
+    [mt, st] = ReactHooks.useState(!0),
+    [we, Ue] = ReactHooks.useState([]),
+    [be, ft] = ReactHooks.useState(!0),
+    [He, Sa] = ReactHooks.useState({}),
+    [oa, $n] = ReactHooks.useState("dia"),
+    [yn, vi] = ReactHooks.useState(dateKey()),
+    [yi, ba] = ReactHooks.useState({});
+  (ReactHooks.useEffect(() => {
+    ((async () => {
+      try {
+        const ae = await repository.carregarTema();
+        ae && Ol[ae]
+          ? ze(ae)
+          : ae &&
+            u0[ae] &&
+            (ze("claro"),
+            Le(Bo),
+            await repository.salvarTema("claro"),
+            await storage.set("config:accent", Bo));
+        try {
+          const qe = await storage.get("config:accent"),
+            lt = Cu(qe.value);
+          (Le(lt), qe.value !== lt && (await storage.set("config:accent", lt)));
+        } catch {}
+      } catch {
+      } finally {
+        ((tt.current = !0), u((ae) => (ae === "carregando" ? "splash" : ae)));
+      }
+    })(),
+      Dn.track("app_opened"));
+  }, []),
+    ReactHooks.useEffect(() => {
+      var lt, Ft;
+      const ae =
+        (lt = window.matchMedia) == null
+          ? void 0
+          : lt.call(window, "(prefers-color-scheme: dark)");
+      if (!ae) return;
+      const qe = (ar) => Me(ar.matches);
+      return (
+        Me(ae.matches),
+        (Ft = ae.addEventListener) == null || Ft.call(ae, "change", qe),
+        () => {
+          var ar;
+          return (ar = ae.removeEventListener) == null
+            ? void 0
+            : ar.call(ae, "change", qe);
+        }
+      );
+    }, []),
+    ReactHooks.useEffect(() => {
+      if (!tt.current) return;
+      const ae = setTimeout(() => {
+        storage
+          .set("config:accent", Cu(te))
+          .catch((qe) => console.error("Erro ao salvar cor de destaque:", qe));
+      }, 180);
+      return () => clearTimeout(ae);
+    }, [te]));
+  const Ei = (ae) => {
+      (ze(ae),
+        repository
+          .salvarTema(ae)
+          .catch((qe) => console.error("Erro ao salvar tema:", qe)),
+        Dn.track("theme_changed", {
+          tema: ae,
+        }));
+    },
+    [Ga, xa] = ReactHooks.useState(!0);
+  ReactHooks.useEffect(() => {
+    (async () => {
+      try {
+        const ae = await storage.get("config:sons"),
+          qe = JSON.parse(ae.value);
+        (xa(qe), setSoundEnabled(Boolean(qe)));
+      } catch {}
+    })();
+  }, []);
+  const Ca = (ae) => {
+      (xa(ae),
+        setSoundEnabled(Boolean(ae)),
+        storage
+          .set("config:sons", JSON.stringify(ae))
+          .catch((qe) =>
+            console.error("Erro ao salvar preferência de som:", qe),
+          ));
+    },
+    ot = async (ae) => {
+      (await repository.salvarPerfil(ae), Be(ae));
+    };
+  ReactHooks.useEffect(() => {
+    (async () => {
+      const ae = await repository.carregarPerfil();
+      if (ae) Be(ae);
+      else
+        try {
+          (await storage.get(ws), me(!0));
+        } catch {
+          me(!1);
+        }
+      try {
+        const qe = await loadClasses(storage);
+        qe.ativa &&
+          (await migrateLegacyClassData(storage, qe.ativa.id),
+          repository.definirTurmaAtiva(qe.ativa.id),
+          O(qe.lista),
+          ne(qe.ativa));
+      } catch (qe) {
+        console.error("Erro ao carregar turmas:", qe);
+      }
+    })();
+  }, []);
+  const Vt = async (ae) => {
+      var qe, lt, Ft, ar, nr;
+      try {
+        const sr = {
+            id: (ae == null ? void 0 : ae.perfilId) || createId("prof"),
+            nome:
+              ((qe = ae == null ? void 0 : ae.nome) == null
+                ? void 0
+                : qe.trim()) || "",
+            tratamento: ["professor", "professora", "docente"].includes(
+              ae == null ? void 0 : ae.tratamento,
+            )
+              ? ae.tratamento
+              : "",
+            escola:
+              ((lt = ae == null ? void 0 : ae.escola) == null
+                ? void 0
+                : lt.trim()) || "",
+            cidade:
+              ((Ft = ae == null ? void 0 : ae.cidade) == null
+                ? void 0
+                : Ft.trim()) || "",
+            uf: (ae == null ? void 0 : ae.uf) || "",
+            ibgeCode: (ae == null ? void 0 : ae.ibgeCode) || null,
+            etapaEnsino: (ae == null ? void 0 : ae.etapaEnsino) || "",
+            criadoEm: nowISO(),
+            ultimoAcesso: nowISO(),
+          },
+          Vr = {
+            id: (ae == null ? void 0 : ae.turmaId) || createId("turma"),
+            nome:
+              ((ar = ae == null ? void 0 : ae.turma) == null
+                ? void 0
+                : ar.trim()) || "",
+            nivel:
+              ((nr = ae == null ? void 0 : ae.nivel) == null
+                ? void 0
+                : nr.trim()) || "",
+            turno: (ae == null ? void 0 : ae.turno) || "",
+            professorId: sr.id,
+            etapa: stageFrom(ae.etapaEnsino),
+            componentesCurriculares: [],
+            duracaoAulaMin: 50,
+            criadoEm: nowISO(),
+          };
+        let bn = [];
+        try {
+          bn = (await loadClasses(storage)).lista || [];
+        } catch {}
+        const xn = bn.some((Cn) => Cn.id === Vr.id)
+          ? bn.map((Cn) => (Cn.id === Vr.id ? Vr : Cn))
+          : [...bn, Vr];
+        return (
+          await repository.salvarTurmas(xn),
+          await saveClasses(storage, xn, Vr.id),
+          await repository.salvarPerfil(sr),
+          repository.definirTurmaAtiva(Vr.id),
+          Be(sr),
+          O(xn),
+          ne(Vr),
+          Dn.track("profile_created", {
+            temEscola: !!sr.escola,
+            temNivel: !!Vr.nivel,
+          }),
+          Dn.track("class_created"),
+          {
+            perfil: sr,
+            turma: Vr,
+          }
+        );
+      } catch (sr) {
+        throw (console.error("Erro ao salvar dados do assistente:", sr), sr);
+      }
+    },
+    Ja = (ae) => {
+      (me(!1),
+        R(null),
+        u("home"),
+        ae === "aluno"
+          ? (_("forward"),
+            E([
+              {
+                name: "novo-aluno",
+                routeKey: createId("rota"),
+              },
+            ]))
+          : (_("tab"), E([]), y("inicio")));
+    };
+  ReactHooks.useEffect(() => {
+    if (!(M != null && M.id)) return;
+    const ae = M.id;
+    let qe = !0;
+    return (
+      ft(!0),
+      (async () => {
+        try {
+          const lt = await repository.carregarPlanoDoDia();
+          if (!qe || repository.turmaAtivaId !== ae) return;
+          Ue(lt || []);
+        } catch (lt) {
+          console.error("Erro ao carregar plano de aula:", lt);
+        } finally {
+          qe && repository.turmaAtivaId === ae && ft(!1);
+        }
+      })(),
+      () => {
+        qe = !1;
+      }
+    );
+  }, [M == null ? void 0 : M.id]);
+  const ki = async (ae) => {
+      const qe = {
+          ...ae,
+          atualizadoEm: nowISO(),
+        },
+        lt = await repository.salvarPlano(qe);
+      return (
+        ae.dataKey === dateKey(new Date()) && Ue(lt),
+        Dn.track("planning_created"),
+        qe
+      );
+    },
+    Qa = async (ae) => {
+      const qe = await repository.removerPlano(ae);
+      ae.dataKey === dateKey(new Date()) && Ue(qe);
+    },
+    Ya = async (ae = repository.turmaAtivaId) => {
+      if (ae)
+        try {
+          const qe = await repository.listarTodasAsChamadas();
+          if (repository.turmaAtivaId !== ae) return;
+          const lt = {};
+          Object.values(qe).forEach((ar) => {
+            Object.entries(ar).forEach(([nr, sr]) => {
+              (lt[nr] ||
+                (lt[nr] = {
+                  presencas: 0,
+                  faltas: 0,
+                  atrasos: 0,
+                }),
+                sr === "presente"
+                  ? lt[nr].presencas++
+                  : sr === "falta"
+                    ? lt[nr].faltas++
+                    : sr === "atrasado" && lt[nr].atrasos++);
+            });
+          });
+          const Ft = await repository.carregarChamadaDoDia();
+          if (repository.turmaAtivaId !== ae) return;
+          (Sa(lt), ba(Ft));
+        } catch (qe) {
+          console.error("Erro ao calcular frequência:", qe);
+        }
+    };
+  ReactHooks.useEffect(() => {
+    M != null && M.id && Ya(M.id);
+  }, [M == null ? void 0 : M.id]);
+  const wi = async (ae, qe) => {
+    (await repository.salvarChamadaPorData(ae, qe),
+      await Ya(),
+      Dn.track("attendance_registered"));
+  };
+  (ReactHooks.useEffect(() => {
+    if (!(M != null && M.id)) return;
+    const ae = M.id;
+    let qe = !0;
+    return (
+      st(!0),
+      (async () => {
+        try {
+          const lt = await repository.carregarEstudantes();
+          if (!qe || repository.turmaAtivaId !== ae) return;
+          if (lt) {
+            let Ft = !1;
+            const ar = lt.map((nr) =>
+              nr.id
+                ? nr
+                : ((Ft = !0),
+                  {
+                    ...nr,
+                    id: createId("aluno"),
+                    criadoEm: nr.criadoEm || nowISO(),
+                  }),
+            );
+            (rt(ar),
+              Ft &&
+                repository.turmaAtivaId === ae &&
+                (await repository.salvarEstudantes(ar)));
+          } else rt([]);
+        } catch (lt) {
+          console.error("Erro ao carregar alunos:", lt);
+        } finally {
+          qe && repository.turmaAtivaId === ae && st(!1);
+        }
+      })(),
+      () => {
+        qe = !1;
+      }
+    );
+  }, [M == null ? void 0 : M.id]),
+    ReactHooks.useEffect(() => {
+      M != null && M.id && repository.migrarEvolucaoParaRotina();
+    }, [M == null ? void 0 : M.id]));
+  const Xa = (ae) => {
+      (repository.definirTurmaAtiva(ae.id),
+        st(!0),
+        ft(!0),
+        ne(ae),
+        Ue([]),
+        rt([]),
+        Sa({}),
+        ba({}),
+        vi(dateKey()),
+        $n("dia"));
+    },
+    dr = async (ae) => {
+      const qe = await ph(storage, se, ae);
+      (Xa(qe), kn("inicio"));
+    },
+    Pa = async (ae) => {
+      (O(ae.lista),
+        ae.ativa &&
+          (ae.ativa.id !== (M == null ? void 0 : M.id)
+            ? Xa(ae.ativa)
+            : ne(ae.ativa)));
+    },
+    Si = async (ae) => {
+      const qe = [...We, ae];
+      (await repository.salvarEstudantes(qe),
+        rt(qe),
+        ue("Novo Aluno Adicionado com Sucesso"),
+        Dn.track("student_created"));
+    };
+  ReactHooks.useEffect(() => {
+    if (!ge) return;
+    const ae = setTimeout(() => ue(""), 2600);
+    return () => clearTimeout(ae);
+  }, [ge]);
+  const bi = async (ae, qe) => {
+      const lt = We.map((Ft) =>
+        Ft.id === ae.id
+          ? {
+              ...Ft,
+              nome: qe,
+              atualizadoEm: nowISO(),
+            }
+          : Ft,
+      );
+      (await repository.salvarEstudantes(lt), rt(lt));
+    },
+    Ho = async (ae, qe) => {
+      const lt = We.map((Ft) =>
+        Ft.id === ae.id
+          ? {
+              ...Ft,
+              ...qe,
+              atualizadoEm: nowISO(),
+            }
+          : Ft,
+      );
+      (await repository.salvarEstudantes(lt), rt(lt));
+    },
+    Wn = async (ae) => {
+      const qe = We.map((lt) =>
+        lt.id === ae.id
+          ? {
+              ...lt,
+              deletedAt: nowISO(),
+            }
+          : lt,
+      );
+      (await repository.salvarEstudantes(qe), rt(qe));
+    },
+    Ka = We.filter((ae) => !ae.deletedAt),
+    Za = Ka.map((ae) => {
+      var qe, lt, Ft;
+      return {
+        ...ae,
+        presencas: ((qe = He[ae.id]) == null ? void 0 : qe.presencas) ?? 0,
+        faltas: ((lt = He[ae.id]) == null ? void 0 : lt.faltas) ?? 0,
+        atrasos: ((Ft = He[ae.id]) == null ? void 0 : Ft.atrasos) ?? 0,
+      };
+    }),
+    Aa = Oe === "sistema" ? (xe ? "escuro" : "claro") : Oe;
+  (Object.assign(colors, p0(Ol[Aa] || Ol.claro, te)),
+    ReactHooks.useEffect(() => {
+      var ae;
+      ((document.documentElement.style.colorScheme = colors.colorScheme),
+        document.documentElement.style.setProperty(
+          "--app-background",
+          colors.bg,
+        ),
+        document.documentElement.style.setProperty(
+          "--focus-ring",
+          `${colors.primary}70`,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-primary",
+          colors.primary,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-on-primary",
+          colors.onPrimary,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-primary-dark",
+          colors.primaryDark,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-primary-light",
+          colors.primaryLight,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-surface",
+          colors.white,
+        ),
+        document.documentElement.style.setProperty("--color-text", colors.dark),
+        document.documentElement.style.setProperty(
+          "--color-muted",
+          colors.gray,
+        ),
+        document.documentElement.style.setProperty(
+          "--color-border",
+          colors.border,
+        ),
+        document.documentElement.style.setProperty(
+          "--card-shadow",
+          colors.cardShadow,
+        ),
+        (ae = document.querySelector('meta[name="theme-color"]')) == null ||
+          ae.setAttribute("content", colors.primary));
+    }, [Aa, te]));
+  const Re = v[v.length - 1] || null,
+    Wr = (ae, qe) => {
+      (_("forward"),
+        E((lt) => [
+          ...lt,
+          {
+            name: ae,
+            data: qe,
+            routeKey: createId("rota"),
+          },
+        ]),
+        ae === "biblioteca" && Dn.track("library_opened"),
+        ae === "bncc" && Dn.track("bncc_opened"));
+    },
+    [en, no] = ReactHooks.useState(0),
+    En = () => {
+      (_("back"), E((ae) => ae.slice(0, -1)), no((ae) => ae + 1));
+    },
+    kn = (ae) => {
+      (_("tab"), y(ae), E([]));
+    },
+    je = (ae) => {
+      (ye(ae), Ce(!0));
+    },
+    zt = (ae, qe) => {
+      J
+        ? je({
+            tipo: "rota",
+            name: ae,
+            data: qe,
+          })
+        : Wr(ae, qe);
+    },
+    _t = () => {
+      J
+        ? je({
+            tipo: "voltar",
+          })
+        : En();
+    },
+    xr = (ae) => {
+      (ae === f && v.length === 0) ||
+        (J
+          ? je({
+              tipo: "aba",
+              tab: ae,
+            })
+          : kn(ae));
+    },
+    Ot = () => {
+      (pe(!1), En());
+    },
+    wn = () => {
+      const ae = ke;
+      (pe(!1),
+        Ce(!1),
+        ye(null),
+        (ae == null ? void 0 : ae.tipo) === "biblioteca-local"
+          ? Ee == null || Ee()
+          : (ae == null ? void 0 : ae.tipo) === "aba"
+            ? kn(ae.tab)
+            : (ae == null ? void 0 : ae.tipo) === "rota"
+              ? Wr(ae.name, ae.data)
+              : En());
+    };
+  ReactHooks.useEffect(() => {
+    let ae;
+    return (
+      Vf.addListener("backButton", () => {
+        var ar, nr;
+        const qe = document.activeElement;
+        if (
+          qe &&
+          qe !== document.body &&
+          (ar = qe.matches) != null &&
+          ar.call(qe, "input, textarea, select, [contenteditable='true']")
+        ) {
+          qe.blur();
+          return;
+        }
+        if (Se) {
+          (Ce(!1), ye(null));
+          return;
+        }
+        const lt = document.querySelector(".modal-overlay");
+        if (lt) {
+          lt.click();
+          return;
+        }
+        const Ft = document.querySelector(".bottom-sheet-panel");
+        if (Ft) {
+          (nr = Ft.parentElement) == null || nr.click();
+          return;
+        }
+        if (D) {
+          T(!1);
+          return;
+        }
+        if (U) {
+          R(null);
+          return;
+        }
+        if (Ee) {
+          J
+            ? je({
+                tipo: "biblioteca-local",
+              })
+            : Ee();
+          return;
+        }
+        if (J) {
+          v.length > 0
+            ? je({
+                tipo: "voltar",
+              })
+            : o === "home" &&
+              f !== "inicio" &&
+              je({
+                tipo: "aba",
+                tab: "inicio",
+              });
+          return;
+        }
+        if (v.length > 0) {
+          En();
+          return;
+        }
+        if (o === "wizard") {
+          ce((sr) => sr + 1);
+          return;
+        }
+        if (o === "home" && f !== "inicio") {
+          kn("inicio");
+          return;
+        }
+        Vf.exitApp();
+      }).then((qe) => {
+        ae = qe;
+      }),
+      () => {
+        ae == null || ae.remove();
+      }
+    );
+  }, [Ee, Se, o, J, v.length, D, f, U]);
+  const qr = Re
+      ? `screen-${Re.routeKey || `${Re.name}-${v.length}`}`
+      : `tab-${f}`,
+    Sn = {};
+  let ht;
+  return (
+    Re?.name === "importar-alunos" && M
+      ? (ht = React.createElement(StudentImportScreen, {
+          onBack: _t,
+          turmaId: M.id,
+          onImported: rt,
+          onDirtyChange: pe,
+        }))
+      : Re?.name === "academico" && M
+        ? (ht = React.createElement(AcademicScreen, {
+            onBack: _t,
+            turma: M,
+            alunos: Za,
+            studentId: Re.data?.studentId,
+            goTo: zt,
+            onDirtyChange: pe,
+          }))
+        : Re?.name === "caderno" && M
+          ? (ht = React.createElement(NotebookScreen, {
+              onBack: _t,
+              turma: M,
+              alunos: Za,
+              studentId: Re.data?.studentId,
+              goTo: zt,
+              onDirtyChange: pe,
+            }))
+          : Re?.name === "sequencias" && M
+            ? (ht = React.createElement(SequenceScreen, {
+                onBack: _t,
+                turma: M,
+                goTo: zt,
+                onDirtyChange: pe,
+              }))
+            : Re?.name === "assinatura"
+              ? (ht = React.createElement(SubscriptionScreen, { onBack: _t, goTo: zt }))
+              : Re?.name === "organizacao"
+                ? (ht = React.createElement(OrganizationScreen, {
+                    onBack: _t,
+                    onDirtyChange: pe,
+                  }))
+                : (Re == null ? void 0 : Re.name) === "perfil"
+                  ? (ht = React.createElement(StudentScreen, {
+                      crianca: Re.data,
+                      onBack: _t,
+                      goTo: zt,
+                      onExcluir: Wn,
+                      onEditar: Ho,
+                      turma: M,
+                    }))
+                  : (Re == null ? void 0 : Re.name) === "observacao"
+                    ? (ht = React.createElement(ObservationScreen, {
+                        crianca: Re.data,
+                        onBack: _t,
+                        onDirtyChange: pe,
+                      }))
+                    : (Re == null ? void 0 : Re.name) === "biblioteca" ||
+                        ["musica", "videos", "links"].includes(
+                          Re == null ? void 0 : Re.name,
+                        )
+                      ? (ht = React.createElement(LibraryScreen, {
+                          onBack: _t,
+                          onDirtyChange: pe,
+                          setBackHandler: Ie,
+                          onOpenTrash: () => zt("lixeira"),
+                          onRequestLocalBack: () => {
+                            J
+                              ? je({
+                                  tipo: "biblioteca-local",
+                                })
+                              : Ee == null || Ee();
+                          },
+                        }))
+                      : (Re == null ? void 0 : Re.name) === "relatorios"
+                        ? (ht = React.createElement(
+                            React.Suspense,
+                            {
+                              fallback: React.createElement(
+                                "div",
+                                {
+                                  className: "module-loading",
+                                  role: "status",
+                                  "aria-live": "polite",
+                                },
+                                "Carregando relatórios…",
+                              ),
+                            },
+                            React.createElement(ReportsScreen, {
+                              turma: M,
+                              onBack: _t,
+                              alunos: Za,
+                              goTo: zt,
+                            }),
+                          ))
+                        : (Re == null ? void 0 : Re.name) === "tema"
+                          ? (ht = React.createElement(AppearanceScreen, {
+                              onBack: _t,
+                              theme: Oe,
+                              setTheme: Ei,
+                              accentColor: te,
+                              setAccentColor: Le,
+                              systemDark: xe,
+                            }))
+                          : (Re == null ? void 0 : Re.name) === "bncc"
+                            ? (ht = React.createElement(BnccScreen, {
+                                etapa: M?.etapa,
+                                onBack: _t,
+                                goTo: zt,
+                              }))
+                            : (Re == null ? void 0 : Re.name) ===
+                                "bncc-infantil"
+                              ? (ht = React.createElement(BnccInfantilScreen, {
+                                  onBack: _t,
+                                }))
+                              : (Re == null ? void 0 : Re.name) === "documentos"
+                                ? (ht = React.createElement(DocumentsScreen, {
+                                    onBack: _t,
+                                  }))
+                                : (Re == null ? void 0 : Re.name) ===
+                                    "configuracoes"
+                                  ? (ht = React.createElement(SettingsScreen, {
+                                      onBack: _t,
+                                      goTo: zt,
+                                      sonsAtivados: Ga,
+                                      setSonsAtivados: Ca,
+                                    }))
+                                  : (Re == null ? void 0 : Re.name) ===
+                                      "privacidade"
+                                    ? (ht = React.createElement(PrivacyScreen, {
+                                        onBack: _t,
+                                        goTo: zt,
+                                      }))
+                                    : (Re == null ? void 0 : Re.name) ===
+                                        "ajuda-feedback"
+                                      ? (ht = React.createElement(
+                                          HelpFeedbackScreen,
+                                          { onBack: _t },
+                                        ))
+                                      : (Re == null ? void 0 : Re.name) ===
+                                          "termos"
+                                        ? (ht = React.createElement(
+                                            LegalScreen,
+                                            { onBack: _t },
+                                          ))
+                                        : (Re == null ? void 0 : Re.name) ===
+                                            "backup"
+                                          ? (ht = React.createElement(
+                                              BackupScreen,
+                                              {
+                                                onBack: _t,
+                                              },
+                                            ))
+                                          : (Re == null ? void 0 : Re.name) ===
+                                              "tutoriais"
+                                            ? (ht = React.createElement(
+                                                TutorialsScreen,
+                                                {
+                                                  onBack: _t,
+                                                  onIniciarTutorial: (ae) => {
+                                                    (E([]), R(ae));
+                                                  },
+                                                },
+                                              ))
+                                            : (Re == null
+                                                  ? void 0
+                                                  : Re.name) === "lixeira"
+                                              ? (ht = React.createElement(
+                                                  TrashScreen,
+                                                  {
+                                                    onBack: _t,
+                                                  },
+                                                ))
+                                              : (Re == null
+                                                    ? void 0
+                                                    : Re.name) ===
+                                                  "planejamento-pedagogico"
+                                                ? (ht = React.createElement(
+                                                    PedagogicalPlanningScreen,
+                                                    {
+                                                      onBack: _t,
+                                                    },
+                                                  ))
+                                                : (Re == null
+                                                      ? void 0
+                                                      : Re.name) ===
+                                                    "perfil-professor"
+                                                  ? (ht = React.createElement(
+                                                      TeacherProfileScreen,
+                                                      {
+                                                        onBack: _t,
+                                                        onConcluido: Ot,
+                                                        perfil: yt,
+                                                        onSalvar: ot,
+                                                        onDirtyChange: pe,
+                                                      },
+                                                    ))
+                                                  : (Re == null
+                                                        ? void 0
+                                                        : Re.name) ===
+                                                      "gerenciar-turmas"
+                                                    ? (ht = React.createElement(
+                                                        ClassesScreen,
+                                                        {
+                                                          onBack: _t,
+                                                          goTo: zt,
+                                                          turmas: se,
+                                                          turmaAtiva: M,
+                                                          onAtualizar: Pa,
+                                                          onAtivar: dr,
+                                                          onDirtyChange: pe,
+                                                        },
+                                                      ))
+                                                    : (Re == null
+                                                          ? void 0
+                                                          : Re.name) ===
+                                                        "notificacoes"
+                                                      ? (ht =
+                                                          React.createElement(
+                                                            NotificationsScreen,
+                                                            {
+                                                              onBack: _t,
+                                                              onDirtyChange: pe,
+                                                            },
+                                                          ))
+                                                      : [
+                                                            "ferramentas",
+                                                            "cronometro",
+                                                            "alarmes",
+                                                          ].includes(
+                                                            Re == null
+                                                              ? void 0
+                                                              : Re.name,
+                                                          )
+                                                        ? (ht =
+                                                            React.createElement(
+                                                              ToolsScreen,
+                                                              {
+                                                                onBack: _t,
+                                                              },
+                                                            ))
+                                                        : (Re == null
+                                                              ? void 0
+                                                              : Re.name) ===
+                                                            "novo-aluno"
+                                                          ? (ht =
+                                                              React.createElement(
+                                                                NewStudentScreen,
+                                                                {
+                                                                  onBack: _t,
+                                                                  onConcluido:
+                                                                    Ot,
+                                                                  onDirtyChange:
+                                                                    pe,
+                                                                  onSalvo: Si,
+                                                                  turmaId:
+                                                                    M == null
+                                                                      ? void 0
+                                                                      : M.id,
+                                                                },
+                                                              ))
+                                                          : (Re == null
+                                                                ? void 0
+                                                                : Re.name) ===
+                                                              "plano-aula"
+                                                            ? (ht =
+                                                                React.createElement(
+                                                                  LessonPlanScreen,
+                                                                  {
+                                                                    etapa:
+                                                                      M?.etapa,
+                                                                    plano:
+                                                                      (_a =
+                                                                        Re.data) ==
+                                                                      null
+                                                                        ? void 0
+                                                                        : _a.plano,
+                                                                    prefill:
+                                                                      (bt =
+                                                                        Re.data) ==
+                                                                      null
+                                                                        ? void 0
+                                                                        : bt.prefill,
+                                                                    dataKey:
+                                                                      (qn =
+                                                                        Re.data) ==
+                                                                      null
+                                                                        ? void 0
+                                                                        : qn.dataKey,
+                                                                    turmaId:
+                                                                      M == null
+                                                                        ? void 0
+                                                                        : M.id,
+                                                                    onBack: _t,
+                                                                    onConcluido:
+                                                                      Ot,
+                                                                    onDirtyChange:
+                                                                      pe,
+                                                                    onSalvar:
+                                                                      ki,
+                                                                    onExcluir:
+                                                                      Qa,
+                                                                  },
+                                                                ))
+                                                            : (Re == null
+                                                                  ? void 0
+                                                                  : Re.name) ===
+                                                                "registro-rapido"
+                                                              ? (ht =
+                                                                  React.createElement(
+                                                                    QuickRecordScreen,
+                                                                    {
+                                                                      alunos:
+                                                                        Ka,
+                                                                      onBack:
+                                                                        _t,
+                                                                      goTo: zt,
+                                                                    },
+                                                                  ))
+                                                              : (Re == null
+                                                                    ? void 0
+                                                                    : Re.name) ===
+                                                                  "chamada"
+                                                                ? (ht =
+                                                                    React.createElement(
+                                                                      AttendanceScreen,
+                                                                      {
+                                                                        alunos:
+                                                                          Ka,
+                                                                        dataKey:
+                                                                          ((xi =
+                                                                            Re.data) ==
+                                                                          null
+                                                                            ? void 0
+                                                                            : xi.dataKey) ||
+                                                                          yn,
+                                                                        onBack:
+                                                                          _t,
+                                                                        onSalvo:
+                                                                          (
+                                                                            ae,
+                                                                          ) => {
+                                                                            var qe;
+                                                                            return wi(
+                                                                              ((qe =
+                                                                                Re.data) ==
+                                                                              null
+                                                                                ? void 0
+                                                                                : qe.dataKey) ||
+                                                                                yn,
+                                                                              ae,
+                                                                            );
+                                                                          },
+                                                                      },
+                                                                    ))
+                                                                : Re &&
+                                                                    Sn[Re.name]
+                                                                  ? (ht =
+                                                                      React.createElement(
+                                                                        z0,
+                                                                        {
+                                                                          titulo:
+                                                                            Sn[
+                                                                              Re
+                                                                                .name
+                                                                            ],
+                                                                          onBack:
+                                                                            _t,
+                                                                        },
+                                                                      ))
+                                                                  : f ===
+                                                                      "biblioteca"
+                                                                    ? (ht =
+                                                                        React.createElement(
+                                                                          LibraryScreen,
+                                                                          {
+                                                                            onDirtyChange:
+                                                                              pe,
+                                                                           setBackHandler:
+                                                                             Ie,
+                                                                            onOpenTrash:
+                                                                              () => zt("lixeira"),
+                                                                            onRequestLocalBack:
+                                                                              () => {
+                                                                                J
+                                                                                  ? je(
+                                                                                      {
+                                                                                        tipo: "biblioteca-local",
+                                                                                      },
+                                                                                    )
+                                                                                  : Ee ==
+                                                                                      null ||
+                                                                                    Ee();
+                                                                              },
+                                                                          },
+                                                                        ))
+                                                                    : f ===
+                                                                        "inicio"
+                                                                      ? (ht =
+                                                                          React.createElement(
+                                                                            HomeScreen,
+                                                                            {
+                                                                              perfil:
+                                                                                yt,
+                                                                              planosDeHoje:
+                                                                                we,
+                                                                              mudarAba:
+                                                                                xr,
+                                                                              abrirTela:
+                                                                                zt,
+                                                                              turma:
+                                                                                M,
+                                                                              alunos:
+                                                                                Za,
+                                                                              frequenciaHoje:
+                                                                                yi,
+                                                                            },
+                                                                          ))
+                                                                      : f ===
+                                                                          "plano"
+                                                                        ? (ht =
+                                                                            React.createElement(
+                                                                              PlanningScreen,
+                                                                              {
+                                                                                goTo: zt,
+                                                                                turmaId:
+                                                                                  M ==
+                                                                                  null
+                                                                                    ? void 0
+                                                                                    : M.id,
+                                                                                formDirty:
+                                                                                  J,
+                                                                                onDirtyChange:
+                                                                                  pe,
+                                                                                onAbrirPlano:
+                                                                                  (
+                                                                                    ae,
+                                                                                    qe,
+                                                                                  ) =>
+                                                                                    zt(
+                                                                                      "plano-aula",
+                                                                                      {
+                                                                                        plano:
+                                                                                          ae,
+                                                                                        dataKey:
+                                                                                          qe,
+                                                                                      },
+                                                                                    ),
+                                                                              },
+                                                                            ))
+                                                                        : f ===
+                                                                            "turma"
+                                                                          ? (ht =
+                                                                              React.createElement(
+                                                                                ClassScreen,
+                                                                                {
+                                                                                  goTo: zt,
+                                                                                  alunos:
+                                                                                    Za,
+                                                                                  carregando:
+                                                                                    mt,
+                                                                                  turma:
+                                                                                    M,
+                                                                                  onRenomear:
+                                                                                    bi,
+                                                                                  onExcluir:
+                                                                                    Wn,
+                                                                                  aba: oa,
+                                                                                  setAba:
+                                                                                    $n,
+                                                                                  dataKey:
+                                                                                    yn,
+                                                                                  setDataKey:
+                                                                                    vi,
+                                                                                  pulso:
+                                                                                    en,
+                                                                                },
+                                                                              ))
+                                                                          : f ===
+                                                                              "mais" &&
+                                                                            (ht =
+                                                                              React.createElement(
+                                                                                MoreScreen,
+                                                                                {
+                                                                                  goTo: zt,
+                                                                                },
+                                                                              )),
+    React.createElement(
+      "div",
+      {
+        className: "app-viewport",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          background: colors.primaryLight,
+          minHeight: "100dvh",
+          padding: "24px 0",
+          fontFamily: "Nunito Sans, system-ui, sans-serif",
+        },
+      },
+      React.createElement(
+        "div",
+        {
+          className: "app-shell",
+          style: {
+            width: "100%",
+            // O Poco X7 trabalha em uma largura CSS próxima de 393px; manter o
+            // limite aqui deixa o preview de navegador fiel ao viewport Android
+            // sem limitar telas menores no aparelho.
+            maxWidth: 393,
+            minHeight: "100dvh",
+            background: colors.bg,
+            borderRadius: 36,
+            overflow: "hidden",
+            position: "relative",
+            boxShadow: `0 20px 50px ${colors.primary}2A`,
+            border: "8px solid #1E1B26",
+          },
+        },
+        o === "carregando" &&
+          React.createElement("div", {
+            style: {
+              height: "100%",
+              background: colors.bg,
+            },
+          }),
+        o === "splash" &&
+          React.createElement(SplashScreen, {
+            onDone: () => u(yt ? "home" : dt ? "wizard" : "onboarding"),
+          }),
+        o === "onboarding" &&
+          React.createElement(WelcomeScreen, {
+            onDone: (plan) => {
+              storage
+                .set("assinatura:interesse", plan || "gratuito")
+                .catch(() => {})
+                .finally(() => u("wizard"));
+            },
+          }),
+        o === "wizard" &&
+          React.createElement(SetupWizard, {
+            onDone: Vt,
+            onBack: () => u("onboarding"),
+            onFinish: Ja,
+            backSignal: X,
+          }),
+        o === "home" &&
+          React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(
+              "div",
+              {
+                key: qr,
+                className: `screen-motion screen-${b} app-screen-scroll`,
+                style: {
+                  height: "100%",
+                  overflowY: "auto",
+                },
+              },
+              ht,
+            ),
+            !Re &&
+              React.createElement(BottomNavigation, {
+                tab: f,
+                setTab: xr,
+              }),
+            U &&
+              React.createElement(GuidedTour, {
+                tutorialId: U,
+                onClose: () => R(null),
+                onChangeTab: xr,
+              }),
+            ge &&
+              React.createElement(
+                "div",
+                {
+                  className: "celebration-toast success-celebration",
+                  role: "status",
+                  "aria-live": "polite",
+                  style: {
+                    background: colors.white,
+                    color: colors.dark,
+                    borderColor: colors.green,
+                  },
+                },
+                React.createElement(
+                  "span",
+                  {
+                    "aria-hidden": "true",
+                    style: {
+                      background: colors.green,
+                    },
+                  },
+                  React.createElement(Zr, {
+                    size: 17,
+                    color: "#173626",
+                  }),
+                ),
+                ge,
+              ),
+            Se &&
+              React.createElement(
+                "div",
+                {
+                  className: "modal-overlay",
+                  role: "presentation",
+                  onClick: () => {
+                    (Ce(!1), ye(null));
+                  },
+                },
+                React.createElement(
+                  "div",
+                  {
+                    className: "ui-dialog",
+                    role: "dialog",
+                    "aria-modal": "true",
+                    "aria-labelledby": "titulo-descartar",
+                    onClick: (ae) => ae.stopPropagation(),
+                    style: {
+                      background: colors.white,
+                    },
+                  },
+                  React.createElement(
+                    "div",
+                    {
+                      id: "titulo-descartar",
+                      style: {
+                        fontSize: 16,
+                        fontWeight: 800,
+                        color: colors.dark,
+                      },
+                    },
+                    "Descartar alterações?",
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 14,
+                        color: colors.gray,
+                        lineHeight: 1.5,
+                        marginTop: 6,
+                      },
+                    },
+                    "O que foi preenchido nesta tela ainda não foi salvo.",
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      style: {
+                        display: "flex",
+                        gap: 8,
+                        marginTop: 16,
+                      },
+                    },
+                    React.createElement(
+                      "button",
+                      {
+                        className: "press-fx touch-target",
+                        autoFocus: !0,
+                        onClick: () => {
+                          (Ce(!1), ye(null));
+                        },
+                        style: {
+                          flex: 1,
+                          border: `1px solid ${colors.border}`,
+                          background: colors.white,
+                          color: colors.dark,
+                          borderRadius: 14,
+                          fontWeight: 700,
+                        },
+                      },
+                      "Continuar editando",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        className: "press-fx touch-target",
+                        onClick: wn,
+                        style: {
+                          flex: 1,
+                          border: "none",
+                          background: colors.red,
+                          color: "#fff",
+                          borderRadius: 14,
+                          fontWeight: 700,
+                        },
+                      },
+                      "Descartar",
+                    ),
+                  ),
+                ),
+              ),
+          ),
+        React.createElement(ConfirmationDialog, null),
+      ),
+    )
+  );
+}
+export { App };

@@ -1,0 +1,560 @@
+[
+  {
+    "codigo": "EI01EO01",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Perceber que suas ações afetam as outras crianças e os adultos."
+  },
+  {
+    "codigo": "EI01EO02",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Perceber as possibilidades e limites do próprio corpo nas brincadeiras e interações."
+  },
+  {
+    "codigo": "EI01EO03",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Interagir com crianças da mesma idade e adultos ao explorar espaços, materiais e brinquedos."
+  },
+  {
+    "codigo": "EI01EO04",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Comunicar necessidades, desejos e emoções por meio de gestos, balbucios e palavras."
+  },
+  {
+    "codigo": "EI01EO05",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Reconhecer o próprio corpo e expressar sensações em momentos de alimentação, higiene, brincadeira e descanso."
+  },
+  {
+    "codigo": "EI01EO06",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Interagir com outras crianças e adultos, adaptando-se ao convívio social."
+  },
+  {
+    "codigo": "EI02EO01",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Demonstrar cuidado e solidariedade ao interagir com crianças e adultos."
+  },
+  {
+    "codigo": "EI02EO02",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Demonstrar confiança em si mesma para enfrentar dificuldades e desafios."
+  },
+  {
+    "codigo": "EI02EO03",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Compartilhar objetos e espaços com crianças da mesma idade e adultos."
+  },
+  {
+    "codigo": "EI02EO04",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Comunicar-se com colegas e adultos, buscando compreender e ser compreendida."
+  },
+  {
+    "codigo": "EI02EO05",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Perceber que as pessoas têm características físicas diferentes, respeitando essas diferenças."
+  },
+  {
+    "codigo": "EI02EO06",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Respeitar regras básicas de convívio social nas interações e brincadeiras."
+  },
+  {
+    "codigo": "EI02EO07",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Resolver conflitos nas interações e brincadeiras, com a orientação de um adulto."
+  },
+  {
+    "codigo": "EI03EO01",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Demonstrar empatia, percebendo que as pessoas sentem e pensam de formas diferentes."
+  },
+  {
+    "codigo": "EI03EO02",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Agir com independência e confiança nas próprias capacidades, reconhecendo conquistas e limites."
+  },
+  {
+    "codigo": "EI03EO03",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Ampliar as relações interpessoais, participando e cooperando com o grupo."
+  },
+  {
+    "codigo": "EI03EO04",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Comunicar ideias e sentimentos a diferentes pessoas e grupos."
+  },
+  {
+    "codigo": "EI03EO05",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Valorizar as características do próprio corpo e respeitar as dos outros."
+  },
+  {
+    "codigo": "EI03EO06",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Demonstrar interesse e respeito por diferentes culturas e modos de vida."
+  },
+  {
+    "codigo": "EI03EO07",
+    "campo": "O eu, o outro e o nós",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Usar o respeito mútuo como estratégia para lidar com conflitos."
+  },
+  {
+    "codigo": "EI01CG01",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Movimentar o corpo para expressar emoções, necessidades e desejos."
+  },
+  {
+    "codigo": "EI01CG02",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Experimentar as possibilidades do corpo em brincadeiras e interações em ambientes acolhedores."
+  },
+  {
+    "codigo": "EI01CG03",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Imitar gestos e movimentos de outras crianças, adultos e animais."
+  },
+  {
+    "codigo": "EI01CG04",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Participar do cuidado do próprio corpo e do próprio bem-estar."
+  },
+  {
+    "codigo": "EI01CG05",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Usar movimentos de preensão, encaixe e lançamento ao manusear objetos e materiais."
+  },
+  {
+    "codigo": "EI02CG01",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Apropriar-se de gestos e movimentos da própria cultura no cuidado de si e nas brincadeiras."
+  },
+  {
+    "codigo": "EI02CG02",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Deslocar o corpo no espaço usando noções como em frente, atrás, dentro e fora."
+  },
+  {
+    "codigo": "EI02CG03",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Explorar formas de deslocamento no espaço, como pular, saltar e dançar."
+  },
+  {
+    "codigo": "EI02CG04",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Demonstrar independência progressiva no cuidado do próprio corpo."
+  },
+  {
+    "codigo": "EI02CG05",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Desenvolver as habilidades manuais, ganhando controle para desenhar, pintar e rasgar."
+  },
+  {
+    "codigo": "EI03CG01",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Criar com o corpo formas de expressar sentimentos e emoções em brincadeiras, dança, teatro e música."
+  },
+  {
+    "codigo": "EI03CG02",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Demonstrar controle e adequação do corpo em brincadeiras, jogos e atividades artísticas."
+  },
+  {
+    "codigo": "EI03CG03",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Criar movimentos, gestos e mímicas em brincadeiras e atividades artísticas."
+  },
+  {
+    "codigo": "EI03CG04",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Adotar hábitos de autocuidado relacionados a higiene, alimentação e bem-estar."
+  },
+  {
+    "codigo": "EI03CG05",
+    "campo": "Corpo, gestos e movimentos",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Coordenar as habilidades manuais de acordo com interesses e necessidades."
+  },
+  {
+    "codigo": "EI01TS01",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Explorar sons produzidos com o próprio corpo e com objetos do ambiente."
+  },
+  {
+    "codigo": "EI01TS02",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Fazer marcas gráficas em diferentes suportes, usando instrumentos riscantes e tintas."
+  },
+  {
+    "codigo": "EI01TS03",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Explorar fontes sonoras e materiais para acompanhar músicas e brincadeiras cantadas."
+  },
+  {
+    "codigo": "EI02TS01",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Criar sons com materiais, objetos e instrumentos musicais para acompanhar ritmos."
+  },
+  {
+    "codigo": "EI02TS02",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Manipular materiais variados, explorando cores, texturas e formas ao criar objetos tridimensionais."
+  },
+  {
+    "codigo": "EI02TS03",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Usar diferentes fontes sonoras do ambiente em brincadeiras cantadas e músicas."
+  },
+  {
+    "codigo": "EI03TS01",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Usar sons de materiais e instrumentos em encenações e criações musicais."
+  },
+  {
+    "codigo": "EI03TS02",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Expressar-se livremente por desenho, pintura, colagem e escultura."
+  },
+  {
+    "codigo": "EI03TS03",
+    "campo": "Traços, sons, cores e formas",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Reconhecer qualidades do som (intensidade, duração, altura, timbre) em produções sonoras."
+  },
+  {
+    "codigo": "EI01EF01",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Reconhecer quando é chamado pelo nome e reconhecer os nomes de pessoas próximas."
+  },
+  {
+    "codigo": "EI01EF02",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Demonstrar interesse ao ouvir poemas e músicas."
+  },
+  {
+    "codigo": "EI01EF03",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Demonstrar interesse ao ouvir histórias, observando ilustrações e o modo de leitura do adulto."
+  },
+  {
+    "codigo": "EI01EF04",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Reconhecer elementos das ilustrações de histórias, apontando-os quando solicitado."
+  },
+  {
+    "codigo": "EI01EF05",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Imitar entonações e gestos dos adultos ao ler histórias e cantar."
+  },
+  {
+    "codigo": "EI01EF06",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Comunicar-se com outras pessoas usando movimentos, gestos, balbucios e fala."
+  },
+  {
+    "codigo": "EI01EF07",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Conhecer e manusear materiais impressos e audiovisuais."
+  },
+  {
+    "codigo": "EI01EF08",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Participar de situações de escuta de diferentes tipos de texto."
+  },
+  {
+    "codigo": "EI01EF09",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Conhecer e manusear diferentes instrumentos e suportes de escrita."
+  },
+  {
+    "codigo": "EI02EF01",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Dialogar com crianças e adultos, expressando desejos, necessidades, sentimentos e opiniões."
+  },
+  {
+    "codigo": "EI02EF02",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Identificar e criar sons, reconhecendo rimas em cantigas de roda e textos poéticos."
+  },
+  {
+    "codigo": "EI02EF03",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Demonstrar interesse ao ouvir histórias, diferenciando escrita de ilustrações."
+  },
+  {
+    "codigo": "EI02EF04",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Formular e responder perguntas sobre fatos da história narrada."
+  },
+  {
+    "codigo": "EI02EF05",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Relatar experiências, histórias ouvidas, filmes ou peças assistidas."
+  },
+  {
+    "codigo": "EI02EF06",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Criar e contar histórias oralmente a partir de imagens ou temas sugeridos."
+  },
+  {
+    "codigo": "EI02EF07",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Manusear diferentes portadores textuais, reconhecendo seus usos sociais."
+  },
+  {
+    "codigo": "EI02EF08",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Manusear textos e participar de situações de escuta para ampliar o contato com gêneros textuais."
+  },
+  {
+    "codigo": "EI02EF09",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Manusear instrumentos e suportes de escrita para desenhar e traçar letras."
+  },
+  {
+    "codigo": "EI03EF01",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Expressar ideias, desejos e sentimentos por meio da fala, escrita espontânea, fotos e desenhos."
+  },
+  {
+    "codigo": "EI03EF02",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Inventar brincadeiras cantadas, poemas e canções, criando rimas e ritmos."
+  },
+  {
+    "codigo": "EI03EF03",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Escolher e folhear livros, orientando-se por temas e ilustrações."
+  },
+  {
+    "codigo": "EI03EF04",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Recontar histórias e planejar coletivamente roteiros de vídeos e encenações."
+  },
+  {
+    "codigo": "EI03EF05",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Recontar histórias para produção de reconto escrito, com o professor como escriba."
+  },
+  {
+    "codigo": "EI03EF06",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Produzir histórias orais e escritas próprias, com função social significativa."
+  },
+  {
+    "codigo": "EI03EF07",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Levantar hipóteses sobre gêneros textuais, observando a forma gráfica."
+  },
+  {
+    "codigo": "EI03EF08",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Selecionar livros e textos para leitura própria ou de um adulto."
+  },
+  {
+    "codigo": "EI03EF09",
+    "campo": "Escuta, fala, pensamento e imaginação",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Levantar hipóteses sobre a escrita, registrando palavras por escrita espontânea."
+  },
+  {
+    "codigo": "EI01ET01",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Explorar propriedades de objetos e materiais, como odor, cor, sabor e temperatura."
+  },
+  {
+    "codigo": "EI01ET02",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Explorar relações de causa e efeito na interação com o mundo físico."
+  },
+  {
+    "codigo": "EI01ET03",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Explorar o ambiente por ação e observação, fazendo descobertas."
+  },
+  {
+    "codigo": "EI01ET04",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Manipular e explorar o espaço por meio de deslocamentos de si e dos objetos."
+  },
+  {
+    "codigo": "EI01ET05",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Manipular materiais variados para comparar diferenças e semelhanças entre eles."
+  },
+  {
+    "codigo": "EI01ET06",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Bebês (zero a 1 ano e 6 meses)",
+    "descricao": "Vivenciar diferentes ritmos e velocidades em interações e brincadeiras."
+  },
+  {
+    "codigo": "EI02ET01",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Explorar e descrever semelhanças e diferenças entre propriedades de objetos."
+  },
+  {
+    "codigo": "EI02ET02",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Observar e descrever fenômenos naturais do cotidiano, como luz solar, vento e chuva."
+  },
+  {
+    "codigo": "EI02ET03",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Compartilhar com outras crianças situações de cuidado de plantas e animais."
+  },
+  {
+    "codigo": "EI02ET04",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Identificar relações espaciais (dentro, fora, em cima, embaixo) e temporais (antes, durante, depois)."
+  },
+  {
+    "codigo": "EI02ET05",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Classificar objetos considerando um atributo, como tamanho, peso, cor ou forma."
+  },
+  {
+    "codigo": "EI02ET06",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Usar conceitos básicos de tempo, como agora, antes, depois, ontem e hoje."
+  },
+  {
+    "codigo": "EI02ET07",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Contar oralmente objetos, pessoas e livros em diferentes contextos."
+  },
+  {
+    "codigo": "EI02ET08",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças bem pequenas (1 ano e 7 meses a 3 anos e 11 meses)",
+    "descricao": "Registrar com números a quantidade de crianças e de objetos."
+  },
+  {
+    "codigo": "EI03ET01",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Estabelecer comparações entre objetos, observando suas propriedades."
+  },
+  {
+    "codigo": "EI03ET02",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Observar e descrever mudanças em materiais resultantes de experimentos."
+  },
+  {
+    "codigo": "EI03ET03",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Identificar e selecionar fontes de informação para responder questões sobre a natureza."
+  },
+  {
+    "codigo": "EI03ET04",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Registrar observações e medidas usando desenho, números ou escrita espontânea."
+  },
+  {
+    "codigo": "EI03ET05",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Classificar objetos e figuras de acordo com semelhanças e diferenças."
+  },
+  {
+    "codigo": "EI03ET06",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Relatar fatos sobre seu nascimento, desenvolvimento e a história da família."
+  },
+  {
+    "codigo": "EI03ET07",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Relacionar números a quantidades e identificar o antes, o depois e o entre em uma sequência."
+  },
+  {
+    "codigo": "EI03ET08",
+    "campo": "Espaços, tempos, quantidades, relações e transformações",
+    "faixa": "Crianças pequenas (4 anos a 5 anos e 11 meses)",
+    "descricao": "Expressar medidas de peso e altura, construindo gráficos básicos."
+  }
+]

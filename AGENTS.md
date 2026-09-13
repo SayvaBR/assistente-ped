@@ -1,87 +1,43 @@
-# AGENTS.md — Assistente Pedagógico
-
-Este arquivo contém regras obrigatórias para qualquer agente de código que trabalhe neste repositório, incluindo Codex/Astra.
+# Regras de trabalho — Assistente Pedagógico
 
 ## Objetivo
 
-Levar o Assistente Pedagógico até uma versão Android 1.0 funcional, estável, segura, visualmente consistente e publicável.
+Construir um aplicativo Android local-first para professores, com interface clara, acessível e consistente com o Design System do projeto. A base atual usa React, TypeScript, Vite e Capacitor.
 
-## Stack obrigatória
+## Antes de alterar código
 
-- React
-- TypeScript
-- Vite
-- Capacitor Android
+1. Leia `README.md`, `docs/ROADMAP-DE-LANCAMENTO.md` e `docs/ESTADO-DA-ENTREGA.md`.
+2. Identifique o módulo afetado e preserve os contratos de dados existentes.
+3. Não substitua a base por telas estáticas ou dados fictícios.
+4. Não adicione segredos, chaves de assinatura, tokens, dados pessoais ou credenciais.
 
-Não migrar para Flutter, React Native ou Kotlin sem uma decisão explícita de produto.
+## Regras de implementação
 
-## Regras de execução
+- Reutilize tokens e componentes de `src/styles/design-system.css` e `src/components`.
+- Preserve a persistência local e trate falhas de armazenamento sem apagar dados.
+- Toda ação de criação, edição ou exclusão precisa atualizar a interface e persistir o resultado.
+- Toda tela precisa ter estados de carregamento, vazio, erro e sucesso quando aplicável.
+- Controles de toque devem ter área mínima de 48 px e nome acessível.
+- Não use emojis como ícones estruturais; use os ícones Lucide já instalados.
+- Respeite safe areas, foco visível, contraste e `prefers-reduced-motion`.
+- Não invente preços, compras, métricas ou disponibilidade de serviços.
 
-1. Nunca trabalhar diretamente em `main` depois que a base do app estiver importada.
-2. Cada milestone deve usar branch própria e PR próprio.
-3. Nenhuma feature está concluída apenas porque a tela existe.
-4. Uma feature só está pronta quando fluxo, persistência, validação, erro e testes essenciais funcionam.
-5. Não remover funcionalidades úteis do app legado sem justificativa documentada.
-6. Não quebrar dados existentes. Toda mudança de storage/schema deve ter migração.
-7. Dados pedagógicos e dados de alunos não podem ser enviados a analytics.
-8. Analytics deve ser opcional e limitado a métricas técnicas/uso permitidas.
-9. Não adicionar SDK externo sem documentar finalidade, dados tratados e impacto em privacidade.
-10. Não adicionar botão, CTA, menu ou opção sem comportamento real.
-11. Corrigir bugs P0 antes de iniciar refinamentos P1/P2.
-12. Testar recursos nativos em Android real quando aplicável.
-13. Manter o Design System e o Motion System consistentes em todas as telas.
-14. Recursos específicos da Educação Infantil não devem aparecer indevidamente em Fundamental ou Médio.
-15. O núcleo do aplicativo deve continuar utilizável sem internet.
+## Verificação obrigatória
 
-## Fluxo esperado para cada tarefa
+Antes de considerar uma alteração concluída, execute:
 
-1. Ler a issue e os documentos relevantes.
-2. Criar branch `codex/<numero-issue>-<slug>` ou equivalente.
-3. Implementar em mudanças pequenas e rastreáveis.
-4. Rodar build, lint e testes disponíveis.
-5. Atualizar documentação afetada.
-6. Abrir PR contra `main` com resumo, testes executados, riscos e screenshots quando houver UI.
-7. Não fazer merge por conta própria salvo instrução explícita.
+```text
+pnpm test
+pnpm build
+node scripts/android-sync.mjs
+cd android && gradlew.bat assembleDebug
+```
 
-## Severidade
+Quando a alteração envolver interface, execute também os E2E relevantes e registre evidências no estado da entrega.
 
-### P0 — bloqueia release
+## Git e release
 
-- perda/corrupção de dados;
-- app não abre ou fica preso no splash;
-- crash recorrente;
-- compra cobra e não desbloqueia;
-- backup/restauração destrói dados;
-- dados de aluno enviados indevidamente;
-- cálculo acadêmico crítico incorreto;
-- fluxo essencial sem saída.
-
-### P1 — alta prioridade
-
-- regressão importante de UX;
-- lentidão grave;
-- layout quebrado;
-- permissão tratada incorretamente;
-- erro funcional sem perda de dados.
-
-### P2 — refinamento
-
-- polish visual;
-- microanimações secundárias;
-- microcopy;
-- espaçamento isolado.
-
-## Evidência obrigatória no PR
-
-- o que mudou;
-- arquivos/módulos principais;
-- comandos/testes executados;
-- resultado do build;
-- screenshots antes/depois para UI;
-- bugs conhecidos;
-- riscos de migração/persistência;
-- impacto em LGPD/analytics/billing quando aplicável.
-
-## Fonte de verdade
-
-Os documentos de produto e release em `docs/` devem ser respeitados. Quando houver conflito, sinalizar no PR em vez de inventar uma decisão silenciosa.
+- Trabalhe em branch própria para cada milestone quando houver remoto configurado.
+- Não faça merge automático em `main`.
+- Não altere dados do usuário para facilitar testes.
+- APK debug é apenas artefato de validação; publicação exige assinatura de produção e AAB.

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Assistente Pedagógico</string>
+    <string name="title_activity_main">Assistente Pedagógico</string>
+    <string name="package_name">br.com.assistentepedagogico.app</string>
+    <string name="custom_url_scheme">br.com.assistentepedagogico.app</string>
+</resources>
