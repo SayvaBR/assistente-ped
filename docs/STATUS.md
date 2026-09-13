@@ -177,3 +177,9 @@ Ainda não há release comercial pronta. Não gerar expectativa de produção at
 - `src/v2/screens/BackupV2.tsx` preserva exportação criptografada, importação/validação, desbloqueio, restauração e exclusão local com confirmação textual `APAGAR`.
 - O fluxo continua usando os contratos de `data/backup` e `data/secureBackup`; no Android, o arquivo segue pelo `Share`/`Filesystem`, e no navegador usa download local.
 - Estado: `IN PROGRESS`; restauração e exclusão precisam de validação em dispositivo e reinício real antes do gate de lifecycle.
+
+## Android 1.0 — notificações V2 em andamento
+
+- `src/v2/screens/NotificationsV2.tsx` preserva `data/notifications` para listar, criar e cancelar lembretes locais, solicitando permissão apenas no primeiro agendamento.
+- A tela cobre loading, erro recuperável, vazio, validação do horário e feedback de criação/cancelamento sem toast falso.
+- Estado: `IN PROGRESS`; requer validação em Android físico com permissão de notificações e canal local.
