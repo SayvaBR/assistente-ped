@@ -1,6 +1,6 @@
 # Assistente Pedagógico — Design System V2
 
-Este diretório é a especificação implementável da identidade visual V2 do Assistente Pedagógico. Ele existe para transformar a direção visual aprovada em regras que Codex/Astra consigam aplicar no produto real sem voltar ao padrão genérico de dashboard, starter kit ou UI de IA.
+Este diretório é a especificação implementável da identidade visual, motion, ativação e monetização V2 do Assistente Pedagógico. Ele existe para transformar a direção aprovada em regras que Codex/Astra consigam aplicar no produto real sem voltar ao padrão genérico de dashboard, starter kit, UI de IA ou paywall manipulativo.
 
 ## Autoridade e precedência
 
@@ -28,6 +28,16 @@ O código atual é baseline funcional, não baseline visual. Componentes existen
 9. `VISUAL_QA_CHECKLIST.md`
 10. `MOTION_QA_CHECKLIST.md` quando houver motion/gesto/haptic
 
+### Leitura adicional obrigatória para onboarding, assinatura, paywall, analytics ou retenção
+
+11. `GROWTH_MONETIZATION_SYSTEM.md`
+12. `ONBOARDING_ACTIVATION_SPEC.md` para onboarding/setup/preview
+13. `PAYWALL_SUBSCRIPTION_SPEC.md` para planos/billing/paywall
+14. `ANALYTICS_EXPERIMENTATION_RETENTION.md` para eventos, A/B, retenção e win-back
+15. `MONETIZATION_ETHICS.md` para todo fluxo comercial
+
+Quando os documentos de Growth trouxerem decisão comercial mais recente que uma seção antiga de `SCREEN_SPEC_01_ENTRY_ACCOUNT_SUBSCRIPTION.md`, **a decisão de Growth prevalece**. Isso inclui a adoção do hard paywall após ativação guiada e a ausência de plano gratuito funcional no baseline de lançamento.
+
 Não implementar uma tela V2 apenas olhando um mockup. A especificação de tela define comportamento, posição, dados, serviços, estados e critérios de aceite. Da mesma forma, não implementar animação apenas olhando um vídeo de referência: o Motion System define causalidade, física, acessibilidade, haptics, performance e fallback de Reduced Motion.
 
 ## Documentos deste sistema
@@ -45,10 +55,18 @@ Não implementar uma tela V2 apenas olhando um mockup. A especificação de tela
 - `MOTION_REFERENCE_MATRIX.md` — triagem das referências externas: o que adotar, adaptar, estudar, colocar em backlog ou cortar.
 - `MOTION_QA_CHECKLIST.md` — evidência obrigatória, gravações, Android real, interrupção, Reduced Motion, haptics, gestos, performance e gate final.
 
+### Growth, onboarding e monetização
+
+- `GROWTH_MONETIZATION_SYSTEM.md` — decisões oficiais de promessa Pro, hard paywall, packaging, preços baseline, trial, analytics, retenção e ética.
+- `ONBOARDING_ACTIVATION_SPEC.md` — arquitetura completa do onboarding de ativação/personalização e preview antes do paywall.
+- `PAYWALL_SUBSCRIPTION_SPEC.md` — anatomia, copy, planos, trial, reminder, billing, restore, cancelamento e estados do hard paywall.
+- `ANALYTICS_EXPERIMENTATION_RETENTION.md` — Aptabase/RevenueCat, taxonomia allowlist, A/B testing, métricas, retenção, billing recovery e win-back.
+- `MONETIZATION_ETHICS.md` — guardrails anti-dark-pattern e regras de psicologia aplicada sem manipulação.
+
 ### Especificação completa das 62 telas/fluxos
 
 - `SCREEN_SPEC_INDEX.md` — índice mestre e regras globais.
-- `SCREEN_SPEC_01_ENTRY_ACCOUNT_SUBSCRIPTION.md` — Splash, onboarding, cadastro, login, setup, plano, paywall, confirmação e primeiro sucesso.
+- `SCREEN_SPEC_01_ENTRY_ACCOUNT_SUBSCRIPTION.md` — Splash, onboarding, cadastro, login, setup, plano, paywall, confirmação e primeiro sucesso. Para onboarding/paywall, ler também as specs de Growth acima.
 - `SCREEN_SPEC_02_HOME_DAILY_WORK.md` — Home, chamada, observação, agenda e atividade recente.
 - `SCREEN_SPEC_03_PLANNING.md` — visão geral, dia, semana, mês, plano de aula, BNCC e atividades.
 - `SCREEN_SPEC_04_CLASSES_STUDENTS_ACADEMIC.md` — turmas, alunos, frequência, registros, histórico, notas e avaliações.
@@ -61,6 +79,21 @@ Não implementar uma tela V2 apenas olhando um mockup. A especificação de tela
 - `IMPLEMENTATION_PLAYBOOK.md` — como o Codex deve migrar o app, organização de código, testes, evidências e gate de aprovação.
 - `VISUAL_QA_CHECKLIST.md` — checklist obrigatória de revisão visual, acessibilidade, estados, privacidade, billing e aprovação.
 - `MOTION_QA_CHECKLIST.md` — checklist obrigatória para qualquer PR com animação, transição, gesto ou haptic.
+
+## Decisões comerciais V1 resumidas
+
+- hard paywall após onboarding de valor + personalização + preview;
+- sem plano gratuito funcional do núcleo no lançamento;
+- Pro Mensal baseline Brasil: R$ 24,90/mês;
+- Pro Anual baseline Brasil: R$ 149,90/ano;
+- trial baseline: 7 dias no anual, sujeito à eligibility real da loja;
+- anual recomendado/selecionado por padrão, mensal sempre visível;
+- sem semanal e sem vitalício no lançamento;
+- preço/discount/trial exibidos sempre vêm da loja/RevenueCat, nunca de string hardcoded;
+- RevenueCat = billing/entitlement/experiments;
+- Aptabase EU = analytics anônimo de produto via allowlist, após revisão de privacidade;
+- nenhum dado de aluno/pedagógico ou free text em analytics;
+- cancelamento/expiração nunca apaga dados do usuário nem bloqueia caminhos de portabilidade/privacidade.
 
 ## Objetivo de identidade
 
@@ -106,6 +139,17 @@ Também é motivo de rejeição usar motion como maquiagem:
 - animação que atrasa a tarefa;
 - sucesso animado antes da operação real concluir.
 
+E é motivo de rejeição comercial:
+
+- desconto/urgência falsos;
+- esconder plano mais barato;
+- trial com cobrança futura pouco visível;
+- confirmshaming;
+- X/voltar propositalmente escondido;
+- preço não vindo da store;
+- benefício não implementado;
+- uso de dados pedagógicos para persuasão.
+
 Cards são permitidos quando representam uma unidade real de conteúdo, decisão ou ação. Eles não podem substituir hierarquia, ritmo ou arquitetura. Motion é permitido quando explica causalidade, continuidade ou estado; ele não pode substituir clareza.
 
 ## Teste de identidade
@@ -118,21 +162,26 @@ Antes de aprovar uma interação, responder:
 
 > Se a animação fosse removida, ainda entenderíamos a tarefa — e, com ela, a relação entre ação e resultado ficou mais clara e prazerosa?
 
-Se a primeira resposta for “não”, a tela ainda não atingiu a V2. Se a segunda resposta for “não”, o motion precisa ser simplificado ou removido.
+Antes de aprovar um paywall, responder:
+
+> Um professor entenderia exatamente o que recebe, quanto paga, quando será cobrado e como cancelar sem precisar procurar letras miúdas?
+
+Se a primeira resposta for “não”, a tela ainda não atingiu a V2. Se a segunda resposta for “não”, o motion precisa ser simplificado ou removido. Se a terceira resposta for “não”, a monetização não pode ser publicada.
 
 ## Regras não negociáveis
 
-A reformulação visual e de motion não pode enfraquecer:
+A reformulação visual, de motion ou monetização não pode enfraquecer:
 
 - LGPD e privacidade;
 - proteção de dados de alunos e dados pedagógicos;
-- funcionamento offline do núcleo do app;
+- funcionamento offline do núcleo para assinante com entitlement válido/cache seguro;
 - persistência e migração de dados;
 - acessibilidade;
 - Reduced Motion;
 - integridade de assinatura/billing;
 - clareza de ações destrutivas;
-- estados de erro e recuperação.
+- estados de erro e recuperação;
+- transparência comercial e cancelamento.
 
 Não usar mascote. Ilustração humana é recurso narrativo, não personagem permanente.
 
@@ -140,6 +189,6 @@ Não usar mascote. Ilustração humana é recurso narrativo, não personagem per
 
 O Design System V2 é um sistema vivo, mas não pode virar improvisação. Toda alteração sistêmica deve ser feita via token/componente, documentada e validada em telas reais antes de se espalhar.
 
-A ordem de implementação recomendada é: foundations → motion primitives → shell/navegação → componentes de domínio → fluxos P0 → interações assinatura → demais fluxos.
+A ordem de implementação recomendada é: foundations → motion primitives → shell/navegação → componentes de domínio → instrumentação segura → onboarding/preview → hard paywall/billing → fluxos P0 → interações assinatura → demais fluxos.
 
-As interações assinatura devem ser implementadas progressivamente e validadas em Android real; não tentar colocar todo o repertório de motion no primeiro PR.
+As interações assinatura devem ser implementadas progressivamente e validadas em Android real; não tentar colocar todo o repertório de motion no primeiro PR. Growth também deve avançar por baseline + experimento, não por mudanças simultâneas impossíveis de atribuir.
