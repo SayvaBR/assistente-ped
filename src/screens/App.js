@@ -6,7 +6,6 @@ import { OrganizationScreen } from "./OrganizationScreen";
 import { setSoundEnabled } from "../core/recovered.js";
 // Recovered from APK 0.2.0. Original behavior retained; vendor code uses npm packages.
 import { AppearanceScreen } from "../screens/AppearanceScreen.js";
-import { AttendanceScreen } from "../screens/AttendanceScreen.js";
 import { BackupScreen } from "../screens/BackupScreen.js";
 import { BnccInfantilScreen } from "../screens/BnccInfantilScreen.js";
 import { BnccScreen } from "../screens/BnccCatalogScreen.tsx";
@@ -21,6 +20,8 @@ import { DocumentsScreen } from "../screens/DocumentsScreen.js";
 import { GuidedTour } from "../screens/GuidedTour.js";
 import { HomeV2 } from "../v2/screens/HomeV2";
 import { createHomeV2Data } from "../v2/adapters/home-v2-adapter";
+import { FrequencyV2 } from "../v2/screens/FrequencyV2";
+import { createFrequencyV2Data } from "../v2/adapters/frequency-v2-adapter";
 import { LessonPlanScreen } from "../screens/LessonPlanScreen.js";
 import { LibraryScreen } from "../screens/LibraryScreen.jsx";
 import { MoreScreen } from "../screens/MoreScreen.js";
@@ -70,6 +71,14 @@ const ReportsScreen = React.lazy(() =>
     default: screen,
   })),
 );
+
+function shiftDateKey(value, offset) {
+  const [year, month, day] = String(value || '').split('-').map(Number);
+  const shifted = new Date(year || new Date().getFullYear(), (month || 1) - 1, day || 1);
+  shifted.setDate(shifted.getDate() + offset);
+  return dateKey(shifted);
+}
+
 function App() {
   var _a, bt, qn, xi;
   const [o, u] = ReactHooks.useState("carregando"),
@@ -115,7 +124,13 @@ function App() {
     }),
     [homeIsOnline, setHomeIsOnline] = ReactHooks.useState(
       () => typeof navigator === "undefined" || navigator.onLine !== false,
-    );
+    ),
+    [frequencyV2State, setFrequencyV2State] = ReactHooks.useState({
+      status: "ready",
+      attendance: {},
+      error: "",
+    }),
+    [frequencyV2Reload, setFrequencyV2Reload] = ReactHooks.useState(0);
   (ReactHooks.useEffect(() => {
     ((async () => {
       try {
@@ -632,11 +647,61 @@ function App() {
         (J
           ? je({
               tipo: "aba",
-              tab: ae,
-            })
+            tab: ae,
+          })
           : kn(ae));
+    };
+  const frequencyV2DateKey =
+    Re?.name === "chamada" ? Re.data?.dataKey || yn : yn;
+  ReactHooks.useEffect(() => {
+    if (Re?.name !== "chamada" || !M?.id) return undefined;
+    let active = true;
+    setFrequencyV2State((state) => ({ ...state, status: "loading", error: "" }));
+    repository
+      .carregarChamadaPorData(frequencyV2DateKey)
+      .then((attendance) => {
+        if (active) {
+          setFrequencyV2State({ status: "ready", attendance: attendance || {}, error: "" });
+        }
+      })
+      .catch((error) => {
+        if (active) {
+          setFrequencyV2State({
+            status: "error",
+            attendance: {},
+            error: error?.message || "Não foi possível carregar a chamada.",
+          });
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, [Re?.name, Re?.data?.dataKey, M?.id, frequencyV2DateKey, frequencyV2Reload]);
+  const retryFrequencyV2 = () => {
+    setFrequencyV2Reload((value) => value + 1);
+  };
+  const frequencyV2Data = createFrequencyV2Data({
+    turma: M,
+    alunos: Ka,
+    frequencia: frequencyV2State.attendance,
+    dataKey: frequencyV2DateKey,
+    status: frequencyV2State.status,
+    error: frequencyV2State.error,
+    offline: !homeIsOnline,
+  });
+  const frequencyV2 = (props = {}) => React.createElement(FrequencyV2, {
+    data: frequencyV2Data,
+    onBack: _t,
+    onRetry: retryFrequencyV2,
+    onDateChange: (offset) => zt("chamada", { dataKey: shiftDateKey(frequencyV2DateKey, offset) }),
+    onSave: async (attendance) => {
+      await wi(frequencyV2DateKey, attendance);
+      setFrequencyV2State({ status: "ready", attendance, error: "" });
     },
-    Ot = () => {
+    onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turma", arquivos: "biblioteca", mais: "mais" }[tab]),
+    ...props,
+  });
+  const Ot = () => {
       (pe(!1), En());
     },
     wn = () => {
@@ -1069,39 +1134,9 @@ function App() {
                                                               : (Re == null
                                                                     ? void 0
                                                                     : Re.name) ===
-                                                                  "chamada"
+                                                                "chamada"
                                                                 ? (ht =
-                                                                    React.createElement(
-                                                                      AttendanceScreen,
-                                                                      {
-                                                                        alunos:
-                                                                          Ka,
-                                                                        dataKey:
-                                                                          ((xi =
-                                                                            Re.data) ==
-                                                                          null
-                                                                            ? void 0
-                                                                            : xi.dataKey) ||
-                                                                          yn,
-                                                                        onBack:
-                                                                          _t,
-                                                                        onSalvo:
-                                                                          (
-                                                                            ae,
-                                                                          ) => {
-                                                                            var qe;
-                                                                            return wi(
-                                                                              ((qe =
-                                                                                Re.data) ==
-                                                                              null
-                                                                                ? void 0
-                                                                                : qe.dataKey) ||
-                                                                                yn,
-                                                                              ae,
-                                                                            );
-                                                                          },
-                                                                      },
-                                                                    ))
+                                                                    frequencyV2())
                                                                 : Re &&
                                                                     Sn[Re.name]
                                                                   ? (ht =

@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { HomeV2, type HomeV2Data } from '../screens/HomeV2';
+import { FrequencyV2, type FrequencyV2Data } from '../screens/FrequencyV2';
 import '../styles/foundation.css';
 import './v2-preview.css';
 
@@ -43,15 +44,41 @@ const homePreviewData: HomeV2Data = {
   pendingCount: 1,
 };
 
+const frequencyPreviewData: FrequencyV2Data = {
+  className: '5º Ano A',
+  studentCount: 24,
+  dateKey: '2024-08-28',
+  dateLabel: 'Quinta-feira, 28 de agosto',
+  students: [
+    { id: 'ana', name: 'Ana Clara Souza', status: 'presente', color: '#1cb0f6' },
+    { id: 'bruno', name: 'Bruno Lima', status: 'presente', color: '#5f8fda' },
+    { id: 'caio', name: 'Caio Almeida', status: 'falta', color: '#eb6b6b' },
+    { id: 'daniela', name: 'Daniela Martins', status: 'presente', color: '#7b61d9' },
+    { id: 'enzo', name: 'Enzo Gabriel', status: 'presente', color: '#f2b84b' },
+    { id: 'fernanda', name: 'Fernanda Rocha', status: 'falta', color: '#d84f9d' },
+    { id: 'gabriel', name: 'Gabriel Henrique', status: 'presente', color: '#3fb980' },
+    { id: 'helena', name: 'Helena Ferreira', color: '#6785c7' },
+  ],
+};
+
 export function V2Preview() {
   const width = useMemo(readWidth, []);
   const screen = new URLSearchParams(window.location.search).get('v2-preview') || 'home';
+  const previewState = new URLSearchParams(window.location.search).get('state');
+  const [activeScreen, setActiveScreen] = useState(screen);
+  const frequencyStateData: FrequencyV2Data = {
+    ...frequencyPreviewData,
+    status: previewState === 'loading' || previewState === 'error' || previewState === 'empty' ? previewState : 'ready',
+    error: previewState === 'error' ? 'O armazenamento local demorou para responder.' : '',
+    offline: previewState === 'offline',
+    students: previewState === 'empty' ? [] : frequencyPreviewData.students,
+  };
 
   return (
     <div className="v2-preview-shell">
       <header className="v2-preview-toolbar">
         <strong>Assistente Pedagógico · V2 Visual Lab</strong>
-        <span className="v2-preview-toolbar__screen">{screen}</span>
+        <span className="v2-preview-toolbar__screen">{activeScreen}</span>
         <div className="v2-preview-toolbar__widths" aria-label="Larguras Android de preview">
           {widths.map((item) => (
             <button
@@ -69,7 +96,11 @@ export function V2Preview() {
 
       <div className="v2-preview-stage">
         <div className="v2-preview-device" style={{ width }} data-preview-width={width}>
-          <HomeV2 data={homePreviewData} />
+          {activeScreen === 'attendance' ? (
+            <FrequencyV2 data={frequencyStateData} onBack={() => setActiveScreen('home')} onRetry={() => undefined} onSave={() => undefined} />
+          ) : (
+            <HomeV2 data={homePreviewData} onAction={(action) => action === 'attendance' && setActiveScreen('attendance')} />
+          )}
         </div>
       </div>
     </div>
