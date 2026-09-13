@@ -38,6 +38,9 @@ importers:
       '@capawesome/capacitor-torch':
         specifier: ^7.0.0
         version: 7.0.2(@capacitor/core@7.6.9)
+      '@fontsource/fredoka':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/nunito-sans':
         specifier: ^5.2.0
         version: 5.3.0
@@ -351,6 +354,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource/fredoka@5.3.0':
+    resolution: {integrity: sha512-s2IhjQ50wDnKkkaKmjhtL0rxQg6ITsVusiipM3m7zUwVZZbbCKsscNDkngwp28xVzfIt7neWrkgU1qKqyTycQg==}
 
   '@fontsource/nunito-sans@5.3.0':
     resolution: {integrity: sha512-CctNhebQ2YYJUwVMCAkHexQg7yedfz9s8JzaETALyc9QIQuDFRlNTWXux9H5PsNLgptPkrzRDomAdLJt1sDFpQ==}
@@ -1443,6 +1449,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
+
+  '@fontsource/fredoka@5.3.0': {}
 
   '@fontsource/nunito-sans@5.3.0': {}
 
