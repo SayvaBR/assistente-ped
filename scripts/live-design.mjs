@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 
 const args = process.argv.slice(2);
 const requestedPreview = (args.find((arg) => !arg.startsWith('--')) || 'home').trim();
@@ -29,6 +30,24 @@ if (!supportedWidths.has(width)) {
 
 const baseUrl = `http://${host}:${port}`;
 const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=${Math.round(width)}`;
+const markerPath = resolve('tmp/live-design-server.json');
+
+function removeMarker() {
+  try { unlinkSync(markerPath); } catch { /* stale marker already gone */ }
+}
+
+function ownsRunningServer() {
+  if (!existsSync(markerPath)) return false;
+  try {
+    const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+    if (marker.cwd !== process.cwd() || !Number.isInteger(marker.pid)) return false;
+    process.kill(marker.pid, 0);
+    return true;
+  } catch {
+    removeMarker();
+    return false;
+  }
+}
 
 async function isReady() {
   try {
@@ -52,15 +71,21 @@ function printReady(existing) {
   console.log('');
 }
 
-if (await isReady()) {
+const ownedServer = ownsRunningServer();
+if (ownedServer && await isReady()) {
   printReady(true);
 } else {
+  if (ownedServer) removeMarker();
 
 const viteBin = resolve('node_modules/vite/bin/vite.js');
 const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
   stdio: 'inherit',
   env: process.env,
 });
+if (child.pid) {
+  mkdirSync(dirname(markerPath), { recursive: true });
+  writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), pid: child.pid }));
+}
 
   let readyPrinted = false;
   let startupTimedOut = false;
@@ -88,8 +113,9 @@ const stop = (signal) => {
 process.on('SIGINT', () => stop('SIGINT'));
 process.on('SIGTERM', () => stop('SIGTERM'));
 
-child.on('exit', (code, signal) => {
-  clearInterval(poll);
+  child.on('exit', (code, signal) => {
+    clearInterval(poll);
+    removeMarker();
     if (signal) process.exit(startupTimedOut ? 1 : 0);
   process.exit(code ?? 1);
 });

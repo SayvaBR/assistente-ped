@@ -38,6 +38,8 @@ O comando inicia um Vite dev server local e imprime a URL direta da superfície 
 
 O preview precisa ser uma superfície V2 suportada e a largura precisa estar na matriz do Visual Lab (`320`, `360`, `390`, `412`, `432`, `480` ou `600`). Entradas inválidas falham explicitamente para não abrir uma tela diferente da solicitada.
 
+O launcher só reutiliza um Vite que ele próprio iniciou para este checkout. Se a porta 5173 estiver ocupada por outro servidor, ele falha explicitamente para evitar observar a superfície errada.
+
 Por padrão o servidor fica preso em `127.0.0.1`. Não expor na LAN durante o MVP.
 
 ## 3. Browser-first

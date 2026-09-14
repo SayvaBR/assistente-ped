@@ -11,7 +11,7 @@ pnpm dev
 Abra:
 
 ```text
-http://127.0.0.1:5173/?v2-preview=home&width=390
+http://127.0.0.1:5173/?v2-preview=home&width=412
 ```
 
 Larguras rápidas:
