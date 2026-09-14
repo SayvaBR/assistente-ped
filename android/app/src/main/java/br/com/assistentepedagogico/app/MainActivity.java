@@ -30,12 +30,14 @@ public class MainActivity extends BridgeActivity {
     }
 
     private void installWindowInsetsBridge() {
-        getBridge().addWebViewListener(new WebViewListener() {
-            @Override
-            public void onPageLoaded(WebView webView) {
-                publishWindowInsets(lastSystemInsets);
-            }
-        });
+        if (getBridge() != null) {
+            getBridge().addWebViewListener(new WebViewListener() {
+                @Override
+                public void onPageLoaded(WebView webView) {
+                    publishWindowInsets(lastSystemInsets);
+                }
+            });
+        }
 
         View decorView = getWindow().getDecorView();
         ViewCompat.setOnApplyWindowInsetsListener(decorView, (view, windowInsets) -> {
