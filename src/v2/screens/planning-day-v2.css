@@ -30,6 +30,15 @@
 .v2-planning-day__state { display: grid; min-height: 240px; place-items: center; gap: 8px; padding: 28px 20px; border: 1px solid #c6e9f9; border-radius: 24px; background: #fff; color: #168be0; text-align: center; }
 .v2-planning-day__state strong { color: #102b72; font-size: 1.08rem; } .v2-planning-day__state p { max-width: 280px; margin: 0; color: #6983ad; font: 600 .8rem/1.35 var(--v2-font-family); }
 .v2-planning-day__add { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 7px; margin-top: 14px; border: 1px dashed #168be0; border-radius: 17px; background: #e8f8ff; color: #147bd5; font-weight: 800; }
+.v2-planning-day__activities { margin-top: 20px; }
+.v2-planning-day__activities-heading { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+.v2-planning-day__activities-heading h2 { margin: 5px 0 0; color: #102b72; font-size: 1.2rem; line-height: 1.05; }
+.v2-planning-day__activities-heading > span { display: grid; min-width: 30px; min-height: 30px; place-items: center; border-radius: 999px; background: #edf6ff; color: #5c78aa; font: 800 .76rem "Fredoka", sans-serif; }
+.v2-planning-day__activity { display: grid; grid-template-columns: 48px minmax(0, 1fr) 22px; min-width: 0; min-height: 74px; align-items: center; gap: 10px; width: 100%; padding: 10px; border: 1px solid #bfe6f7; border-bottom: 4px solid #a8d8ed; border-radius: 18px; background: #f8fdff; color: #2d5f9e; text-align: left; }
+.v2-planning-day__activity + .v2-planning-day__activity { margin-top: 8px; }
+.v2-planning-day__activity > span:nth-child(2) { display: grid; min-width: 0; gap: 4px; }
+.v2-planning-day__activity strong { color: #102b72; font-size: .91rem; line-height: 1.12; }
+.v2-planning-day__activity small { color: #5f7ead; font: 600 .71rem/1.25 var(--v2-font-family); }
 .v2-planning-day__bottom-nav { position: fixed; right: 0; bottom: 0; left: 0; z-index: 5; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: min(100%, var(--v2-content-max)); margin: 0 auto; padding: 9px 10px max(10px, env(safe-area-inset-bottom)); border: 1px solid #c6e9f9; border-bottom: 0; border-radius: 24px 24px 0 0; background: rgb(255 255 255 / 98%); }
 .v2-planning-day__nav-item { display: grid; min-width: 48px; min-height: 56px; place-items: center; gap: 4px; border: 0; border-radius: 16px; background: transparent; color: #5c78aa; font-size: .67rem; font-weight: 700; line-height: 1; } .v2-planning-day__nav-item.is-selected { background: #e7f7ff; color: #1379dc; } .v2-planning-day__nav-item span { text-align: center; }
 .v2-planning-day .is-spinning { animation: v2-planning-day-spin 900ms linear infinite; } @keyframes v2-planning-day-spin { to { transform: rotate(360deg); } }

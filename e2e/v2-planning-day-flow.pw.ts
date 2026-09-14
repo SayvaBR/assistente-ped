@@ -7,6 +7,8 @@ test('Planejamento diário V2 exibe os momentos e a ação de adicionar', async 
   await expect(device.getByRole('heading', { name: 'Planejamento diário' })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Matemática' })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Adicionar momento' })).toBeVisible();
+  await expect(device.getByRole('heading', { name: 'Atividades para levar', exact: true })).toBeVisible();
+  await expect(device.getByRole('button', { name: /Caça às palavras/ })).toBeVisible();
 });
 
 test('Planejamento diário V2 preserva copy e layout em texto ampliado', async ({ page }) => {
@@ -23,6 +25,7 @@ test('Planejamento V2 navega entre Dia, Semana e Mês', async ({ page }) => {
   const device = page.locator('.v2-preview-device');
   await device.getByRole('tab', { name: 'Semana' }).click();
   await expect(device.getByRole('heading', { name: 'Planejamento semanal' })).toBeVisible();
+  await expect(device.getByRole('heading', { name: 'Atividades preparadas', exact: true })).toBeVisible();
   await device.getByRole('tab', { name: 'Mês' }).click();
   await expect(device.getByRole('heading', { name: /agosto de 2024/i })).toBeVisible();
   await device.getByRole('tab', { name: 'Dia' }).click();

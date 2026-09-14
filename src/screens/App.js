@@ -715,7 +715,7 @@ function App() {
     return () => { active = false; };
   }, [f, Re?.name, M?.id, planningV2Date, planningV2Reload]);
   ReactHooks.useEffect(() => {
-    if (f !== "plano" || !M?.id) return undefined;
+    if (!(f === "plano" || ["planejamento-dia", "planejamento-semana", "planejamento-mes"].includes(Re?.name)) || !M?.id) return undefined;
     let active = true;
     setActivityV2State((state) => ({ ...state, status: "loading", error: "" }));
     listActivities(M.id, storage)
@@ -879,6 +879,7 @@ function App() {
     className: M?.nome || "Sua turma",
     dateKey: planningV2Date,
     plans: planningV2State.plans.filter((plan) => plan.dataKey === planningV2Date),
+    activities: activityV2State.activities.filter((activity) => activity.dataKey === planningV2Date),
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
     offline: !homeIsOnline,
@@ -886,6 +887,7 @@ function App() {
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onDateChange: (offset) => setPlanningV2Date((value) => shiftDateKey(value, offset)),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onOpenActivity: (activity) => zt("atividade-v2", { activity, isEditing: true }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
@@ -894,6 +896,7 @@ function App() {
     mode,
     dateKey: planningV2Date,
     plans: planningV2State.plans,
+    activities: activityV2State.activities,
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
     offline: !homeIsOnline,
@@ -902,6 +905,7 @@ function App() {
     onDateChange: (value) => setPlanningV2Date(value),
     onViewChange: (next) => zt(next === "day" ? "planejamento-dia" : next === "week" ? "planejamento-semana" : "planejamento-mes"),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onOpenActivity: (activity) => zt("atividade-v2", { activity, isEditing: true }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
