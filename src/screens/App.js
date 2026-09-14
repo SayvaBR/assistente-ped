@@ -880,10 +880,11 @@ function App() {
   const planningDayV2 = () => React.createElement(PlanningDayV2, {
     className: M?.nome || "Sua turma",
     dateKey: planningV2Date,
-    plans: planningV2State.plans.filter((plan) => plan.dataKey === planningV2Date),
-    activities: activityV2State.activities.filter((activity) => activity.dataKey === planningV2Date),
+    plans: planningV2State.plans.filter((plan) => plan.dataKey === planningV2Date && !plan.arquivadoEm),
+    activities: activityV2State.activities.filter((activity) => activity.dataKey === planningV2Date && activity.status !== "arquivada"),
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
+    activityError: activityV2State.error,
     offline: !homeIsOnline,
     onBack: _t,
     onRetry: () => setPlanningV2Reload((value) => value + 1),
