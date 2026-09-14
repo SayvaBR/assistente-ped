@@ -54,7 +54,7 @@ type HomeV2Props = {
 
 const navItems = [
   { id: 'inicio', label: 'Início', icon: House },
-  { id: 'planejamento', label: 'Planejamento', icon: BookOpenCheck },
+  { id: 'planejamento', label: 'Plano', ariaLabel: 'Planejamento', icon: BookOpenCheck },
   { id: 'turmas', label: 'Turmas', icon: Users },
   { id: 'arquivos', label: 'Arquivos', icon: FileText },
   { id: 'mais', label: 'Mais', icon: LayoutGrid },
@@ -221,6 +221,7 @@ export function HomeV2({
                 key={id}
                 type="button"
                 className={`v2-home__nav-item v2-pressable${selected ? ' is-selected' : ''}`}
+                aria-label={id === 'planejamento' ? 'Planejamento' : label}
                 aria-current={selected ? 'page' : undefined}
                 onClick={() => onTabChange(id)}
               >
