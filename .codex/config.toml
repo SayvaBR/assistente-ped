@@ -27,3 +27,7 @@ description = "Scoped worker that owns the dev-only UI Lab and visual preview to
 [agents.qa_reviewer]
 config_file = "agents/qa-reviewer.toml"
 description = "Read-only reviewer for regressions, accessibility, responsive behavior and test gaps."
+
+[agents.professor_real_device_tester]
+config_file = "agents/professor-real-device-tester.toml"
+description = "Independent Luna High teacher-persona tester for end-to-end Android QA on a real device."
