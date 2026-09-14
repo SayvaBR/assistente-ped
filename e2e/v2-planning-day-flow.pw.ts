@@ -8,7 +8,9 @@ test('Planejamento diário V2 exibe os momentos e a ação de adicionar', async 
   const device = page.locator('.v2-preview-device');
   await expect(device.getByRole('heading', { name: 'Planejamento diário' })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Matemática' })).toBeVisible();
-  await expect(device.getByRole('button', { name: 'Adicionar momento' })).toBeVisible();
+  await expect(device.getByText('Sem horário', { exact: true })).toBeVisible();
+  await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
+  await expect(device.getByRole('button', { name: 'Criar outro plano neste dia' })).toBeVisible();
   await expect(device.getByRole('heading', { name: 'Atividades para levar', exact: true })).toBeVisible();
   await expect(device.getByRole('button', { name: /Caça às palavras/ })).toBeVisible();
 });
@@ -41,7 +43,7 @@ for (const width of planningViewports) {
     const device = page.locator('.v2-preview-device');
     const result = await device.evaluate((root) => {
       const rootRect = root.getBoundingClientRect();
-      const critical = ['Planejamento diário', 'Adicionar momento', 'Atividades para levar'];
+      const critical = ['Planejamento diário', 'Criar outro plano neste dia', 'Atividades para levar'];
       const elements = Array.from(root.querySelectorAll<HTMLElement>('h1,h2,p,button,strong,small'));
       return {
         overflow: root.scrollWidth > root.clientWidth + 1,

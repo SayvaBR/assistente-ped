@@ -3,6 +3,7 @@ import { deletePlan, listPlans, loadPlansByDate, savePlan, updatePlanMetadata } 
 import { newLessonPlan } from "../src/domain/lessonPlans";
 import { newTeachingActivity, saveActivity, listActivities } from "../src/domain/activities";
 import type { StoragePort } from "../src/domain/models";
+import { buildPlanningDayRows } from "../src/v2/screens/PlanningDayV2";
 
 function memoryStorage(): StoragePort {
   const values = new Map<string, string>();
@@ -19,6 +20,20 @@ function memoryStorage(): StoragePort {
 }
 
 describe("planning repository", () => {
+  it("keeps untimed moments visible after timed moments", () => {
+    const plan = newLessonPlan({ turmaId: "turma-rows", dataKey: "2026-09-12" });
+    plan.tituloTema = "Ciclo da água";
+    plan.momentos = [
+      { id: "timed", titulo: "Experimento", horario: "10:00", duracaoMin: 30, descricao: "", tipo: "aula" },
+      { id: "untimed", titulo: "Fechamento", horario: "", duracaoMin: null, descricao: "Síntese coletiva", tipo: "aula" },
+    ];
+
+    expect(buildPlanningDayRows([plan])).toEqual([
+      expect.objectContaining({ time: "10:00", moment: expect.objectContaining({ id: "timed" }) }),
+      expect.objectContaining({ time: "", moment: expect.objectContaining({ id: "untimed" }) }),
+    ]);
+  });
+
   it("persists, moves and reloads plans by date", async () => {
     const port = memoryStorage();
     const plan = newLessonPlan({ turmaId: "turma-1", dataKey: "2026-09-12" });

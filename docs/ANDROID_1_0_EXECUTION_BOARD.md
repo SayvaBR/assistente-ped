@@ -34,6 +34,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
+   - Delivery Unit atual: `Planejamento diário V2 — hardening funcional/responsivo`; branch `codex/delivery-planning-day-v2`; aguardando revisão via PR para `integration/android-1.0`.
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
