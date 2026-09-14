@@ -3,6 +3,7 @@
   background: #0f1720;
   color: #fff;
   font-family: var(--v2-font-family);
+  overflow-x: clip;
 }
 
 .v2-preview-toolbar {
