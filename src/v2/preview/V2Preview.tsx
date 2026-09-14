@@ -17,6 +17,7 @@ import { ReportsV2 } from '../screens/ReportsV2';
 import { SettingsV2 } from '../screens/SettingsV2';
 import { AppearanceV2 } from '../screens/AppearanceV2';
 import { OnboardingV2 } from '../screens/OnboardingV2';
+import { OnboardingEntryV2 } from '../screens/OnboardingEntryV2';
 import { SplashV2 } from '../screens/SplashV2';
 import { SetupWizardV2 } from '../screens/SetupWizardV2';
 import { NewStudentV2 } from '../screens/NewStudentV2';
@@ -205,6 +206,8 @@ export function V2Preview() {
             <SetupWizardV2 storage={previewStorage} onDone={() => undefined} onBack={() => setActiveScreen('onboarding')} onFinish={(destination) => setActiveScreen(destination === 'aluno' ? 'classes' : 'home')} />
           ) : activeScreen === 'splash' ? (
             <SplashV2 autoAdvance={false} onDone={() => setActiveScreen('onboarding')} />
+          ) : activeScreen === 'onboarding-entry' ? (
+            <OnboardingEntryV2 state={previewState === 'error' ? 'error' : 'default'} onContinue={() => undefined} />
           ) : activeScreen === 'onboarding' ? (
             <OnboardingV2 storage={previewStorage} onDone={() => setActiveScreen('home')} />
           ) : activeScreen === 'attendance' ? (

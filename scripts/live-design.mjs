@@ -18,7 +18,7 @@ const supportedPreviews = new Set([
   'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
   'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
   'class-workspace', 'student-profile', 'profile', 'files', 'more', 'activity', 'plan-editor', 'bncc',
-  'reports', 'settings', 'appearance', 'subscription', 'privacy', 'backup', 'notifications', 'tools',
+  'reports', 'settings', 'appearance', 'subscription', 'privacy', 'backup', 'notifications', 'tools', 'onboarding-entry',
   'help', 'legal', 'trash', 'organization', 'academic',
 ]);
 const supportedWidths = new Set([320, 360, 390, 412, 432, 480, 600]);

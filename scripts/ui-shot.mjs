@@ -11,7 +11,9 @@ const width = Number(args[1] || 412);
 const output = args[2] || `docs/qa/ui-lab/${screen}-${width}.png`;
 
 mkdirSync('docs/qa/ui-lab', { recursive: true });
-const url = `http://127.0.0.1:5173/__lab?screen=${encodeURIComponent(screen)}&width=${width}`;
+const url = screen === 'onboarding-entry'
+  ? `http://127.0.0.1:5173/?v2-preview=${encodeURIComponent(screen)}&width=${width}`
+  : `http://127.0.0.1:5173/__lab?screen=${encodeURIComponent(screen)}&width=${width}`;
 const screenshotArgs = [
   'exec', 'playwright', 'screenshot', '--browser', 'chromium',
   '--viewport-size', `${width},844`, '--wait-for-timeout', '250', '--full-page', url, output,
