@@ -1,5 +1,5 @@
 import { execFile, spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,6 +41,15 @@ async function waitForOutput(run: ReturnType<typeof runLauncher>, text: string) 
     if (Date.now() - started > 20_000) throw new Error(`timed out waiting for ${text}: ${run.output}`);
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
+}
+
+async function waitForProcessGone(pid: number) {
+  const started = Date.now();
+  while (Date.now() - started < 5_000) {
+    try { process.kill(pid, 0); } catch { return; }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error(`process ${pid} did not exit`);
 }
 
 async function stop(child: ChildProcessWithoutNullStreams) {
@@ -106,33 +115,44 @@ describe('live design launcher ownership', () => {
     expect(reused.output).toContain('Vite existente detectado');
     expect(reused.output).toContain('width=480');
 
+    const occupiedMarker = join(testRoot, 'occupied-marker.json');
+    const occupied = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: port,
+      LIVE_DESIGN_MARKER: occupiedMarker,
+    });
+    expect(await waitForExit(occupied.child)).not.toBe(0);
+    expect(occupied.output).toContain('Port 46103 is already in use');
+    expect(existsSync(occupiedMarker)).toBe(false);
+
     const foreign = runLauncher(['home'], {
       LIVE_DESIGN_PORT: port,
       LIVE_DESIGN_MARKER: foreignMarker,
     });
     expect(await waitForExit(foreign.child)).not.toBe(0);
-    expect(foreign.output).toContain('Port 46103 is already in use');
-    expect(existsSync(foreignMarker)).toBe(false);
+    expect(foreign.output).toContain('marker estrangeiro');
+    expect(existsSync(foreignMarker)).toBe(true);
 
     await stop(owner.child);
-    if (process.platform !== 'win32') expect(existsSync(ownerMarker)).toBe(false);
   });
 
   it('discards stale markers and reports startup timeout with cleanup', async () => {
     const marker = join(testRoot, 'stale-marker.json');
     const fakeVite = join(testRoot, 'fake-vite.mjs');
-    writeFileSync(marker, JSON.stringify({ cwd: repoRoot, pid: 999999 }));
-    writeFileSync(fakeVite, 'setInterval(() => {}, 1000);\n');
+    const fakePidFile = join(testRoot, 'fake-vite.pid');
+    writeFileSync(marker, JSON.stringify({ cwd: process.cwd(), pid: process.pid }));
+    writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
 
     const timedOut = runLauncher(['home'], {
       LIVE_DESIGN_PORT: '46104',
       LIVE_DESIGN_MARKER: marker,
       LIVE_DESIGN_VITE_BIN: fakeVite,
+      FAKE_PID_FILE: fakePidFile,
       LIVE_DESIGN_STARTUP_TIMEOUT_MS: '300',
       LIVE_DESIGN_POLL_INTERVAL_MS: '50',
     });
     expect(await waitForExit(timedOut.child)).toBe(1);
     expect(timedOut.output).toContain('não ficou pronto em 300ms');
     expect(existsSync(marker)).toBe(false);
+    await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
   });
 });

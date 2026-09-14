@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
@@ -34,20 +34,44 @@ const baseUrl = `http://${host}:${port}`;
 const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=${Math.round(width)}`;
 const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
 
-function removeMarker() {
-  try { unlinkSync(markerPath); } catch { /* stale marker already gone */ }
+function removeMarker(expectedPid) {
+  try {
+    if (expectedPid !== undefined) {
+      const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+      if (marker.pid !== expectedPid) return;
+    }
+    unlinkSync(markerPath);
+  } catch { /* stale marker already gone */ }
 }
 
-function ownsRunningServer() {
-  if (!existsSync(markerPath)) return false;
+function isExpectedViteProcess(pid) {
+  try {
+    let commandLine = '';
+    if (process.platform === 'win32') {
+      commandLine = execFileSync('powershell.exe', [
+        '-NoProfile', '-NonInteractive', '-Command',
+        `(Get-CimInstance Win32_Process -Filter \"ProcessId = ${pid}\").CommandLine`,
+      ], { encoding: 'utf8' });
+    } else if (process.platform === 'linux') {
+      commandLine = readFileSync(`/proc/${pid}/cmdline`, 'utf8').replaceAll('\0', ' ');
+    } else {
+      commandLine = execFileSync('ps', ['-p', String(pid), '-o', 'command='], { encoding: 'utf8' });
+    }
+    return /vite[\\/\\s].*--host|vite[\\/]bin[\\/]vite\\.js/i.test(commandLine);
+  } catch {
+    return false;
+  }
+}
+
+function markerState() {
+  if (!existsSync(markerPath)) return 'missing';
   try {
     const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
-    if (marker.cwd !== process.cwd() || !Number.isInteger(marker.pid)) return false;
+    if (marker.cwd !== process.cwd() || !Number.isInteger(marker.pid)) return 'foreign';
     process.kill(marker.pid, 0);
-    return true;
+    return isExpectedViteProcess(marker.pid) ? 'owned' : 'stale';
   } catch {
-    removeMarker();
-    return false;
+    return 'stale';
   }
 }
 
@@ -73,11 +97,17 @@ function printReady(existing) {
   console.log('');
 }
 
-const ownedServer = ownsRunningServer();
+const initialMarkerState = markerState();
+if (initialMarkerState === 'foreign') {
+  console.error(`[live-design] marker estrangeiro detectado em ${markerPath}; não sobrescrevendo.`);
+  process.exit(1);
+}
+
+const ownedServer = initialMarkerState === 'owned';
 if (ownedServer && await isReady()) {
   printReady(true);
 } else {
-  if (ownedServer) removeMarker();
+  if (initialMarkerState === 'stale' || ownedServer) removeMarker();
 
 const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
 const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
@@ -86,7 +116,13 @@ const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String
 });
 if (child.pid) {
   mkdirSync(dirname(markerPath), { recursive: true });
-  writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), pid: child.pid }));
+  try {
+    writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), pid: child.pid }), { flag: 'wx' });
+  } catch {
+    console.error(`[live-design] não foi possível assumir o marker ${markerPath}; outro launcher já o possui.`);
+    child.kill('SIGTERM');
+    process.exit(1);
+  }
 }
 
   let readyPrinted = false;
@@ -112,13 +148,13 @@ const stop = (signal) => {
   if (!child.killed) child.kill(signal);
 };
 
-process.on('exit', removeMarker);
+process.on('exit', () => removeMarker(child.pid));
 process.on('SIGINT', () => stop('SIGINT'));
 process.on('SIGTERM', () => stop('SIGTERM'));
 
   child.on('exit', (code, signal) => {
     clearInterval(poll);
-    removeMarker();
+    removeMarker(child.pid);
     if (signal) process.exit(startupTimedOut ? 1 : 0);
   process.exit(code ?? 1);
 });

@@ -40,6 +40,8 @@ O preview precisa ser uma superfície V2 suportada e a largura precisa estar na 
 
 O launcher só reutiliza um Vite que ele próprio iniciou para este checkout. Se a porta 5173 estiver ocupada por outro servidor, ele falha explicitamente para evitar observar a superfície errada.
 
+O ownership é confirmado pelo marker do checkout e pela linha de comando do processo Vite. Marker estrangeiro não é sobrescrito; marker stale é descartado antes de uma nova inicialização.
+
 Por padrão o servidor fica preso em `127.0.0.1`. Não expor na LAN durante o MVP.
 
 ## 3. Browser-first
