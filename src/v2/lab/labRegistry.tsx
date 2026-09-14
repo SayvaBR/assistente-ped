@@ -30,7 +30,7 @@ const frequencyFixture = {
   className: '5º Ano A',
   studentCount: 24,
   dateKey: '2024-08-28',
-  dateLabel: 'Quinta-feira, 28 de agosto',
+  dateLabel: 'Quarta-feira, 28 de agosto',
   students: [{ id: 'ana', name: 'Ana Clara Souza', status: 'presente' as const, color: '#1cb0f6' }, { id: 'bruno', name: 'Bruno Lima', status: 'presente' as const, color: '#5f8fda' }, { id: 'caio', name: 'Caio Almeida', status: 'falta' as const, color: '#eb6b6b' }, { id: 'daniela', name: 'Daniela Martins', status: 'presente' as const, color: '#7b61d9' }, { id: 'enzo', name: 'Enzo Gabriel', status: 'presente' as const, color: '#f2b84b' }],
 };
 
