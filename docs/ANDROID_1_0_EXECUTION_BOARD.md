@@ -6,7 +6,7 @@
 ## Estado global
 
 - Base de integração: `integration/android-1.0`
-- Último PR integrado: `#33` (`d3ce01a` → `0027b25`)
+- Último PR integrado: `#39` (`634916d` → `d0eeff0`)
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -30,6 +30,8 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 ## Foco atual
 
+0. DevEx — UI Lab MVP — `FUNCTIONAL HARDENING`
+   - Delivery Unit concluída: `UI Lab dev-only — registry de superfícies, fixtures sintéticas, scroll interno e screenshot direto`; PR `#39` integrado em `integration/android-1.0`.
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
@@ -198,15 +200,15 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint das Ferramentas de sala V2
-- Base: `origin/integration/android-1.0` em `62b7ce9`; worker `codex/tools-timer-calculator`
-- Tela/fluxo: timer com presets de 1/5/10 minutos, iniciar/pausar/resetar e estado concluído; cronômetro com iniciar/pausar/resetar; calculadora com decimal por vírgula, operações básicas, divisão por zero acessível e limpeza; troca de ferramenta sem vazamento de estado. Lanterna não foi alterada.
-- Evidência visual: Live Design ativo em `tools` a 412 CSS px na URL local `http://127.0.0.1:5173/?v2-preview=tools&width=412`; candidato inicial, observação após HMR/correção e captura final na mesma aba. DOM/computed confirmou tabs `64px`, presets `48px`, ações `54px`, largura interna `412px`, sem overflow horizontal e console sem warnings/errors; `live_visual_director` PASS.
-- Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, alunos, deficiência/apoios, atividades de casa, Arquivos, três etapas, fotos, BNCC Computação, billing, auth, migração de storage e telas fora de Ferramentas.
-- Evidência formal: screenshot `docs/qa/android-1.0/tools-v2-412.png`; E2E cobre timer, cronômetro, calculadora, divisão por zero, isolamento e viewport 320px; checkpoint responsivo cobre 360/412/480px.
-- Testes executados: E2E das Ferramentas `2/2`, checkpoint responsivo `360/412/480px` `3/3`, `pnpm test` `66/66`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34845146685` verde, incluindo Gate responsivo completo e Build Android QA APK.
-- Revisão: Cicero PASS no SHA `4d2381a`; Banach PASS visual sem blocker.
-- Commit/PR: `4d2381a` (`P1: harden classroom tools flow`), PR [#37](https://github.com/SayvaBR/assistente-ped/pull/37) integrado em `62b7ce9`.
+- Data/hora: 14/09/2026 — checkpoint do UI Lab MVP
+- Base: `origin/integration/android-1.0` em `d0eeff0`; worker `codex/ui-lab-mvp`
+- Tela/fluxo: `/__lab` permanece dev-only e agora seleciona Onboarding Entry V2, Home V2, Frequência e Planejamento diário com fixtures sintéticas; State default/erro, viewport 360/412/480, escala de texto e Reduced Motion continuam disponíveis. O Lab não importa dados reais nem altera runtime pedagógico.
+- Evidência visual: Live Design ativo na mesma aba em `http://127.0.0.1:5173/__lab?screen=home&width=412`; loop HMR observado após correções do harness. DOM/computed confirmou device de 412px, scroll interno real, bottom navigation em fluxo sem sobreposição, sem overflow horizontal e console sem errors; `live_visual_director` PASS após duas reavaliações.
+- Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, alunos, deficiência/apoios, atividades de casa, Arquivos, três etapas, fotos, BNCC Computação, PRODUCT_UX_AUTHORITY, billing, auth, notificações, backup e `main`.
+- Evidência formal: `docs/qa/ui-lab/home-v2-412.png`; screenshot direta corrigida para Windows; E2E cobre troca de superfícies/estado e rolagem/overflow em 360/412/480px.
+- Testes executados: E2E direcionado UI Lab + preview-scroll `10/10`, `pnpm test` `66/66`, `check:fast`, `pnpm build`, `pnpm run ui:shot home 412 docs/qa/ui-lab/home-v2-412.png`, `git diff --check` e CI exato `34849761414` verde, incluindo Gate responsivo completo e Build Android QA APK.
+- Revisão: Cicero encontrou e o worker corrigiu overlap P1 do harness e inconsistência P2 do fixture de data; Banach PASS visual no SHA final.
+- Commit/PR: `634916d` (`fix: align UI Lab date fixture`), PR [#39](https://github.com/SayvaBR/assistente-ped/pull/39) integrado em `d0eeff0`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
 - Resultado: `FUNCTIONAL HARDENING`; as Ferramentas de sala V2 foram integradas, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
