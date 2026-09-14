@@ -1,28 +1,53 @@
 import { ArrowLeft, Check, ChevronDown, Plus, Save, Trash2, X } from 'lucide-react';
 import * as React from 'react';
-import type { LessonPlan, LessonMoment } from '../../domain/models';
+import type { LessonPlan, LessonMoment, StoragePort } from '../../domain/models';
 import { newLessonPlan } from '../../domain/lessonPlans';
 import '@fontsource/fredoka/600.css';
 import '../styles/foundation.css';
 import './lesson-plan-v2.css';
 
-type Props = { plano?: LessonPlan; isNew?: boolean; prefill?: Partial<LessonPlan>; dataKey?: string; turmaId?: string; onBack?: () => void; onConcluido?: () => void; onDirtyChange?: (dirty: boolean) => void; onSalvar: (plan: LessonPlan) => Promise<unknown> | unknown; onExcluir?: (plan: LessonPlan) => Promise<unknown> | unknown };
+type Props = { plano?: LessonPlan; isNew?: boolean; prefill?: Partial<LessonPlan>; dataKey?: string; turmaId?: string; storage?: StoragePort; onBack?: () => void; onConcluido?: () => void; onDirtyChange?: (dirty: boolean) => void; onSalvar: (plan: LessonPlan) => Promise<unknown> | unknown; onExcluir?: (plan: LessonPlan) => Promise<unknown> | unknown };
 const dateLabel = (key: string) => { const date = new Date(`${key}T12:00:00`); return Number.isNaN(date.valueOf()) ? key : date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); };
 
-export function LessonPlanV2({ plano, isNew = false, prefill, dataKey, turmaId, onBack = () => undefined, onConcluido = () => undefined, onDirtyChange = () => undefined, onSalvar, onExcluir = async () => undefined }: Props) {
+export function LessonPlanV2({ plano, isNew = false, prefill, dataKey, turmaId, storage, onBack = () => undefined, onConcluido = () => undefined, onDirtyChange = () => undefined, onSalvar, onExcluir = async () => undefined }: Props) {
   const [draft, setDraft] = React.useState<LessonPlan>(() => ({ ...(plano || newLessonPlan({ turmaId, dataKey })), ...(prefill || {}) }));
   const [specific, setSpecific] = React.useState('');
   const [moment, setMoment] = React.useState({ titulo: '', horario: '', duracaoMin: '' });
   const [expanded, setExpanded] = React.useState('essentials');
   const [saving, setSaving] = React.useState(false);
   const [message, setMessage] = React.useState('');
+  const [autosaveStatus, setAutosaveStatus] = React.useState('');
+  const [draftHydrated, setDraftHydrated] = React.useState(!storage);
+  const draftStorageKey = storage && isNew && draft.turmaId && draft.dataKey ? `planejamento:rascunho:${draft.turmaId}:${draft.dataKey}` : '';
   const original = React.useRef(JSON.stringify(plano || draft));
   const update = <K extends keyof LessonPlan>(key: K, value: LessonPlan[K]) => setDraft((current) => ({ ...current, [key]: value }));
   const isDirty = JSON.stringify(draft) !== original.current;
+  React.useEffect(() => {
+    if (!storage || !draftStorageKey) { setDraftHydrated(true); return undefined; }
+    let active = true;
+    setDraftHydrated(false);
+    void storage.get(draftStorageKey).then(({ value }) => {
+      if (!active || !value) return;
+      try {
+        const saved = JSON.parse(value) as Partial<LessonPlan>;
+        if (saved && typeof saved === 'object' && saved.turmaId === draft.turmaId && saved.dataKey === draft.dataKey) setDraft((current) => ({ ...current, ...saved, id: current.id, status: 'rascunho' }));
+      } catch { /* a corrupt draft must never block the official plan */ }
+    }).catch(() => undefined).finally(() => { if (active) setDraftHydrated(true); });
+    return () => { active = false; };
+  }, [draftStorageKey, storage]);
+  React.useEffect(() => {
+    if (!storage || !draftStorageKey || !draftHydrated || !isDirty) return undefined;
+    const timer = window.setTimeout(() => {
+      void storage.set(draftStorageKey, JSON.stringify({ ...draft, status: 'rascunho', atualizadoEm: new Date().toISOString() }))
+        .then(() => setAutosaveStatus('Rascunho atualizado neste dispositivo.'))
+        .catch(() => setAutosaveStatus(''));
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [draft, draftHydrated, draftStorageKey, isDirty, storage]);
   React.useEffect(() => { onDirtyChange(isDirty); return () => onDirtyChange(false); }, [isDirty, onDirtyChange]);
   const addSpecific = () => { if (!specific.trim()) return; update('objetivosEspecificos', [...draft.objetivosEspecificos, specific.trim()]); setSpecific(''); };
   const addMoment = () => { if (!moment.titulo.trim()) return; const next: LessonMoment = { id: `momento_${Date.now()}`, titulo: moment.titulo.trim(), horario: moment.horario, duracaoMin: moment.duracaoMin ? Number(moment.duracaoMin) : null, descricao: '', tipo: 'aula' }; update('momentos', [...draft.momentos, next].sort((a, b) => a.horario.localeCompare(b.horario))); setMoment({ titulo: '', horario: '', duracaoMin: '' }); };
-  const save = async (status: LessonPlan['status']) => { setMessage(''); if (!draft.tituloTema.trim() && status === 'concluido') { setMessage('Informe o tema ou título para concluir o plano.'); return; } if (status === 'concluido' && !draft.momentos.length) { setMessage('Adicione pelo menos um momento para concluir o plano.'); return; } if (status === 'rascunho' && !draft.tituloTema.trim() && !draft.objetivoGeral.trim() && !draft.momentos.length) { setMessage('Adicione uma informação antes de salvar o rascunho.'); return; } setSaving(true); try { const next = { ...draft, tituloTema: draft.tituloTema.trim(), status, atualizadoEm: new Date().toISOString() }; await onSalvar(next); setDraft(next); original.current = JSON.stringify(next); setMessage(status === 'concluido' ? 'Plano concluído e salvo.' : 'Rascunho salvo no dispositivo.'); onDirtyChange(false); if (status === 'concluido') onConcluido(); } catch { setMessage('Não foi possível salvar o plano. Seus dados continuam nesta tela.'); } finally { setSaving(false); } };
+  const save = async (status: LessonPlan['status']) => { setMessage(''); if (!draft.tituloTema.trim() && status === 'concluido') { setMessage('Informe o tema ou título para concluir o plano.'); return; } if (status === 'concluido' && !draft.momentos.length) { setMessage('Adicione pelo menos um momento para concluir o plano.'); return; } if (status === 'rascunho' && !draft.tituloTema.trim() && !draft.objetivoGeral.trim() && !draft.momentos.length) { setMessage('Adicione uma informação antes de salvar o rascunho.'); return; } setSaving(true); try { const next = { ...draft, tituloTema: draft.tituloTema.trim(), status, atualizadoEm: new Date().toISOString() }; await onSalvar(next); if (draftStorageKey) await storage?.delete(draftStorageKey).catch(() => undefined); setDraft(next); original.current = JSON.stringify(next); setAutosaveStatus(''); setMessage(status === 'concluido' ? 'Plano concluído e salvo.' : 'Rascunho salvo no dispositivo.'); onDirtyChange(false); if (status === 'concluido') onConcluido(); } catch { setMessage('Não foi possível salvar o plano. Seus dados continuam nesta tela.'); } finally { setSaving(false); } };
   const section = (id: string, label: string, summary: string, content: React.ReactNode, open = false) => <section className="v2-plan__section"><button className="v2-plan__section-toggle v2-pressable" type="button" aria-expanded={expanded === id || open} onClick={() => setExpanded(expanded === id ? '' : id)}><span><small>{label}</small><strong>{summary}</strong></span><ChevronDown size={20} className={expanded === id || open ? 'is-open' : undefined} /></button>{(expanded === id || open) && <div className="v2-plan__section-content">{content}</div>}</section>;
 
   return <main className="v2-root v2-plan" aria-labelledby="plan-v2-title"><div className="v2-screen v2-plan__screen">
@@ -33,6 +58,6 @@ export function LessonPlanV2({ plano, isNew = false, prefill, dataKey, turmaId, 
     {section('bncc', 'REFERÊNCIA CURRICULAR', draft.bncc.habilidades.length ? `${draft.bncc.habilidades.length} habilidade${draft.bncc.habilidades.length > 1 ? 's' : ''} registrada${draft.bncc.habilidades.length > 1 ? 's' : ''}` : 'Registre os códigos BNCC da aula', <><label className="v2-plan__field"><span>Códigos BNCC</span><input value={draft.bncc.habilidades.join(', ')} onChange={(event) => update('bncc', { habilidades: event.target.value.split(',').map((item) => item.trim()).filter(Boolean) })} placeholder="Ex.: EF05MA03, EF05MA04" /></label><p className="v2-plan__hint">Use a consulta BNCC para escolher códigos reais. Este campo guarda código e descrição quando disponíveis.</p></>)}
     {section('moments', 'RITMO DA AULA', draft.momentos.length ? `${draft.momentos.length} momento${draft.momentos.length > 1 ? 's' : ''} planejado${draft.momentos.length > 1 ? 's' : ''}` : 'Adicione abertura, desenvolvimento e fechamento', <><div className="v2-plan__moments">{draft.momentos.map((item, index) => <div className="v2-plan__moment" key={item.id}><span>{index + 1}</span><div><strong>{item.titulo}</strong><small>{item.horario || 'Sem horário'}{item.duracaoMin ? ` · ${item.duracaoMin} min` : ''}</small></div><button type="button" aria-label={`Remover momento ${item.titulo}`} onClick={() => update('momentos', draft.momentos.filter((current) => current.id !== item.id))}><Trash2 size={17} /></button></div>)}</div><div className="v2-plan__moment-form"><label className="v2-plan__field"><span>Momento</span><input value={moment.titulo} onChange={(event) => setMoment({ ...moment, titulo: event.target.value })} placeholder="Ex.: Abertura" /></label><div className="v2-plan__field-row"><label className="v2-plan__field"><span>Horário</span><input type="time" value={moment.horario} onChange={(event) => setMoment({ ...moment, horario: event.target.value })} /></label><label className="v2-plan__field"><span>Minutos</span><input inputMode="numeric" value={moment.duracaoMin} onChange={(event) => setMoment({ ...moment, duracaoMin: event.target.value.replace(/\D/g, '') })} placeholder="20" /></label></div><button className="v2-plan__secondary v2-pressable" type="button" disabled={!moment.titulo.trim()} onClick={addMoment}><Plus size={18} />Adicionar momento</button></div></>)}
     {section('details', 'PREPARE O ENCONTRO', draft.recursos || 'Materiais, metodologia e avaliação', <><label className="v2-plan__field"><span>Materiais e recursos</span><textarea value={draft.recursos} onChange={(event) => update('recursos', event.target.value)} placeholder="O que você precisa deixar separado?" /></label><label className="v2-plan__field"><span>Metodologia e desenvolvimento</span><textarea value={draft.observacoes} onChange={(event) => update('observacoes', event.target.value)} placeholder="Como a aula vai acontecer?" /></label><label className="v2-plan__field"><span>Avaliação</span><textarea value={draft.avaliacao} onChange={(event) => update('avaliacao', event.target.value)} placeholder="Como observar o aprendizado?" /></label><label className="v2-plan__field"><span>Inclusão e adaptações</span><textarea value={draft.inclusao} onChange={(event) => update('inclusao', event.target.value)} placeholder="Estratégias ou adaptações necessárias" /></label></>)}
-    <div className="v2-plan__feedback" role={message ? 'status' : undefined} aria-live="polite">{message}</div><div className="v2-plan__actions"><button className="v2-plan__secondary v2-pressable" type="button" onClick={() => void save('rascunho')} disabled={saving}><Save size={18} />Salvar rascunho</button><button className="v2-primary-action v2-pressable" type="button" onClick={() => void save('concluido')} disabled={saving}><Check size={18} />{saving ? 'Salvando…' : 'Concluir plano'}</button></div>{plano && !isNew && <button className="v2-plan__delete v2-pressable" type="button" onClick={() => void onExcluir(draft)}><Trash2 size={16} />Arquivar este plano</button>}
+    <div className="v2-plan__feedback" role={message || autosaveStatus ? 'status' : undefined} aria-live="polite">{message || autosaveStatus}</div><div className="v2-plan__actions"><button className="v2-plan__secondary v2-pressable" type="button" onClick={() => void save('rascunho')} disabled={saving}><Save size={18} />Salvar rascunho</button><button className="v2-primary-action v2-pressable" type="button" onClick={() => void save('concluido')} disabled={saving}><Check size={18} />{saving ? 'Salvando…' : 'Concluir plano'}</button></div>{plano && !isNew && <button className="v2-plan__delete v2-pressable" type="button" onClick={() => void onExcluir(draft)}><Trash2 size={16} />Arquivar este plano</button>}
   </div></main>;
 }
