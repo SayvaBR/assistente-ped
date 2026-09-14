@@ -7,7 +7,7 @@ import '@fontsource/fredoka/600.css';
 import '../styles/foundation.css';
 import './profile-v2.css';
 
-type Profile = {
+export type Profile = {
   id?: string;
   nome?: string;
   tratamento?: string;
@@ -27,6 +27,18 @@ type Props = {
   onDirtyChange?: (dirty: boolean) => void;
   onTabChange?: (tab: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais') => void;
 };
+
+export function normalizeProfile(perfil: Profile, draft: Profile, atualizadoEm: string) {
+  return {
+    ...perfil,
+    ...draft,
+    nome: draft.nome?.trim() || '',
+    escola: draft.escola?.trim() || '',
+    cidade: draft.cidade?.trim() || '',
+    uf: draft.uf?.trim().toUpperCase() || '',
+    atualizadoEm,
+  };
+}
 
 const navItems = [
   { id: 'inicio', label: 'Início', icon: House },
@@ -57,6 +69,12 @@ export function ProfileV2({ perfil, onBack = () => undefined, onConcluido = () =
   const displayName = draft.nome?.trim() || 'Seu nome';
 
   React.useEffect(() => {
+    original.current = JSON.stringify(perfil || {});
+    setDraft({ ...perfil });
+    setMessage('');
+  }, [perfil]);
+
+  React.useEffect(() => {
     onDirtyChange(JSON.stringify(draft) !== original.current);
     return () => onDirtyChange(false);
   }, [draft, onDirtyChange]);
@@ -85,16 +103,7 @@ export function ProfileV2({ perfil, onBack = () => undefined, onConcluido = () =
       if (typeof draft.foto === 'string' && draft.foto.startsWith('data:')) {
         savedMedia = await saveMedia({ dataUrl: draft.foto, tipo: 'foto', proprietarioId: perfil.id, id: 'professor' });
       }
-      const next = {
-        ...perfil,
-        ...draft,
-        foto: savedMedia || draft.foto,
-        nome: draft.nome.trim(),
-        escola: draft.escola?.trim() || '',
-        cidade: draft.cidade?.trim() || '',
-        uf: draft.uf?.trim().toUpperCase() || '',
-        atualizadoEm: new Date().toISOString(),
-      };
+      const next = normalizeProfile(perfil, { ...draft, foto: savedMedia || draft.foto }, new Date().toISOString());
       await onSalvar(next);
       if (previousPhoto && typeof previousPhoto === 'object' && (next.foto as { path?: string } | undefined)?.path !== (previousPhoto as { path?: string }).path) {
         await deleteMedia(previousPhoto).catch(() => undefined);
@@ -141,7 +150,7 @@ export function ProfileV2({ perfil, onBack = () => undefined, onConcluido = () =
           <label className="v2-profile__field"><span>Etapa de ensino</span><input value={draft.etapaEnsino || ''} onChange={(event) => update('etapaEnsino', event.target.value)} placeholder="Ex.: Ensino Fundamental" /></label>
         </section>
 
-        <div className={`v2-profile__feedback${message.includes('sucesso') ? ' is-success' : message ? ' is-error' : ''}`} role={message ? 'status' : undefined} aria-live="polite">{message && (message.includes('sucesso') ? <Check size={18} /> : null)}<span>{message}</span></div>
+        <div className={`v2-profile__feedback${message.includes('sucesso') ? ' is-success' : message ? ' is-error' : ''}`} role={message ? (message.includes('sucesso') ? 'status' : 'alert') : undefined} aria-live="polite">{message && (message.includes('sucesso') ? <Check size={18} /> : null)}<span>{message}</span></div>
         <button className="v2-profile__save v2-primary-action v2-pressable" type="button" onClick={save} disabled={saving}>{saving ? <span className="v2-profile__spinner" aria-hidden="true" /> : <Save size={20} />}{saving ? 'Salvando perfil…' : 'Salvar perfil'}</button>
         <input ref={photoInput} className="v2-profile__photo-input" type="file" accept="image/*" capture="user" onChange={choosePhoto} aria-label="Selecionar foto do perfil" />
 

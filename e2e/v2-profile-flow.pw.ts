@@ -25,7 +25,33 @@ test('Perfil V2 valida nome sem gerar CTA falso', async ({ page }) => {
   const device = page.locator('.v2-preview-device');
   await device.getByLabel('Nome completo').fill('');
   await device.getByRole('button', { name: 'Salvar perfil' }).click();
-  await expect(device.getByRole('status')).toContainText('Informe seu nome');
+  await expect(device.getByRole('alert')).toContainText('Informe seu nome');
+});
+
+test('Perfil V2 normaliza texto e confirma o salvamento', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=profile');
+  const device = page.locator('.v2-preview-device');
+  await device.getByLabel('Nome completo').fill('  Marina Alves  ');
+  await device.getByLabel('Escola').fill(' Escola Horizonte ');
+  await device.getByLabel('UF').fill('rj');
+  await device.getByRole('button', { name: 'Salvar perfil', exact: true }).click();
+  await expect(device.getByRole('status')).toContainText('Perfil salvo com sucesso');
+  await expect(device.getByLabel('Nome completo')).toHaveValue('Marina Alves');
+  await expect(device.getByLabel('Escola')).toHaveValue('Escola Horizonte');
+  await expect(device.getByLabel('UF')).toHaveValue('RJ');
+});
+
+test('Perfil V2 preserva o formulário quando o salvamento falha', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=profile&state=error');
+  const device = page.locator('.v2-preview-device');
+  await device.getByLabel('Nome completo').fill('Marina em edição');
+  await device.getByLabel('Cidade').fill('Campinas');
+  await device.getByRole('button', { name: 'Salvar perfil', exact: true }).click();
+  await expect(device.getByRole('alert')).toContainText('Seus dados continuam nesta tela');
+  await expect(device.getByLabel('Nome completo')).toHaveValue('Marina em edição');
+  await expect(device.getByLabel('Cidade')).toHaveValue('Campinas');
 });
 
 test('Perfil V2 preserva texto ampliado sem overflow horizontal', async ({ page }) => {
