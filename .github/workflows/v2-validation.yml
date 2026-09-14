@@ -31,7 +31,8 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run check:v2-boundary
       - run: pnpm test
-      - run: pnpm run test:v2-responsive
+      - name: Full responsive production gate
+        run: pnpm run test:v2-responsive:full
       - run: pnpm build
 
   apk-qa:
