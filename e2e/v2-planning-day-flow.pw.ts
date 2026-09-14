@@ -8,6 +8,7 @@ test('Planejamento diário V2 exibe os momentos e a ação de adicionar', async 
   const device = page.locator('.v2-preview-device');
   await expect(device.getByRole('heading', { name: 'Planejamento diário' })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Matemática' })).toBeVisible();
+  await expect(device.getByText('Sem horário', { exact: true })).toBeVisible();
   await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
   await expect(device.getByRole('button', { name: 'Criar outro plano neste dia' })).toBeVisible();
   await expect(device.getByRole('heading', { name: 'Atividades para levar', exact: true })).toBeVisible();
