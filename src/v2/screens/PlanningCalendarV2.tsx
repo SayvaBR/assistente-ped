@@ -48,11 +48,15 @@ export function PlanningCalendarV2({ className = 'Sua turma', mode, dateKey, pla
   const week = React.useMemo(() => { const monday = new Date(selected); monday.setDate(selected.getDate() - ((selected.getDay() + 6) % 7)); return Array.from({ length: 7 }, (_, index) => { const date = new Date(monday); date.setDate(monday.getDate() + index); return keyOf(date); }); }, [dateKey]);
   const monthDays = React.useMemo(() => { const first = new Date(month.getFullYear(), month.getMonth(), 1).getDay(); const count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate(); return [...Array(first).fill(''), ...Array.from({ length: count }, (_, index) => keyOf(new Date(month.getFullYear(), month.getMonth(), index + 1)))]; }, [month]);
   const activePlans = plans.filter((plan) => plan.dataKey === dateKey && !plan.arquivadoEm);
-  const dayPlans = mode === 'week'
-    ? buildPlanningCalendarRows(activePlans)
-    : activePlans.flatMap((plan) => (plan.momentos || []).map((moment) => ({ plan, title: moment.titulo || plan.tituloTema || 'Plano de aula', time: moment.horario || plan.horaInicio, detail: moment.descricao || plan.objetivoGeral })));
+  const dayPlans = buildPlanningCalendarRows(activePlans);
   const dayActivities = activities.filter((activity) => activity.dataKey === dateKey && activity.status !== 'arquivada');
-  const moveMonth = (amount: number) => setMonth(new Date(month.getFullYear(), month.getMonth() + amount, 1));
+  const moveMonth = (amount: number) => {
+    const nextMonth = new Date(month.getFullYear(), month.getMonth() + amount, 1);
+    const lastDay = new Date(nextMonth.getFullYear(), nextMonth.getMonth() + 1, 0).getDate();
+    const nextDay = Math.min(selected.getDate(), lastDay);
+    setMonth(nextMonth);
+    onDateChange(keyOf(new Date(nextMonth.getFullYear(), nextMonth.getMonth(), nextDay)));
+  };
   return <main className="v2-root v2-planning-calendar" data-mode={mode} aria-labelledby="planning-calendar-v2-title"><div className="v2-screen v2-planning-calendar__screen">
     <header className="v2-planning-calendar__header"><button className="v2-planning-calendar__back v2-pressable" type="button" onClick={onBack} aria-label="Voltar"><ArrowLeft size={25} /></button><div><span className="v2-eyebrow">{className}</span><h1 id="planning-calendar-v2-title">{mode === 'week' ? 'Planejamento semanal' : monthLabel(month)}</h1><p>{mode === 'week' ? labelOf(dateKey) : 'Veja o ritmo do mês e escolha um dia.'}</p></div><button className="v2-planning-calendar__calendar v2-pressable" type="button" onClick={() => onViewChange(mode === 'week' ? 'month' : 'week')} aria-label={mode === 'week' ? 'Abrir visão mensal' : 'Abrir visão semanal'}><CalendarDays size={24} /></button></header>
     {offline && <div className="v2-planning-calendar__notice" role="status">Você está offline. O planejamento local continua disponível.</div>}{error && <div className="v2-planning-calendar__notice is-error" role="alert"><span>{error}</span><button type="button" onClick={onRetry}>Tentar novamente</button></div>}{activityError && <div className="v2-planning-calendar__notice is-error" role="alert"><span>{activityError}</span><button type="button" onClick={onRetry}>Tentar novamente</button></div>}
