@@ -6,7 +6,7 @@
 ## Estado global
 
 - Base de integração: `integration/android-1.0`
-- Último PR integrado: `#43` (`55e1eb6` → `992f622`)
+- Último PR integrado: `#48` (`cdb1213` → `d4df7fc`)
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -34,6 +34,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
    - Delivery Unit concluída: `UI Lab dev-only — registry de superfícies, fixtures sintéticas, scroll interno e screenshot direto`; PR `#39` integrado em `integration/android-1.0`.
 1. Onboarding Entry V2 — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `first-viewport hardening — headline em até três linhas, CTA no viewport inicial, preview direto Live Design e gate responsivo`; PR `#41` integrado em `integration/android-1.0`.
+   - Delivery Unit em revisão: `WindowInsets reais + clearance de primeiro viewport e Discovery`; PR `#47` aberto no head `23215a9`; CI verde e revisão independente `PASS`, aguardando reteste físico pós-correção quando o aparelho voltar a aparecer no ADB.
 2. DevEx — WindowInsets Android reais para WebView — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `ponte de barras de sistema/display cutout para --android-safe-* em CSS logical px, com fallback web e reaplicação após carregamento`; PR `#43` integrado em `integration/android-1.0`.
 3. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
@@ -54,6 +55,9 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 13. Configurações — `IN PROGRESS`
 14. Aparência — `IN PROGRESS`
 15. Onboarding — `FUNCTIONAL HARDENING`
+
+16. Home V2 — `FUNCTIONAL HARDENING`
+   - Delivery Unit concluída: `bottom navigation — label Plano sem quebra artificial, navegação do preview, touch targets, altura curta e escala de texto 200%`; PR `#48` integrado em `integration/android-1.0`.
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -197,23 +201,23 @@ Status: `TODO`
 
 ## Blockers externos atuais
 
-- Nenhum blocker externo deve ser inventado.
+- `adb devices` ficou vazio após a instalação do APK QA do PR #47; reteste físico pós-correção está bloqueado até o telefone reaparecer como `device`. Não executar uninstall, `pm clear` ou exclusão de dados.
 - Registrar aqui apenas dependências reais: credenciais, store, hardware, decisão legal, conflito humano de Git etc.
 
 ## Último checkpoint
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do P1 WindowInsets Android reais para WebView
-- Base: `origin/integration/android-1.0` em `992f622`; worker `codex/android-window-insets`
-- Tela/fluxo: sem mudança de tela. `MainActivity` observa barras de sistema e display cutout, converte pixels físicos pela densidade para CSS logical px e publica `--android-safe-top/right/bottom/left`; `WebViewListener.onPageLoaded` reaplica os valores após cada carregamento. O preview web mantém fallback zero.
-- Evidência visual: não aplicável; esta unidade não altera composição visual. A validação estrutural foi feita com `check:fast`, build web, `android:sync` e APK QA; não há telefone Android autorizado nesta sessão para inspeção física.
+- Data/hora: 14/09/2026 — checkpoint Home V2 bottom navigation + onboarding WindowInsets
+- Base: `origin/integration/android-1.0` em `d4df7fc`; Home worker `codex/home-nav-polish`; onboarding PR `#47` ainda aberto
+- Tela/fluxo: Home V2 mantém `Plano` visível em uma linha, aria-label completo `Planejamento`, navegação por toque no preview, targets >=48px, clearance em 412x720 e separação em 360px/200%; PR #48 integrado. Onboarding usa os tokens `--v2-safe-*`, mantém rolagem e cobre Entry → Discovery em runtime; PR #47 aguarda apenas reteste físico pós-correção.
+- Evidência visual: Live Design/HMR em `?v2-preview=home&width=412`; crítica perceptiva final `PASS`; checkpoints 360/390/412 e altura curta executados. A aba visível foi mantida na Home.
 - Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, alunos, deficiência/apoios, atividades de casa, Arquivos, três etapas, fotos, BNCC Computação, PRODUCT_UX_AUTHORITY, billing, auth, notificações, backup e `main`.
 - Evidência formal anterior preservada: `docs/qa/ui-lab/home-v2-412.png` e screenshots de Onboarding Entry; E2E do UI Lab e matriz visual continuam cobertos pelos PRs anteriores.
 - Testes executados nesta unidade: `pnpm run check:fast`, `pnpm run build`, `pnpm run android:sync`, `./gradlew :app:assembleQa`, `git diff --check`; o teste unitário Android compilou, mas o executor local falhou antes de rodar por `ClassNotFoundException: worker.org.gradle.process.internal.worker.GradleWorkerMain`; CI exato `34855675784` verde, incluindo `validate` e `Build Android QA APK`.
 - Revisão: Cicero encontrou e o worker corrigiu race de publicação pós-load e guarda do fallback sem WebView; re-revisão final `PASS` no SHA `55e1eb6`.
-- Commit/PR: `55e1eb6` (`fix: guard missing Capacitor bridge`), PR [#43](https://github.com/SayvaBR/assistente-ped/pull/43) integrado em `992f622`.
-- Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
+- Commit/PR: `cdb1213` (`Keep Home nav readable at large text scale`), PR [#48](https://github.com/SayvaBR/assistente-ped/pull/48) integrado em `d4df7fc`. PR [#47](https://github.com/SayvaBR/assistente-ped/pull/47) permanece aberto para reteste físico do onboarding.
+- Blocker externo: o POCO X7 Pro apareceu inicialmente como `FMV455CMZXY5HYXS device` e o APK `br.com.assistentepedagogico.app.v2qa` foi instalado com `adb install -r` sem tocar nos pacotes antigos. Após o build QA da correção de onboarding, `adb devices` ficou vazio; não foi feito uninstall, `pm clear` ou exclusão de dados. O reteste físico pós-correção permanece bloqueado até reconexão do aparelho.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
 - Resultado: `FUNCTIONAL HARDENING`; a ponte de safe areas Android foi implementada sem mudança de tela, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
 - Próxima ação: sincronizar a integration, conferir issues/PRs ativos e escolher a próxima DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
