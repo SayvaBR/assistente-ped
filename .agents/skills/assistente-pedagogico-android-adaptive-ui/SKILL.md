@@ -8,91 +8,103 @@ description: >
 
 # Assistente Pedagógico — Android Adaptive UI
 
-Use esta skill junto com as skills visual-first do projeto.
-
 Autoridade complementar obrigatória:
 
+- `docs/ANDROID_LOGICAL_UNITS_AND_INSETS.md`;
 - `docs/ANDROID_ADAPTIVE_DEVELOPMENT_CADENCE.md`;
 - `docs/ANDROID_MULTI_DEVICE_RESPONSIVE_POLICY.md`;
 - `docs/ANDROID_REAL_DEVICE_QA.md`.
 
-## Regra principal
+## 1. Modelo de unidade correto
 
-Uma screenshot tem uma largura. O aplicativo não.
+A UI principal roda em React/Vite dentro do WebView do Capacitor.
 
-A UI deve ser construída de forma fluida para Androids diferentes, mas o Codex **não deve testar manualmente sete larguras durante cada microiteração**.
+- Android nativo: `dp` para geometria e `sp` para texto.
+- UI web: CSS logical `px`, `rem`, `%`, flex/grid, viewport dinâmico e insets.
+- Nunca usar resolução física (`1220`, `1080`, `1440`) como largura de layout.
+- CSS não possui unidade `dp`; não simular `dp` convertendo resolução física manualmente.
 
-Durante desenvolvimento visual normal use **412 CSS px** como viewport de trabalho padrão em telefone Android, salvo quando um target aprovado precisar de outra largura para comparação direta.
+Com `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">`, o WebView trabalha no espaço lógico disponível.
 
-412 é apenas uma régua de trabalho, não breakpoint obrigatório nem largura fixa do app.
+`412 CSS px` é somente a régua visual principal de telefone Android. Não é largura fixa nem breakpoint de aparelho.
 
-## Loop de desenvolvimento
+## 2. Loop rápido obrigatório
+
+Durante construção visual normal:
 
 ```text
 HIPÓTESE
 -> IMPLEMENTAÇÃO
--> RENDER EM 412px
+-> RENDER 412
 -> SCREENSHOT
 -> OBSERVAÇÃO
 -> CORREÇÃO
 -> REPETIR
 ```
 
-Foco do loop:
+Não recapturar 320/360/390/412/432/480/600 a cada mudança.
 
-- qualidade visual;
-- composição;
-- hierarquia;
-- fluxo real;
-- persistência;
-- estados;
-- acessibilidade;
-- ausência de problemas responsivos óbvios.
+Durante microiteração, normalmente use:
 
-Não recapturar manualmente 320/360/390/412/432/480/600 a cada mudança.
+```bash
+pnpm run check:fast
+```
 
-## Responsividade vem da estrutura
+Não rode a matriz completa responsiva localmente a cada Delivery Unit comum.
+
+## 3. Layout deve se adaptar por estrutura
 
 Preferir:
 
-- flex/grid;
+- `display: flex` / `grid`;
 - `minmax()`;
 - `flex-wrap`;
 - largura relativa;
 - altura automática;
 - `min-width: 0`;
 - `clamp()` com moderação;
-- container/media queries para mudanças estruturais reais;
-- safe areas;
-- componentes que reorganizam conteúdo quando falta espaço.
+- container/media queries apenas para mudança estrutural real;
+- `100dvh` para raiz quando apropriado;
+- safe areas e WindowInsets;
+- scroll normal quando conteúdo exceder a altura.
 
 Evitar:
 
 - root com largura fixa;
-- heights rígidos para copy;
-- CSS específico para cada screenshot;
-- breakpoints por modelo de aparelho;
+- tela inteira com altura fixa;
+- `height: 830px`/valor calculado para um aparelho;
+- CSS por modelo de celular;
+- breakpoint para 390/412/432 apenas para fazer screenshot passar;
 - posicionamento absoluto de conteúdo principal.
 
-A regra mental é:
+A pergunta correta é:
 
-> **o componente deve se adaptar ao espaço disponível; não criar uma versão para cada aparelho.**
+> Como este componente reage ao espaço que recebeu?
 
-## Copy essencial nunca é sacrificada
+Não:
 
-Não use `text-overflow: ellipsis`, `line-clamp`, `white-space: nowrap`, `overflow: hidden` ou altura fixa para esconder:
+> Qual CSS preciso para cada celular?
 
-- título de tela;
-- título de aula/plano;
-- CTA;
-- label de formulário;
-- item principal de navegação;
-- status operacional;
-- erro/sucesso importante;
-- instrução necessária;
-- identificação principal de aluno/professor quando necessária para a ação.
+## 4. Safe areas e barras do sistema
 
-Para copy humana em PT-BR, o padrão é:
+Nenhuma ação importante pode ficar atrás de:
+
+- status bar;
+- cutout/câmera;
+- gesture/navigation bar;
+- teclado/IME.
+
+Na camada web, usar `env(safe-area-inset-*)` e tokens de inset do projeto.
+
+Se o WebView não fornecer o inset Android necessário, a camada nativa deve publicar WindowInsets reais. Nunca hardcodear altura das barras.
+
+Existe gap técnico conhecido: `foundation.css` menciona `--android-safe-bottom`, mas o `MainActivity` atual precisa ser auditado para provar/publicar esse valor.
+
+## 5. Copy essencial nunca é sacrificada
+
+Não usar `ellipsis`, `line-clamp`, `nowrap`, `overflow: hidden` ou altura fixa para esconder título, CTA, label, status, erro, navegação ou identificação essencial.
+
+Padrão para copy humana:
 
 ```css
 word-break: normal;
@@ -100,111 +112,76 @@ overflow-wrap: normal;
 white-space: normal;
 ```
 
-`overflow-wrap: anywhere` não deve ser usado em labels, títulos, CTAs, status ou frases naturais.
+Se não couber, mudar a composição.
 
-Falhas explícitas:
+Nunca produzir quebras como `Present` + `es`, `Pendent` + `es` ou `Planeja` + `mento`.
 
-- `Presentes` -> `Present` + `es`;
-- `Pendentes` -> `Pendent` + `es`;
-- botão com palavra cortada;
-- fonte reduzida até ficar pequena demais só para caber.
+## 6. Três níveis de validação
 
-Se não couber, mude a composição.
+### Microiteração
 
-## Quando falta espaço
+Somente 412 CSS px + screenshot frequente.
 
-Preferir, conforme o caso:
+### Checkpoint local da Delivery Unit
 
-1. wrap entre palavras;
-2. altura automática;
-3. reduzir gaps/padding moderadamente;
-4. empilhar ações;
-5. reduzir colunas;
-6. mover metadata secundária;
-7. mudar a composição mantendo prioridade visual.
+Quando a candidata estiver forte:
 
-Nunca esconder ação essencial ou criar scroll horizontal para salvar um layout rígido.
+```bash
+pnpm run test:v2-responsive:checkpoint -- <preview> "<texto esperado>"
+```
 
-## Testes multi-device: checkpoint, não ritual
+O checkpoint exercita somente a superfície indicada em:
 
-A matriz responsiva continua obrigatória no produto, mas deve ser executada principalmente:
+- 360px — compacto;
+- 412px — âncora;
+- 480px — amplo.
 
-- quando a tela já estiver visualmente convincente;
-- antes de `PRODUCTION GATE READY`;
-- quando houver mudança estrutural relevante;
-- no CI;
-- antes de release;
-- quando aparecer bug responsivo real.
+Exemplo:
 
-O teste automatizado pode cobrir múltiplas larguras sem forçar o Codex a revisar manualmente cada screenshot em toda iteração.
+```bash
+pnpm run test:v2-responsive:checkpoint -- planning-day "Planejamento diário"
+```
 
-Durante microajuste visual, use o viewport de trabalho e continue construindo.
+Isso é smoke check, não matriz de produção.
 
-## Texto ampliado
+### Gate completo
 
-Não precisa testar todos os níveis a cada alteração visual.
+`pnpm run test:v2-responsive:full` pertence principalmente a:
 
-No hardening das superfícies críticas, validar crescimento equivalente a pelo menos:
+- CI;
+- Gate B;
+- release;
+- mudança estrutural relevante;
+- investigação de bug responsivo real.
 
-- 100%;
-- 130%;
-- 150%;
+Não gastar recursos locais repetindo o mesmo gate completo que o CI executará, salvo justificativa de risco.
 
-200% quando viável em fluxos críticos.
+## 7. Texto ampliado
 
-O objetivo é preservar leitura, ações, palavras completas e ausência de overflow.
+No hardening crítico, validar escalas relevantes. Não testar todos os níveis em toda microalteração visual.
 
-## POCO X7 Pro
+Objetivo: preservar leitura, palavras completas, ordem lógica, ações e ausência de overflow horizontal.
 
-O POCO X7 Pro é aparelho físico de referência de QA, não alvo exclusivo.
+## 8. POCO X7 Pro
 
-Não instalar APK a cada ajuste pequeno.
+O POCO é aparelho físico de QA, não target de layout.
 
-Usar Android real em marcos importantes e antes do Gate B/release.
+Não instalar APK a cada ajuste pequeno. Use-o em checkpoints Android reais, mudanças de insets/teclado/native e antes do release.
 
-Se não houver acesso físico, registrar:
+## 9. Gate visual
 
-`REAL DEVICE QA PENDING — POCO X7 PRO`
+Uma tela falha se:
 
-## Gate A
+- funciona só em uma largura;
+- copy essencial corta/quebra artificialmente;
+- CTA desaparece;
+- há scroll horizontal acidental;
+- safe area/teclado cobre interação;
+- UI ficou genérica/inconsistente para “caber”;
+- foi necessário CSS específico por aparelho.
 
-Para direção visual, exigir:
+## 10. Regra final
 
-- tela convincente no viewport de trabalho/target;
-- sem falha responsiva óbvia;
-- sem copy essencial cortada;
-- sem dependência explícita de largura fixa;
-- fluxo principal coerente.
+> **Desenvolva em espaço lógico, não em pixels físicos.**
 
-Não exigir matriz manual completa para liberar a próxima tela visual.
-
-## Gate B
-
-Para produção, aí sim validar:
-
-- testes responsivos automatizados;
-- faixas de largura representativas;
-- texto ampliado;
-- safe areas;
-- teclado;
-- Android real quando disponível;
-- ausência de overflow e truncamento.
-
-## Critério de falha
-
-A tela falha se:
-
-- copy essencial estiver cortada;
-- palavra humana estiver quebrada artificialmente no meio;
-- ação desaparecer por falta de espaço;
-- houver scroll horizontal acidental;
-- funcionar apenas em uma largura;
-- depender de CSS especial para screenshots específicas;
-- texto ampliado tornar o fluxo impossível;
-- safe area/teclado cobrir interação essencial.
-
-## Regra final
-
-> **Desenvolva rápido em um viewport Android representativo. Implemente fluido. Valide amplo em checkpoints.**
-
-> **O aplicativo se adapta à tela — não redesenhamos o aplicativo para cada tela.**
+> **412 é régua de trabalho; flexibilidade é propriedade do código; matriz ampla é trabalho do CI/gate.**

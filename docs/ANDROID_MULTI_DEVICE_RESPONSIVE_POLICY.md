@@ -1,87 +1,138 @@
 # Android Multi-Device Responsive Policy — Assistente Pedagógico V2
 
 > **Status:** obrigatório para toda UI V2 Android
-> **Objetivo:** garantir que o Assistente Pedagógico funcione e permaneça visualmente coerente em celulares Android de tamanhos, densidades, proporções e escalas de texto diferentes — sem texto cortado, palavras quebradas de forma ruim, ações escondidas ou layouts dependentes de um aparelho específico.
+> **Objetivo:** garantir robustez em Androids diferentes sem transformar cada microiteração em uma bateria manual de resoluções.
 
-## 1. Princípio central
+## 1. Princípio
 
 O aplicativo não é desenhado para um modelo de celular.
 
-O POCO X7 Pro é um aparelho físico de referência disponível para QA, mas **não é o alvo único do produto**. O Assistente Pedagógico precisa funcionar em aparelhos Android menores, médios, grandes e, quando aplicável, tablets/foldables.
+O POCO X7 Pro é aparelho físico de referência de QA, não target exclusivo.
 
-A regra é:
+A decisão de layout deve partir do **espaço lógico disponível para o app**, não da resolução física do painel.
 
-> **uma referência visual pode ter uma largura; o produto deve sobreviver a uma família de viewports.**
+Referências obrigatórias:
 
-Nunca transformar resolução física de um aparelho em breakpoint CSS.
+- `docs/ANDROID_LOGICAL_UNITS_AND_INSETS.md`;
+- `docs/ANDROID_ADAPTIVE_DEVELOPMENT_CADENCE.md`.
 
-## 2. Pixels físicos não são viewport CSS
+## 2. Pixels físicos, dp e CSS px são coisas diferentes
 
-Resolução do painel, densidade e viewport lógico são coisas diferentes.
+- `1220 x 2712`, `1080 x 2400` etc. são pixels físicos do painel e não entram diretamente no CSS.
+- `dp`/`sp` são unidades da UI nativa Android.
+- a UI React/Capacitor usa CSS logical `px`, `rem`, `%`, flex/grid e viewport/insets.
 
-Não usar valores como `1220px`, `1080px` ou `1440px` de resolução física como largura de layout.
+Nunca criar breakpoint a partir da resolução física de um aparelho.
 
-O React/Capacitor deve responder ao espaço lógico realmente disponível no WebView, considerando:
+## 3. Desenvolvimento x checkpoint x gate
 
-- densidade do aparelho;
-- escala de exibição do Android;
-- escala de fonte;
-- status bar;
-- área de gesto/barra de navegação;
-- recortes/câmera;
-- teclado;
-- orientação;
-- WebView e `visualViewport`.
+### Desenvolvimento visual
 
-## 3. Faixas mínimas de validação
+Use somente **412 CSS px** como viewport-âncora, salvo target específico aprovado.
 
-Toda superfície V2 importante deve ser exercitada como uma única composição responsiva nos seguintes pontos de stress lógico:
+Não testar manualmente várias larguras por mudança.
+
+### Checkpoint local da Delivery Unit
+
+Quando a candidata estiver forte:
+
+- 360px — compacto;
+- 412px — âncora;
+- 480px — amplo.
+
+Use:
+
+```bash
+pnpm run test:v2-responsive:checkpoint -- <preview> "<texto esperado>"
+```
+
+Esse checkpoint é um smoke test da superfície alterada, não a prova final Android.
+
+### Gate completo / CI
+
+A matriz ampla fica em:
+
+- CI;
+- Gate B;
+- release;
+- mudança estrutural importante;
+- bug responsivo real.
+
+Use:
+
+```bash
+pnpm run test:v2-responsive:full
+```
+
+O CI deve continuar rodando a matriz completa mesmo que o Codex não a repita localmente.
+
+## 4. Matriz de produção
+
+No gate completo, cobrir pontos lógicos representativos.
 
 ### Telefones
 
-- `320px` — telefone estreito / stress mínimo;
-- `360px` — compacto comum;
-- `384px` / `390px` — intermediário e viewport-âncora frequente;
-- `411px` / `412px` — telefone amplo comum;
-- `432px` — telefone amplo moderno;
-- `480px` — stress de telefone muito largo.
+- 320px — stress estreito;
+- 360px — compacto comum;
+- 390px — intermediário;
+- 412px — telefone amplo/âncora;
+- 432px — amplo moderno;
+- 480px — stress largo.
 
 ### Telas maiores
 
-- `600px` — limite importante para tela grande/foldable;
-- `720px` e/ou `840px` quando a superfície tiver layout relevante para tablet/foldable.
+- 600px — transição importante para telas grandes/foldable;
+- 720/840px quando a superfície tiver layout relevante para tablet/foldable.
 
-Esses números **não criam oito layouts separados**. Eles são pontos para encontrar falhas em um layout fluido.
+Esses números não representam aparelhos específicos e não criam oito layouts separados.
 
-## 4. Altura também é parte da responsividade
+## 5. Altura não é fixa
 
-Não validar apenas largura.
+Não existe “altura útil padrão” universal entre status bar e navigation bar.
 
-Superfícies críticas devem ser verificadas também em alturas reduzidas e altas, porque teclados, barras do sistema e proporções de tela mudam o espaço útil.
+A altura muda com:
 
-Stress mínimo recomendado em telefone:
+- gestos x 3 botões;
+- cutout;
+- Android/ROM;
+- escala de exibição;
+- teclado;
+- orientação;
+- multi-window.
 
-- altura curta: aproximadamente `640–720px` lógicos;
-- altura média: aproximadamente `780–850px`;
-- altura alta: `900px+`.
+Regras:
 
-Nenhuma ação principal pode existir apenas porque a captura de referência era alta.
+- raiz pode usar `min-height: 100dvh`;
+- conteúdo usa altura automática;
+- ação final permanece alcançável por scroll normal;
+- nunca fixar `830px`, `840px`, `915px` etc. como altura útil da aplicação.
 
-## 5. Regra absoluta de texto
+## 6. Safe areas / WindowInsets
 
-Texto essencial precisa permanecer **legível, completo e semanticamente íntegro**.
+Nenhum conteúdo/CTA essencial pode ficar encoberto por:
 
-É falha de produto se um label natural em português quebrar no meio da palavra apenas para caber em um card.
+- status bar;
+- display cutout/câmera;
+- navigation/gesture bar;
+- teclado/IME.
 
-Exemplos de falha:
+Na camada web, usar `env(safe-area-inset-*)` e tokens de inset do projeto.
 
-- `Presentes` → `Present` + `es`;
-- `Pendentes` → `Pendent` + `es`;
-- `Planejamento` quebrado em fragmentos artificiais;
-- CTA com palavra cortada;
-- nome de aula escondido por ellipsis sem necessidade.
+Se isso não representar corretamente o Android/WebView suportado, publicar WindowInsets reais da camada nativa. Nunca hardcodear altura das barras.
 
-Para copy humana essencial, usar como padrão:
+## 7. Texto essencial
+
+Texto essencial deve permanecer completo e legível.
+
+Falhas:
+
+- `Presentes` -> `Present` + `es`;
+- `Pendentes` -> `Pendent` + `es`;
+- `Planejamento` fragmentado artificialmente;
+- CTA cortado;
+- fonte reduzida demais para caber.
+
+Padrão para copy humana:
 
 ```css
 word-break: normal;
@@ -89,242 +140,129 @@ overflow-wrap: normal;
 white-space: normal;
 ```
 
-`overflow-wrap: anywhere` **não deve ser usado em labels, CTAs, títulos, status, navegação ou frases naturais**. Ele só é aceitável em tokens realmente não quebráveis, como IDs/URLs/códigos longos, e ainda assim com justificativa.
+Se não couber, mudar composição.
 
-Se uma palavra não cabe, a solução preferida é **mudar a composição**, não destruir a palavra.
+Não esconder título, CTA, label, status, erro ou ação principal com `ellipsis`, `line-clamp`, `nowrap`, `overflow:hidden` ou altura fixa por conveniência.
 
-## 6. Conteúdo que nunca pode ser truncado por conveniência
+## 8. Estratégia quando falta espaço
 
-Proibido usar `text-overflow: ellipsis`, `line-clamp`, `nowrap`, `overflow: hidden` ou altura fixa para esconder:
+Preferir, nesta ordem conforme o caso:
 
-- título de tela;
-- nome de aula/plano;
-- nome da turma quando principal;
-- CTA;
-- label de formulário;
-- status operacional;
-- mensagem de erro/sucesso;
-- instrução necessária para concluir tarefa;
-- item principal de navegação;
-- nome de aluno quando a identificação completa for necessária para a ação.
+1. wrap entre palavras;
+2. altura automática;
+3. reduzir gaps/padding moderadamente;
+4. empilhar ações;
+5. reduzir colunas;
+6. mover metadata secundária;
+7. trocar a composição preservando prioridade.
 
-Truncamento só pode existir em metadata secundária quando:
+Evitar fonte minúscula, scroll horizontal, ação escondida e touch target reduzido.
 
-1. não afeta entendimento/ação;
-2. o valor completo está acessível por outro caminho;
-3. existe decisão explícita de design.
-
-## 7. Estratégia de layout quando falta espaço
-
-Quando a largura diminui, preferir nesta ordem:
-
-1. permitir wrap entre palavras;
-2. aumentar altura do container;
-3. reduzir gaps/paddings moderadamente;
-4. empilhar ações horizontais;
-5. mudar grid de 3 colunas para 2 ou 1;
-6. mover metadata secundária para outra linha;
-7. substituir composição, mantendo prioridade visual.
-
-Evitar como primeira solução:
-
-- fonte minúscula;
-- palavra quebrada no meio;
-- esconder ação;
-- scroll horizontal;
-- reduzir touch target;
-- cortar conteúdo.
-
-## 8. CSS adaptativo preferido
+## 9. CSS adaptativo preferido
 
 Preferir:
 
-- `display: flex` e `display: grid`;
+- flex/grid;
 - `minmax()`;
-- `auto-fit` / `auto-fill` quando apropriado;
+- `auto-fit`/`auto-fill` quando útil;
 - `flex-wrap`;
-- `min-width: 0` em filhos flex/grid;
-- `clamp()` para escala moderada;
-- media/container queries para mudança estrutural;
-- `width: 100%` + `max-width` apenas quando houver razão de leitura/composição;
-- altura automática para conteúdo textual;
+- `min-width:0`;
+- `clamp()` moderado;
+- container/media queries para mudança estrutural real;
+- `width:100%` e `max-width` quando fizer sentido;
+- altura automática;
 - `env(safe-area-inset-*)`;
-- `100dvh`/viewport dinâmico quando necessário, sem aprisionar conteúdo em altura fixa.
+- `100dvh` quando necessário.
 
-Evitar:
+Evitar CSS específico por aparelho ou screenshot.
 
-- widths rígidos para composição inteira;
-- heights rígidos em cards com copy;
-- posicionamento absoluto de conteúdo principal;
-- breakpoints baseados em modelo de aparelho;
-- CSS criado apenas para uma screenshot específica.
+## 10. Escala de texto
 
-## 9. Escala de texto e acessibilidade
+Texto ampliado é Gate B/hardening, não microiteração constante.
 
-Toda superfície crítica deve sobreviver a aumento de texto.
+Cobrir no mínimo 100%, 130% e 150% em superfícies críticas; 200% quando viável em fluxos críticos.
 
-Validar no mínimo:
+O objetivo é preservar leitura, hierarquia, ação, touch targets e ausência de overflow horizontal — não manter pixel-perfect.
 
-- `100%`;
-- `115%`;
-- `130%`;
-- `150%`.
+## 11. Conteúdo realista
 
-Nos fluxos críticos de produção, também testar `200%` quando viável.
-
-O objetivo em texto ampliado **não é preservar a screenshot pixel-perfect**. É preservar:
-
-- leitura;
-- hierarquia;
-- ordem lógica;
-- acesso às ações;
-- touch targets;
-- palavras completas;
-- ausência de scroll horizontal acidental.
-
-Se 200% exigir mudança de composição, a composição deve mudar.
-
-## 10. Conteúdo brasileiro real deve ser usado nos testes
-
-Não testar responsividade apenas com frases curtas artificiais.
-
-Fixtures de UI devem incluir exemplos realistas em PT-BR, como:
+Fixtures devem usar PT-BR realista e dados fictícios:
 
 - `Experimento do ciclo da água`;
 - `Língua Portuguesa`;
 - `Registrar observação`;
 - `Planejamento semanal`;
 - `Avaliação diagnóstica de aprendizagem`;
-- nomes completos de pessoas fictícias;
-- turmas e descrições com comprimentos variados.
-
-Também testar números e estados que alteram largura:
-
-- `1 aluno` / `38 alunos`;
-- `1 pendente` / `12 pendentes`;
-- datas longas;
-- códigos BNCC.
+- nomes completos fictícios;
+- quantidades/datas/códigos BNCC variados.
 
 Nunca usar dados reais de professores/alunos em fixtures públicas.
 
-## 11. Densidade e tamanho físico
+## 12. Touch targets e legibilidade
 
-A UI não deve ficar minúscula em tela de alta densidade nem enorme em aparelho menor.
+- touch target crítico >= 48px lógicos;
+- fontes não encolhem apenas para caber;
+- ícones preservam legibilidade;
+- estados não dependem só de cor.
 
-Regras mínimas:
+## 13. Android real
 
-- touch target >= `48px` lógicos;
-- não reduzir fonte de navegação a tamanhos ilegíveis para fazê-la caber;
-- ícones mantêm proporção e legibilidade;
-- espaçamento pode adaptar, mas não colapsar;
-- estados não dependem apenas de cor.
+Validar em marcos importantes:
 
-## 12. Safe areas, barras e teclado
-
-No Android real validar:
-
-- status bar;
-- câmera/recorte quando relevante;
-- navegação por gestos e por botões;
-- barra inferior V2;
+- status/navigation bars;
+- gesture/3-button quando possível;
+- cutout;
 - teclado aberto;
-- scroll até o último campo/CTA;
-- foco de inputs;
-- modais/sheets;
-- conteúdo não escondido por elementos fixos.
+- foco/scroll até último campo/CTA;
+- bottom nav;
+- modal/sheet;
+- rotação/landscape sem quebra catastrófica.
 
-Nenhum CTA crítico pode ficar atrás do teclado ou da área de gesto.
+O POCO X7 Pro é referência disponível; aprovação nele não equivale a aprovação Android geral.
 
-## 13. Orientação
+## 14. Gate A
 
-O produto é **portrait-first** em telefones, mas não deve quebrar catastroficamente em landscape.
+Para direção visual:
 
-Para telas de trabalho mais densas (calendário, planejamento, arquivos), considerar aproveitamento de landscape/tablet quando isso melhorar produtividade.
+- composição convincente em 412/target;
+- nenhuma falha óbvia de adaptação;
+- sem copy essencial cortada;
+- sem largura/altura fixa de aparelho;
+- fluxo principal coerente.
 
-Não criar suporte landscape complexo antes de a experiência portrait estar correta, salvo requisito explícito da tela.
+Não exigir matriz manual completa.
 
-## 14. Real device QA
+## 15. Gate B
 
-O POCO X7 Pro continua como principal dispositivo físico disponível, seguindo `docs/ANDROID_REAL_DEVICE_QA.md`.
+Para produção:
 
-Mas aprovação no POCO **não equivale** a aprovação Android geral.
-
-A sequência correta é:
-
-```text
-Visual Lab rápido
--> matriz lógica multi-device
--> texto ampliado
--> testes automáticos
--> APK/WebView Android real no POCO X7 Pro
--> quando possível, smoke test em pelo menos um Android compacto adicional
-```
-
-Se não houver segundo aparelho físico, usar emulador com perfil compacto para complementar o POCO.
-
-## 15. Gate automático obrigatório
-
-`pnpm run test:v2-responsive` deve evoluir para cobrir, no mínimo:
-
-- larguras da matriz;
-- alturas representativas;
-- ausência de overflow horizontal;
-- elementos essenciais dentro do viewport/scroll normal;
-- copy crítica sem clipping;
-- labels essenciais sem quebra intrapalavra;
+- matriz completa no CI;
+- alturas de stress quando aplicável;
 - texto ampliado;
-- touch targets críticos;
-- screenshots de evidência.
-
-O teste automático **não substitui inspeção visual**. Ele elimina regressões óbvias antes da revisão humana.
-
-## 16. Checklist por tela antes do Gate A
-
-Para `VISUAL DIRECTION APPROVED`:
-
-- a composição funciona no viewport-âncora;
-- não existe quebra intrapalavra evidente;
-- não existe corte de copy essencial;
-- a tela ainda pertence ao mesmo DNA V2;
-- não existe dependência óbvia de um único aparelho.
-
-## 17. Checklist por tela antes do Gate B
-
-Para `PRODUCTION GATE READY`:
-
-- matriz 320–480 executada;
-- 600+ executado quando aplicável;
-- alturas de stress executadas;
-- texto 100/130/150% executado, 200% em fluxos críticos quando viável;
-- sem overflow horizontal acidental;
-- sem word-break inadequado;
-- sem CTA escondido;
+- sem overflow horizontal;
+- sem quebra intrapalavra;
 - safe areas corretas;
 - teclado não bloqueia fluxo;
-- touch targets >= 48px;
-- estados loading/empty/error/offline responsivos;
-- Android real testado ou marcado explicitamente como pendente;
-- screenshots/branch/commit registrados.
+- touch targets adequados;
+- loading/empty/error/offline responsivos;
+- Android real ou pendência explícita;
+- evidências vinculadas ao commit/PR.
 
-## 18. Critério de falha imediata
+## 16. Falha imediata
 
-Uma tela deve voltar para correção se qualquer um ocorrer:
+Voltar para correção se:
 
-- palavra essencial quebrada artificialmente no meio;
-- texto essencial cortado;
-- botão sem label completo;
-- conteúdo inacessível sem scroll horizontal;
-- ação escondida por falta de espaço;
-- layout só funciona em 390px;
-- layout só funciona no POCO X7 Pro;
-- fonte foi reduzida a ponto de prejudicar leitura;
-- texto aumentado torna a tarefa impossível;
-- bottom nav, teclado ou safe area cobre conteúdo essencial.
+- copy essencial corta/quebra;
+- botão perde label;
+- ação fica escondida;
+- layout exige scroll horizontal acidental;
+- funciona apenas em uma largura/aparelho;
+- fonte ficou ilegível;
+- texto ampliado torna a tarefa impossível;
+- barra do sistema/teclado cobre conteúdo essencial.
 
-## 19. Princípio final
+## 17. Princípio final
 
-> **O Assistente Pedagógico não é um mockup de 390px e não é um app para um POCO. É um produto Android para professores brasileiros usando aparelhos diferentes.**
+> **Fidelidade visual no viewport-âncora. Robustez automática na família Android.**
 
-A interface deve preservar intenção, leitura e ação em diferentes tamanhos antes de preservar pixels.
-
-> **Fidelidade visual no target. Robustez em toda a família Android.**
+> **Microiteração barata; CI forte; nenhum layout amarrado a pixels físicos.**
