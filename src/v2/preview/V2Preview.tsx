@@ -236,7 +236,7 @@ export function V2Preview() {
           ) : activeScreen === 'classes' ? (
             <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenClass={() => setActiveScreen('class-workspace')} onOpenStudent={() => setActiveScreen('student-profile')} onNewStudent={() => setActiveScreen('new-student')} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} onAcademic={() => setActiveScreen('academic')} />
           ) : activeScreen === 'profile' ? (
-            <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
+            <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={async () => { if (previewState === 'error') throw new Error('Falha de demonstração.'); }} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
           ) : activeScreen === 'files' ? (
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
