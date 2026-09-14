@@ -7,6 +7,7 @@ import { PlanningDayV2 } from '../screens/PlanningDayV2';
 import { PlanningCalendarV2 } from '../screens/PlanningCalendarV2';
 import { PlanningOverviewV2 } from '../screens/PlanningOverviewV2';
 import { ClassesV2 } from '../screens/ClassesV2';
+import { ClassWorkspaceV2 } from '../screens/ClassWorkspaceV2';
 import { ProfileV2 } from '../screens/ProfileV2';
 import { FilesV2 } from '../screens/FilesV2';
 import { MoreV2 } from '../screens/MoreV2';
@@ -127,6 +128,7 @@ export function V2Preview() {
   const [previewTheme, setPreviewTheme] = useState('claro');
   const [previewAccent, setPreviewAccent] = useState('#168be0');
   const [previewSounds, setPreviewSounds] = useState(true);
+  const [classTab, setClassTab] = useState<'dia' | 'criancas' | 'registros' | 'historico' | 'gestao'>('dia');
   const [planPrefill, setPlanPrefill] = useState<Partial<LessonPlan>>({});
   const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
   const frequencyStateData: FrequencyV2Data = {
@@ -209,8 +211,10 @@ export function V2Preview() {
             <ClassManagerV2 classes={classesPreview} activeClass={classesPreview[0]} onBack={() => setActiveScreen('more')} onAtualizar={() => undefined} onAtivar={async () => undefined} goTo={() => undefined} />
           ) : activeScreen === 'student-profile' ? (
             <StudentProfileV2 student={studentProfilePreview} className="5º Ano A" onBack={() => setActiveScreen('classes')} onEditar={async () => undefined} onExcluir={async () => undefined} loadObservations={async () => [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade e explicou sua estratégia para o grupo.' }]} />
+          ) : activeScreen === 'class-workspace' ? (
+            <ClassWorkspaceV2 turma={classesPreview[0]} alunos={classStudentsPreview} aba={classTab} dataKey="2024-08-28" setDataKey={() => undefined} setAba={setClassTab} onBack={() => setActiveScreen('classes')} goTo={(route) => route === 'chamada' ? setActiveScreen('attendance') : route === 'observacao' ? setActiveScreen('observation') : route === 'academico' ? setActiveScreen('academic') : route === 'relatorios' ? setActiveScreen('reports') : route === 'perfil' ? setActiveScreen('student-profile') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} />
           ) : activeScreen === 'classes' ? (
-            <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenStudent={() => setActiveScreen('student-profile')} onNewStudent={() => setActiveScreen('new-student')} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} onAcademic={() => setActiveScreen('academic')} />
+            <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenClass={() => setActiveScreen('class-workspace')} onOpenStudent={() => setActiveScreen('student-profile')} onNewStudent={() => setActiveScreen('new-student')} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} onAcademic={() => setActiveScreen('academic')} />
           ) : activeScreen === 'profile' ? (
             <ProfileV2 perfil={profilePreview} onBack={() => setActiveScreen('home')} onSalvar={() => undefined} onConcluido={() => undefined} onTabChange={(tab) => tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'inicio' ? setActiveScreen('home') : undefined} />
           ) : activeScreen === 'files' ? (

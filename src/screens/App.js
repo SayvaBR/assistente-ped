@@ -10,7 +10,6 @@ import { BnccInfantilScreen } from "../screens/BnccInfantilScreen.js";
 import { BnccScreen } from "../screens/BnccCatalogScreen.tsx";
 import { Bo } from "../core/recovered.js";
 import { BottomNavigation } from "../screens/BottomNavigation.js";
-import { ClassScreen } from "../screens/ClassScreen.js";
 import { ClassesScreen } from "../screens/ClassManager";
 import { ConfirmationDialog } from "../core/recovered.js";
 import { Cu } from "../core/recovered.js";
@@ -89,6 +88,7 @@ import { ClassesV2 } from "../v2/screens/ClassesV2";
 import { ProfileV2 } from "../v2/screens/ProfileV2";
 import { FilesV2 } from "../v2/screens/FilesV2";
 import { MoreV2 } from "../v2/screens/MoreV2";
+import { ClassWorkspaceV2 } from "../v2/screens/ClassWorkspaceV2";
 import { BnccV2 } from "../v2/screens/BnccV2";
 import { ReportsV2 } from "../v2/screens/ReportsV2";
 import { SettingsV2 } from "../v2/screens/SettingsV2";
@@ -934,6 +934,7 @@ function App() {
     students: Ka,
     onBack: () => kn("inicio"),
     onActivate: (item) => { void dr(item); },
+    onOpenClass: () => kn("turma"),
     onOpenStudent: (student) => zt("perfil", student),
     onNewStudent: () => zt("novo-aluno"),
     onAttendance: () => zt("chamada"),
@@ -1501,28 +1502,19 @@ function App() {
                                                                             "turma"
                                                                           ? (ht =
                                                                               React.createElement(
-                                                                                ClassScreen,
+                                                                                ClassWorkspaceV2,
                                                                                 {
                                                                                   goTo: zt,
-                                                                                  alunos:
-                                                                                    Za,
-                                                                                  carregando:
-                                                                                    mt,
-                                                                                  turma:
-                                                                                    M,
-                                                                                  onRenomear:
-                                                                                    bi,
-                                                                                  onExcluir:
-                                                                                    Wn,
+                                                                                  alunos: Za,
+                                                                                  carregando: mt,
+                                                                                  turma: M,
+                                                                                  onRenomear: bi,
                                                                                   aba: oa,
-                                                                                  setAba:
-                                                                                    $n,
-                                                                                  dataKey:
-                                                                                    yn,
-                                                                                  setDataKey:
-                                                                                    vi,
-                                                                                  pulso:
-                                                                                    en,
+                                                                                  setAba: $n,
+                                                                                  dataKey: yn,
+                                                                                  setDataKey: vi,
+                                                                                  onBack: _t,
+                                                                                  onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
                                                                                 },
                                                                               ))
                                                                           : f ===
