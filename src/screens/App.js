@@ -426,7 +426,11 @@ function App() {
       );
     },
     Qa = async (ae) => {
-      const qe = await repository.removerPlano(ae);
+      const qe = await repository.salvarPlano({
+        ...ae,
+        arquivadoEm: nowISO(),
+        atualizadoEm: nowISO(),
+      });
       ae.dataKey === dateKey(new Date()) && Ue(qe);
     },
     Ya = async (ae = repository.turmaAtivaId) => {

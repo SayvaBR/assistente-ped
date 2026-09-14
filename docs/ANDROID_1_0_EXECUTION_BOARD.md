@@ -70,7 +70,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - BNCC — `IN PROGRESS`
 - Criar atividade — `TODO`
 - Autosave — `FUNCTIONAL HARDENING` (rascunho local por turma/data, recuperação após saída/reabertura e limpeza após salvamento oficial)
-- Status rascunho/pronto/concluído/arquivado — `IN PROGRESS` (rascunho, pronto, concluído e arquivado via `arquivadoEm`; falta validar o ciclo completo em todos os pontos de entrada)
+- Status rascunho/pronto/concluído/arquivado — `IN PROGRESS` (rascunho, pronto, concluído e arquivado via `arquivadoEm`; o editor agora arquiva sem apagar o registro, falta validar restauração/descoberta do arquivado em todos os pontos de entrada)
 - Integração Home/calendário — `TODO`
 
 ## Milestone M3 — Turmas e alunos
@@ -202,7 +202,7 @@ Atualizar a cada rodada significativa:
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: conectar seleção BNCC real ao editor preservando código + descrição; depois fechar o ciclo de atividade e repetir sync/APK/QA Android desta rodada
+- Próxima ação: fechar o ciclo de atividade e integrar uma entrada recuperável para itens arquivados; depois repetir QA de lifecycle e continuar a fila de superfícies
 
 ### BNCC — evidência e contratos
 
