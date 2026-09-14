@@ -35,7 +35,7 @@ async function isReady() {
     const response = await fetch(baseUrl, { signal: AbortSignal.timeout(750) });
     if (!response.ok) return false;
     const body = await response.text();
-    if (!body.includes('/@vite/client') || !body.includes('/src/main.tsx') || !body.includes('<title>Assistente Pedagógico</title>')) return false;
+    if (!body.includes('/@vite/client') || !body.includes('/src/main.tsx') || !body.includes('assistente-pedagogico-dev-surface')) return false;
     const previewModule = await fetch(`${baseUrl}/src/v2/preview/V2Preview.tsx`, { signal: AbortSignal.timeout(750) });
     return previewModule.ok && (await previewModule.text()).includes('export function V2Preview');
   } catch {
@@ -62,7 +62,8 @@ const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String
   env: process.env,
 });
 
-let readyPrinted = false;
+  let readyPrinted = false;
+  let startupTimedOut = false;
 const startedAt = Date.now();
 const poll = setInterval(async () => {
   if (readyPrinted) return;
@@ -73,6 +74,7 @@ const poll = setInterval(async () => {
   } else if (Date.now() - startedAt > 15000) {
     clearInterval(poll);
     console.error('[live-design] Vite não ficou pronto em 15s. Verifique a saída acima.');
+    startupTimedOut = true;
     stop('SIGTERM');
     process.exitCode = 1;
   }
@@ -88,7 +90,7 @@ process.on('SIGTERM', () => stop('SIGTERM'));
 
 child.on('exit', (code, signal) => {
   clearInterval(poll);
-  if (signal) process.exit(0);
+    if (signal) process.exit(startupTimedOut ? 1 : 0);
   process.exit(code ?? 1);
 });
 }
