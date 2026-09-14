@@ -75,11 +75,18 @@ padding-bottom: max(var(--space), env(safe-area-inset-bottom, 0px));
 
 Quando o WebView não expuser um inset Android necessário com fidelidade, a camada nativa deve publicar o WindowInset real para CSS/JS. Não hardcodear a altura da status/navigation bar.
 
-### Gap atual a auditar
+`WindowInsetsCompat` entrega dimensões em pixels físicos. A ponte Android deve
+convertê-las pela densidade da tela antes de publicar os valores como `px` CSS;
+publicar o valor físico diretamente inflaria o safe area em aparelhos de alta
+densidade.
 
-`src/v2/styles/foundation.css` hoje declara `--android-safe-bottom` e afirma que `MainActivity` publica esse valor, mas `MainActivity.java` atualmente apenas estende `BridgeActivity` e não implementa essa publicação.
+### Bridge implementada
 
-Isso deve ser tratado como gap técnico real: ou provar por teste que `env(safe-area-inset-*)` cobre os casos Android suportados, ou implementar um bridge confiável de WindowInsets e testá-lo no Android real.
+`MainActivity` instala um listener de `WindowInsetsCompat` no decor view,
+considera barras de sistema e display cutout, converte pixels físicos pela
+densidade para CSS logical px e publica `--android-safe-top/right/bottom/left`
+no documento do WebView. O preview web continua usando os valores zero de
+fallback; o APK QA é o gate para validar os valores nativos em dispositivo.
 
 ## Cadência de desenvolvimento
 
