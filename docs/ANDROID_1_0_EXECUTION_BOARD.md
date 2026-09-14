@@ -38,7 +38,8 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
    - Delivery Unit concluída: `Planejamento semanal V2 — hardening funcional/responsivo`; PR `#20` integrado em `integration/android-1.0`.
    - Delivery Unit concluída: `Planejamento mensal V2 — hardening funcional`; PR `#31` integrado em `integration/android-1.0`.
 5. Turmas — `IN PROGRESS`
-6. Perfil do professor — `IN PROGRESS`
+6. Perfil do professor — `FUNCTIONAL HARDENING`
+   - Delivery Unit concluída: `Perfil profissional V2 — hardening de salvar/recuperar dados textuais`; PR `#35` integrado em `integration/android-1.0`.
 7. Arquivos — `IN PROGRESS`
 8. Mais — `IN PROGRESS`
 9. BNCC — `IN PROGRESS`
@@ -115,7 +116,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 ## Milestone M6 — Mais, configurações e lifecycle
 
-- Perfil profissional — `TODO`
+- Perfil profissional — `FUNCTIONAL HARDENING` (PR #35 cobre normalização, recuperação do draft após erro, sincronização segura do perfil recebido e feedback acessível; foto/câmera permanece fora do escopo)
 - Gerenciar turmas — `IN PROGRESS`
 - Ferramentas de sala — `IN PROGRESS`
 - Notificações — `IN PROGRESS`
@@ -196,18 +197,18 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do Histórico da turma/Frequência
-- Base: `origin/integration/android-1.0` em `0027b25`; worker `codex/class-history-frequency-hardening`
-- Tela/fluxo: o Histórico agrega chamadas salvas por data em modo read-only, ordena newest-first, preserva o limite de seis eventos, conta os cinco status existentes e abre Frequência com a data selecionada. Preview determinístico cobre duas datas e a jornada E2E confirma troca de `dataKey` para 27/08.
-- Evidência visual: Live Design ativo em `class-workspace` a 412 CSS px na URL local `http://127.0.0.1:5173/?v2-preview=class-workspace&width=412`; captura inicial, rolagem até `CHAMADAS RECENTES`/`MEMÓRIA RECENTE` e captura final na mesma aba. DOM/AX confirmou duas datas e conteúdo inferior; console sem warnings/errors; `live_visual_director` PASS, sem correção visual necessária.
+- Data/hora: 14/09/2026 — checkpoint do Perfil profissional V2
+- Base: `origin/integration/android-1.0` em `02e9359`; worker `codex/profile-save-hardening`
+- Tela/fluxo: o Perfil normaliza nome/escola/cidade/UF ao salvar, sincroniza o draft quando o perfil recebido muda, preserva os valores digitados em falha de persistência e expõe feedback de erro/sucesso acessível. O preview de erro é determinístico somente para E2E; foto/câmera não foram alterados.
+- Evidência visual: Live Design ativo em `profile` a 412 CSS px na URL local `http://127.0.0.1:5173/?v2-preview=profile&width=412`; candidato inicial, observação após HMR/correção e captura final na mesma aba. DOM/computed confirmou Docente bottom `604.17px`, bottom navigation top `644px`, clearance `39.83px`, botão Salvar acessível no fim do scroll e console sem warnings/errors; `live_visual_director` PASS após reavaliação.
 - Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, billing, auth, migração de storage e telas de produto.
 - Evidência: screenshot formal em 412 CSS px, DOM/AX com `Atividades preparadas`, CTA e planos mensais; E2E mensal e checkpoint responsivo em 360/412/480px.
-- Testes executados: E2E do workspace `2/2`, checkpoint responsivo `360/412/480px` `3/3`, `pnpm test` `62/62`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34840966825` verde, incluindo Gate responsivo completo e Build Android QA APK.
-- Revisão: Cicero PASS no SHA `d3ce01a`, após correção do finding P2 que exigiu clicar em data não padrão e validar data/status; Banach PASS visual, sem blocker.
-- Commit/PR: `d3ce01a` (`test: prove attendance history date navigation`), PR [#33](https://github.com/SayvaBR/assistente-ped/pull/33) integrado em `0027b25`.
+- Testes executados: E2E do Perfil `6/6`, checkpoint responsivo `360/412/480px` `3/3`, `pnpm test` `63/63`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34842913960` verde, incluindo Gate responsivo completo e Build Android QA APK.
+- Revisão: Cicero PASS no SHA `7ba577c`; Banach PASS visual após confirmação independente do clearance de `39.83px`, sem blocker.
+- Commit/PR: `7ba577c` (`P1: harden professional profile save flow`), PR [#35](https://github.com/SayvaBR/assistente-ped/pull/35) integrado em `02e9359`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `FUNCTIONAL HARDENING`; o Histórico/Frequência foi integrado, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
+- Resultado: `FUNCTIONAL HARDENING`; o Perfil profissional V2 foi integrado, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
 - Próxima ação: sincronizar a integration, conferir issues/PRs ativos e escolher a próxima DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
 
 ### BNCC — evidência e contratos
