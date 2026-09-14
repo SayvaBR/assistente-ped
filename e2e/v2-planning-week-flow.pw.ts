@@ -20,16 +20,59 @@ test('Planejamento semanal V2 mantém preparo, planos e estados úteis', async (
   await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
 });
 
-test('Planejamento mensal V2 preserva a composição base fora do hardening semanal', async ({ page }) => {
+test('Planejamento mensal V2 mantém seleção, planos sem momento e filtros', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 980 });
   await page.goto('/?v2-preview=planning-month&width=412');
   const device = page.locator('.v2-preview-device');
 
   await expect(device.locator('.v2-planning-calendar[data-mode="month"] .v2-planning-calendar__month')).toBeVisible();
-  await expect(device.locator('.v2-planning-calendar[data-mode="month"] .v2-planning-calendar__plan time')).toHaveText(['10:00', '13:00']);
+  await expect(device.locator('.v2-planning-calendar[data-mode="month"] .v2-planning-calendar__plan time')).toHaveText(['10:00', '13:00', '—']);
+  await expect(device.getByRole('button', { name: /Leitura silenciosa/ })).toBeVisible();
+  await expect(device.getByText('4 itens', { exact: true })).toBeVisible();
   await expect(device.getByText('Sem horário', { exact: true })).toHaveCount(0);
-  await expect(device.getByText('Leitura silenciosa', { exact: true })).toHaveCount(0);
+  await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
+
+  await device.getByRole('button', { name: /terça-feira, 27 de agosto/ }).click();
+  await expect(device.getByRole('heading', { name: 'terça-feira, 27 de agosto' })).toBeVisible();
+  await expect(device.getByText('Dia livre para planejar', { exact: true })).toBeVisible();
+
+  await device.getByRole('button', { name: /quarta-feira, 28 de agosto/ }).click();
+  await expect(device.getByRole('heading', { name: 'quarta-feira, 28 de agosto' })).toBeVisible();
+
+  await device.getByRole('button', { name: 'Mês anterior' }).click();
+  await expect(device.getByRole('heading', { name: 'julho de 2024' })).toBeVisible();
+  await expect(device.getByRole('heading', { name: 'domingo, 28 de julho' })).toBeVisible();
+  await expect(device.getByText('Dia livre para planejar', { exact: true })).toBeVisible();
+
+  await device.getByRole('button', { name: 'Próximo mês' }).click();
+  await device.getByRole('button', { name: /sábado, 31 de agosto/ }).click();
+  await device.getByRole('button', { name: 'Próximo mês' }).click();
+  await expect(device.getByRole('heading', { name: 'setembro de 2024' })).toBeVisible();
+  await expect(device.getByRole('heading', { name: 'segunda-feira, 30 de setembro' })).toBeVisible();
 });
+
+for (const width of [360, 412, 480] as const) {
+  test(`Planejamento mensal V2 mantém composição adaptativa em ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`/?v2-preview=planning-month&width=${width}`);
+    const device = page.locator('.v2-preview-device');
+    const result = await device.evaluate((root) => {
+      const rootRect = root.getBoundingClientRect();
+      const elements = Array.from(root.querySelectorAll<HTMLElement>('h1,h2,p,button,strong,small'));
+      return {
+        overflow: root.scrollWidth > root.clientWidth + 1,
+        missing: ['agosto de 2024', 'Atividades preparadas', 'Criar plano neste dia'].filter((copy) => !(root.textContent || '').includes(copy)),
+        outside: elements.filter((element) => {
+          const rect = element.getBoundingClientRect();
+          return rect.right > rootRect.right + 1 || rect.left < rootRect.left - 1;
+        }).map((element) => element.textContent?.trim()).filter(Boolean).slice(0, 3),
+      };
+    });
+    expect(result.overflow, `overflow em ${width}px`).toBe(false);
+    expect(result.missing, `copy ausente em ${width}px`).toEqual([]);
+    expect(result.outside, `conteúdo fora do dispositivo em ${width}px`).toEqual([]);
+  });
+}
 
 test('Planejamento semanal V2 preserva copy e layout em texto ampliado', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 1200 });

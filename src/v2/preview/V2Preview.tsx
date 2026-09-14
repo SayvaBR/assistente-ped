@@ -109,6 +109,10 @@ const planningPreviewPlans: LessonPlan[] = [
   { id: 'plan-science', turmaId: 'preview', dataKey: '2024-08-28', tituloTema: 'Experimento do ciclo da água', horaInicio: '13:00', horaFim: '13:50', status: 'rascunho', objetivoGeral: 'Observar mudanças de estado.', objetivosEspecificos: [], bncc: { habilidades: [] }, momentos: [{ id: 'moment-science', titulo: 'Ciências', horario: '13:00', duracaoMin: 50, descricao: '5º Ano A · Sala 1', tipo: 'aula' }], recursos: '', avaliacao: '', inclusao: '', observacoes: '', posAula: { comoFoi: null, observacoesPosAula: '' }, criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' },
 ];
 planningPreviewPlans.push({ ...planningPreviewPlans[1], id: 'plan-archived', tituloTema: 'Plano arquivado', arquivadoEm: '2024-08-27T10:00:00.000Z' });
+const planningMonthPreviewPlans: LessonPlan[] = [
+  ...planningPreviewPlans,
+  { ...planningPreviewPlans[1], id: 'plan-untimed-month', tituloTema: 'Leitura silenciosa', horaInicio: '', horaFim: '', momentos: [] },
+];
 const planningWeekPreviewPlans: LessonPlan[] = [
   ...planningPreviewPlans,
   { ...planningPreviewPlans[0], id: 'plan-untimed-week', tituloTema: 'Leitura silenciosa', horaInicio: '', horaFim: '', momentos: [{ ...planningPreviewPlans[0].momentos[0], id: 'moment-untimed-week', titulo: 'Leitura silenciosa', horario: '', descricao: 'Leitura individual · Biblioteca' }] },
@@ -136,6 +140,7 @@ export function V2Preview() {
   const [previewTheme, setPreviewTheme] = useState('claro');
   const [previewAccent, setPreviewAccent] = useState('#168be0');
   const [previewSounds, setPreviewSounds] = useState(true);
+  const [planningPreviewDateKey, setPlanningPreviewDateKey] = useState('2024-08-28');
   const [classTab, setClassTab] = useState<'dia' | 'criancas' | 'registros' | 'historico' | 'gestao'>('dia');
   const [planPrefill, setPlanPrefill] = useState<Partial<LessonPlan>>({});
   const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
@@ -214,7 +219,7 @@ export function V2Preview() {
           ) : activeScreen === 'planning-day' ? (
             <PlanningDayV2 plans={planningDayPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
-            <PlanningCalendarV2 plans={activeScreen === 'planning-week' ? planningWeekPreviewPlans : planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} />
+            <PlanningCalendarV2 plans={activeScreen === 'planning-week' ? planningWeekPreviewPlans : planningMonthPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey={planningPreviewDateKey} mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={setPlanningPreviewDateKey} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'class-manager' ? (
             <ClassManagerV2 classes={classesPreview} activeClass={classesPreview[0]} onBack={() => setActiveScreen('more')} onAtualizar={() => undefined} onAtivar={async () => undefined} goTo={() => undefined} />
           ) : activeScreen === 'student-profile' ? (
