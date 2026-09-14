@@ -35,5 +35,14 @@ for (const { preview, marker } of surfaces) {
     expect(after, `conteúdo inferior de ${preview} não foi encontrado`).not.toBeNull();
     expect(after?.top, `conteúdo inferior de ${preview} não ficou visível`).toBeGreaterThanOrEqual(0);
     expect(after?.bottom, `conteúdo inferior de ${preview} saiu do viewport`).toBeLessThanOrEqual(720);
+
+    if (preview === 'planning-day') {
+      const clearance = await page.evaluate(() => {
+        const card = document.querySelector('.v2-planning-day__activity');
+        const bottomNav = document.querySelector('.v2-planning-day__bottom-nav');
+        return { cardBottom: card?.getBoundingClientRect().bottom, navTop: bottomNav?.getBoundingClientRect().top };
+      });
+      expect(clearance.cardBottom, 'card inferior não foi medido').toBeLessThanOrEqual(clearance.navTop ?? 0);
+    }
   });
 }
