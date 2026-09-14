@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+const planningViewports = [320, 360, 390, 412, 432, 480, 600] as const;
+
 test('Planejamento diário V2 exibe os momentos e a ação de adicionar', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 980 });
   await page.goto('/?v2-preview=planning-day&width=412');
@@ -31,6 +33,30 @@ test('Planejamento V2 navega entre Dia, Semana e Mês', async ({ page }) => {
   await device.getByRole('tab', { name: 'Dia' }).click();
   await expect(device.getByRole('heading', { name: 'Planejamento diário' })).toBeVisible();
 });
+
+for (const width of planningViewports) {
+  test(`Planejamento diário V2 mantém composição adaptativa em ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: width >= 600 ? 960 : 900 });
+    await page.goto(`/?v2-preview=planning-day&width=${width}`);
+    const device = page.locator('.v2-preview-device');
+    const result = await device.evaluate((root) => {
+      const rootRect = root.getBoundingClientRect();
+      const critical = ['Planejamento diário', 'Adicionar momento', 'Atividades para levar'];
+      const elements = Array.from(root.querySelectorAll<HTMLElement>('h1,h2,p,button,strong,small'));
+      return {
+        overflow: root.scrollWidth > root.clientWidth + 1,
+        missing: critical.filter((copy) => !(root.textContent || '').includes(copy)),
+        outside: elements.filter((element) => {
+          const rect = element.getBoundingClientRect();
+          return rect.right > rootRect.right + 1 || rect.left < rootRect.left - 1;
+        }).map((element) => element.textContent?.trim()).filter(Boolean).slice(0, 3),
+      };
+    });
+    expect(result.overflow, `overflow em ${width}px`).toBe(false);
+    expect(result.missing, `copy ausente em ${width}px`).toEqual([]);
+    expect(result.outside, `conteúdo fora do dispositivo em ${width}px`).toEqual([]);
+  });
+}
 
 async function deviceText(page: Page) {
   return page.locator('.v2-preview-device').evaluate((root: HTMLElement) => ({
