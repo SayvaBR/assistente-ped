@@ -433,6 +433,15 @@ function App() {
       });
       ae.dataKey === dateKey(new Date()) && Ue(qe);
     },
+    restorePlanV2 = async (ae) => {
+      const qe = await repository.salvarPlano({
+        ...ae,
+        arquivadoEm: null,
+        atualizadoEm: nowISO(),
+      });
+      ae.dataKey === dateKey(new Date()) && Ue(qe);
+      setPlanningV2Reload((value) => value + 1);
+    },
     Ya = async (ae = repository.turmaAtivaId) => {
       if (ae)
         try {
@@ -888,6 +897,7 @@ function App() {
     onBack: () => kn("inicio"),
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onRestorePlan: (plan) => { void restorePlanV2(plan); },
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onViewChange: (view) => zt(view === "day" ? "planejamento-dia" : view === "week" ? "planejamento-semana" : "planejamento-mes", { dataKey: planningV2Date }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),

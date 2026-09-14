@@ -6,6 +6,8 @@ test('Planejamento overview V2 mantém a próxima aula dominante e abre o plano'
   const device = page.locator('.v2-preview-device');
   await expect(device.getByRole('heading', { name: 'Planejamento' })).toBeVisible();
   await expect(device.getByRole('heading', { name: 'Frações: conceitos e prática' })).toBeVisible();
+  await expect(device.getByRole('heading', { name: 'Planos arquivados', exact: true })).toBeVisible();
+  await expect(device.getByRole('button', { name: 'Restaurar', exact: true })).toBeVisible();
   await device.getByRole('button', { name: 'Abrir plano' }).click();
   await expect(device.getByRole('heading', { name: 'Editar plano' })).toBeVisible();
 });
