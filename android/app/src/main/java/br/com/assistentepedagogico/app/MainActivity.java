@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.getcapacitor.BridgeActivity;
+import com.getcapacitor.WebViewListener;
 
 public class MainActivity extends BridgeActivity {
 
@@ -29,6 +30,13 @@ public class MainActivity extends BridgeActivity {
     }
 
     private void installWindowInsetsBridge() {
+        getBridge().addWebViewListener(new WebViewListener() {
+            @Override
+            public void onPageLoaded(WebView webView) {
+                publishWindowInsets(lastSystemInsets);
+            }
+        });
+
         View decorView = getWindow().getDecorView();
         ViewCompat.setOnApplyWindowInsetsListener(decorView, (view, windowInsets) -> {
             lastSystemInsets = windowInsets.getInsets(
