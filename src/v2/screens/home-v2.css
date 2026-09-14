@@ -557,6 +557,16 @@
   .v2-home__screen { padding-inline: 24px; }
 }
 
+@media (max-height: 760px) and (min-width: 360px) {
+  .v2-home__screen { padding-top: 14px; }
+  .v2-home__header { margin-bottom: 12px; }
+  .v2-home__context { margin-bottom: 8px; }
+  .v2-home__hero { padding: 12px 16px; }
+  .v2-home__hero-heading { margin-top: 8px; }
+  .v2-home__hero-meta { margin-top: 8px; }
+  .v2-home__hero-actions { margin-top: 8px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .v2-home__hero-action,
   .v2-home__command,

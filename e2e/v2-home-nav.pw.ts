@@ -54,3 +54,25 @@ for (const width of [360, 390, 412] as const) {
     }
   });
 }
+
+test('Home V2 keeps hero CTAs above the fixed nav at short 412px height', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 720 });
+  await page.goto('/?v2-preview=home&width=412');
+
+  const device = page.locator('.v2-preview-device');
+  await expect(device).toBeVisible();
+
+  const geometry = await device.evaluate(() => {
+    const nav = document.querySelector<HTMLElement>('.v2-home__bottom-nav');
+    const actions = document.querySelector<HTMLElement>('.v2-home__hero-actions');
+    if (!nav || !actions) throw new Error('Home hero/nav geometry is unavailable');
+    return {
+      navTop: nav.getBoundingClientRect().top,
+      actionsBottom: actions.getBoundingClientRect().bottom,
+      actionHeight: actions.querySelector<HTMLElement>('button')?.getBoundingClientRect().height ?? 0,
+    };
+  });
+
+  expect(geometry.actionHeight).toBeGreaterThanOrEqual(48);
+  expect(geometry.actionsBottom).toBeLessThanOrEqual(geometry.navTop - 8);
+});
