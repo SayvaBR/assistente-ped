@@ -72,6 +72,61 @@ test('Onboarding Entry mantém CTA e rodapé acima do safe area inferior em runt
   expect(metrics.footerClearance, 'rodapé ficou sob a área reservada inferior').toBeGreaterThanOrEqual(metrics.computedSafeBottom);
 });
 
+test('Onboarding Discovery aplica WindowInsets no scroll após avançar uma etapa', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 720 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+
+  await expect(page.getByRole('button', { name: 'Preparar meu assistente' })).toBeVisible();
+  await page.getByRole('button', { name: 'Preparar meu assistente' }).click();
+
+  const scroll = page.locator('.v2-first-run-scroll');
+  await expect(scroll).toBeAttached();
+  await expect(page.getByRole('heading', { name: /Vamos preparar o seu espaço juntos/ })).toBeVisible();
+  await page.getByRole('button', { name: 'Vamos conversar' }).click();
+  await expect(page.getByRole('heading', { name: /Como está a sua rotina hoje/ })).toBeVisible();
+
+  const metrics = await scroll.evaluate((wrapper) => {
+    const safeBottom = 48;
+    document.documentElement.style.setProperty('--android-safe-bottom', `${safeBottom}px`);
+
+    const screen = wrapper.querySelector<HTMLElement>('.v2-discovery__screen');
+    const cta = wrapper.querySelector<HTMLElement>('.v2-discovery__continue');
+    const footer = wrapper.querySelector<HTMLElement>('.v2-discovery__footer');
+    if (!screen || !cta || !footer) throw new Error('Onboarding Discovery runtime elements missing');
+
+    const computedAndroidSafeBottom = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--android-safe-bottom'));
+    const safeToken = getComputedStyle(document.documentElement).getPropertyValue('--v2-safe-bottom').trim();
+    const wrapperPaddingBottom = Number.parseFloat(getComputedStyle(wrapper).paddingBottom);
+    const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
+    wrapper.scrollTop = wrapper.scrollHeight;
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const screenRect = screen.getBoundingClientRect();
+    const ctaRect = cta.getBoundingClientRect();
+    const footerRect = footer.getBoundingClientRect();
+    return {
+      computedAndroidSafeBottom,
+      safeToken,
+      wrapperPaddingBottom,
+      overflowY: getComputedStyle(wrapper).overflowY,
+      maxScroll,
+      scrollTop: wrapper.scrollTop,
+      ctaClearance: wrapperRect.bottom - ctaRect.bottom,
+      footerClearance: wrapperRect.bottom - footerRect.bottom,
+    };
+  });
+
+  expect(metrics.computedAndroidSafeBottom).toBe(48);
+  expect(metrics.safeToken).toContain('48px');
+  expect(metrics.wrapperPaddingBottom).toBeGreaterThanOrEqual(48);
+  expect(metrics.overflowY).toBe('auto');
+  expect(metrics.maxScroll, 'onboarding discovery perdeu rolagem vertical').toBeGreaterThan(0);
+  expect(metrics.scrollTop, 'onboarding discovery não rolou até o conteúdo inferior').toBeGreaterThan(0);
+  expect(metrics.ctaClearance, 'CTA da discovery ficou sob a área reservada inferior').toBeGreaterThanOrEqual(48);
+  expect(metrics.footerClearance, 'rodapé da discovery ficou sob a área reservada inferior').toBeGreaterThanOrEqual(48);
+});
+
 test('Onboarding Entry mantém estado de erro recuperável, foco e reduced motion', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 720 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
