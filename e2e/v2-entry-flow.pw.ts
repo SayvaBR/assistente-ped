@@ -24,6 +24,9 @@ test('Splash V2 não cria overflow em compacto e suporta reduced motion', async 
     overflow: root.scrollWidth > root.clientWidth + 1,
     hasBrand: root.textContent?.includes('Assistente Pedagógico'),
     hasLoading: Boolean(root.querySelector('[role="progressbar"]')),
+    loadingAnimation: root.querySelector('.v2-splash__loading span')
+      ? getComputedStyle(root.querySelector('.v2-splash__loading span')!).animationName
+      : null,
   }));
-  expect(result).toEqual({ overflow: false, hasBrand: true, hasLoading: true });
+  expect(result).toEqual({ overflow: false, hasBrand: true, hasLoading: true, loadingAnimation: 'none' });
 });
