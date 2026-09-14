@@ -43,12 +43,14 @@ android {
         }
     }
     buildTypes {
-        // Variante instalada ao lado da produção para testes destrutivos com
-        // armazenamento isolado. Nunca é publicada na Google Play.
+        // Variante V2 Clean Room instalada ao lado de qualquer QA legado.
+        // Usa package próprio para evitar conflito de assinatura com builds QA antigos
+        // e preservar os dados locais já existentes no aparelho. Nunca é publicada
+        // na Google Play e não substitui o teste real de billing no package canônico.
         qa {
             initWith debug
-            applicationIdSuffix ".qa"
-            versionNameSuffix "-qa"
+            applicationIdSuffix ".v2qa"
+            versionNameSuffix "-v2qa"
             debuggable true
             matchingFallbacks = ['debug']
         }
