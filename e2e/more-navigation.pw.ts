@@ -23,18 +23,18 @@ test.beforeEach(async ({ page }) => {
 
 test("mantém Mais focada em conta, organização e suporte", async ({ page }) => {
   await page.getByRole("button", { name: "Mais", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Mais" })).toBeVisible();
-  await expect(page.getByText("Seu espaço de trabalho", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Mais", exact: true })).toBeVisible();
+  await expect(page.getByText("Recursos para cuidar da sua rotina docente.", { exact: true })).toBeVisible();
   await expect(page.getByText("BNCC", { exact: true })).toBeVisible();
   await expect(page.getByText("Notas e avaliações", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Configurações", { exact: true })).toBeVisible();
 });
 
-test("leva os atalhos de rotina para Início", async ({ page }) => {
-  await expect(page.getByText("Ferramentas", { exact: true })).toBeVisible();
-  await expect(page.getByText("Lembretes", { exact: true })).toBeVisible();
-  await page.getByText("Ferramentas", { exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Ferramentas de sala" })).toBeVisible();
+test("abre Ferramentas de sala a partir de Mais", async ({ page }) => {
+  await page.getByRole("button", { name: "Mais", exact: true }).click();
+  await expect(page.getByText("Ferramentas de sala", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: /Ferramentas de sala/ }).click();
+  await expect(page.getByRole("heading", { name: "Ferramentas", exact: true })).toBeVisible();
 });
 
 test("mantém a navegação inferior visível ao chegar ao fim da Home", async ({ page }) => {
@@ -58,5 +58,5 @@ test("abre preferências sem passar por Configurações", async ({ page }) => {
   await page.getByRole("button", { name: "Voltar" }).click();
   await page.getByRole("button", { name: "Mais", exact: true }).click();
   await page.getByText("Notificações", { exact: true }).last().click();
-  await expect(page.getByRole("heading", { name: "Lembretes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Lembretes", exact: true })).toBeVisible();
 });

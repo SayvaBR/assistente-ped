@@ -789,6 +789,25 @@ function App() {
     }
   };
   const loadStudentObservationsV2 = async (studentId) => repository.carregarObservacoes(studentId);
+  const loadStudentPhotosV2 = async (studentId) => repository.carregarGaleria(studentId);
+  const addStudentPhotoV2 = async (studentId, dataUrl, fileName) => {
+    const saved = await saveMedia({ dataUrl, tipo: "foto", proprietarioId: studentId, id: createId("foto"), nomeOriginal: fileName });
+    try {
+      const current = await repository.carregarGaleria(studentId);
+      const item = { id: saved.id, arquivo: saved, data: new Date().toLocaleDateString("pt-BR") };
+      await repository.salvarGaleria(studentId, [item, ...(Array.isArray(current) ? current : [])]);
+      return item;
+    } catch (error) {
+      await deleteMedia(saved).catch(() => {});
+      throw error;
+    }
+  };
+  const deleteStudentPhotoV2 = async (studentId, item) => {
+    const file = item?.arquivo && typeof item.arquivo === "object" ? item.arquivo : item;
+    if (file?.path) await deleteMedia(file);
+    const current = await repository.carregarGaleria(studentId);
+    await repository.salvarGaleria(studentId, (Array.isArray(current) ? current : []).filter((entry) => entry !== item && entry?.id !== item?.id));
+  };
   const observationV2 = (props = {}) => React.createElement(ObservationV2, {
     students: Ka.map((student) => ({ id: student.id, name: student.nome, color: student.cor })),
     className: M?.nome || "Sua turma",
@@ -1048,6 +1067,9 @@ function App() {
                       student: Re.data,
                       className: M?.nome,
                       loadObservations: loadStudentObservationsV2,
+                      loadPhotos: loadStudentPhotosV2,
+                      onAddPhoto: addStudentPhotoV2,
+                      onDeletePhoto: deleteStudentPhotoV2,
                       crianca: Re.data,
                       onBack: _t,
                       goTo: zt,

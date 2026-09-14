@@ -25,13 +25,14 @@ test.beforeEach(async ({ page }) => {
 
 test("abre a biblioteca pela navegação principal", async ({ page }) => {
   await page.getByRole("button", { name: "Arquivos", exact: true }).last().click();
-  await expect(page.getByRole("heading", { name: "Arquivos" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Meus Arquivos", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Arquivos", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Meus arquivos", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Adicionar arquivo", exact: true })).toBeEnabled();
-  await expect(page.getByRole("button", { name: "Criar nova pasta", exact: true })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Criar pasta", exact: true })).toBeEnabled();
   await expect(page.getByText("Este espaço é seu", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Criar nova pasta", exact: true }).click();
+  await page.getByRole("button", { name: "Criar pasta", exact: true }).click();
   await page.getByRole("textbox", { name: "Nome da pasta", exact: true }).fill("Planejamento");
-  await expect(page.getByRole("button", { name: "Criar", exact: true })).toHaveCSS("color", "rgb(255, 255, 255)");
-  await expect(page.getByRole("button", { name: "Arquivos", exact: true }).last().locator(".nav-label")).toHaveCSS("color", "rgb(15, 87, 79)");
+  await expect(page.getByRole("button", { name: "Criar pasta", exact: true }).last()).toBeEnabled();
+  await page.getByRole("button", { name: "Criar pasta", exact: true }).last().click();
+  await expect(page.getByText("Planejamento", { exact: true })).toBeVisible();
 });

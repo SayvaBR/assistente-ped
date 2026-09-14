@@ -20,3 +20,13 @@ test('Perfil do aluno V2 não cria overflow em 320px', async ({ page }) => {
   const result = await page.locator('.v2-preview-device').evaluate((root) => root.scrollWidth > root.clientWidth + 1);
   expect(result).toBe(false);
 });
+
+test('Perfil do aluno V2 expõe galeria real vazia e ação de adicionar foto', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 980 });
+  await page.goto('/?v2-preview=student-profile&width=390');
+  const device = page.locator('.v2-preview-device');
+  await device.getByRole('button', { name: 'Fotos' }).click();
+  await expect(device.getByRole('heading', { name: 'Galeria do aluno' })).toBeVisible();
+  await expect(device.getByText('Nenhuma foto registrada')).toBeVisible();
+  await expect(device.getByRole('button', { name: 'Adicionar primeira foto' })).toBeVisible();
+});
