@@ -42,6 +42,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
    - Delivery Unit concluída: `Perfil profissional V2 — hardening de salvar/recuperar dados textuais`; PR `#35` integrado em `integration/android-1.0`.
 7. Arquivos — `IN PROGRESS`
 8. Mais — `IN PROGRESS`
+   - Delivery Unit concluída: `Ferramentas de sala V2 — hardening de timer, cronômetro e calculadora`; PR `#37` integrado em `integration/android-1.0`.
 9. BNCC — `IN PROGRESS`
 10. Relatórios — `IN PROGRESS`
 11. Configurações — `IN PROGRESS`
@@ -118,7 +119,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 - Perfil profissional — `FUNCTIONAL HARDENING` (PR #35 cobre normalização, recuperação do draft após erro, sincronização segura do perfil recebido e feedback acessível; foto/câmera permanece fora do escopo)
 - Gerenciar turmas — `IN PROGRESS`
-- Ferramentas de sala — `IN PROGRESS`
+- Ferramentas de sala — `IN PROGRESS` (timer com presets/pausa/reset/estado concluído, cronômetro isolado e calculadora com decimal, erro de divisão por zero e limpeza; Lanterna permanece separada por depender de hardware)
 - Notificações — `IN PROGRESS`
 - Mais hub — `TODO`
 - Configurações — `IN PROGRESS`
@@ -197,18 +198,18 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do Perfil profissional V2
-- Base: `origin/integration/android-1.0` em `02e9359`; worker `codex/profile-save-hardening`
-- Tela/fluxo: o Perfil normaliza nome/escola/cidade/UF ao salvar, sincroniza o draft quando o perfil recebido muda, preserva os valores digitados em falha de persistência e expõe feedback de erro/sucesso acessível. O preview de erro é determinístico somente para E2E; foto/câmera não foram alterados.
-- Evidência visual: Live Design ativo em `profile` a 412 CSS px na URL local `http://127.0.0.1:5173/?v2-preview=profile&width=412`; candidato inicial, observação após HMR/correção e captura final na mesma aba. DOM/computed confirmou Docente bottom `604.17px`, bottom navigation top `644px`, clearance `39.83px`, botão Salvar acessível no fim do scroll e console sem warnings/errors; `live_visual_director` PASS após reavaliação.
-- Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, billing, auth, migração de storage e telas de produto.
-- Evidência: screenshot formal em 412 CSS px, DOM/AX com `Atividades preparadas`, CTA e planos mensais; E2E mensal e checkpoint responsivo em 360/412/480px.
-- Testes executados: E2E do Perfil `6/6`, checkpoint responsivo `360/412/480px` `3/3`, `pnpm test` `63/63`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34842913960` verde, incluindo Gate responsivo completo e Build Android QA APK.
-- Revisão: Cicero PASS no SHA `7ba577c`; Banach PASS visual após confirmação independente do clearance de `39.83px`, sem blocker.
-- Commit/PR: `7ba577c` (`P1: harden professional profile save flow`), PR [#35](https://github.com/SayvaBR/assistente-ped/pull/35) integrado em `02e9359`.
+- Data/hora: 14/09/2026 — checkpoint das Ferramentas de sala V2
+- Base: `origin/integration/android-1.0` em `62b7ce9`; worker `codex/tools-timer-calculator`
+- Tela/fluxo: timer com presets de 1/5/10 minutos, iniciar/pausar/resetar e estado concluído; cronômetro com iniciar/pausar/resetar; calculadora com decimal por vírgula, operações básicas, divisão por zero acessível e limpeza; troca de ferramenta sem vazamento de estado. Lanterna não foi alterada.
+- Evidência visual: Live Design ativo em `tools` a 412 CSS px na URL local `http://127.0.0.1:5173/?v2-preview=tools&width=412`; candidato inicial, observação após HMR/correção e captura final na mesma aba. DOM/computed confirmou tabs `64px`, presets `48px`, ações `54px`, largura interna `412px`, sem overflow horizontal e console sem warnings/errors; `live_visual_director` PASS.
+- Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, alunos, deficiência/apoios, atividades de casa, Arquivos, três etapas, fotos, BNCC Computação, billing, auth, migração de storage e telas fora de Ferramentas.
+- Evidência formal: screenshot `docs/qa/android-1.0/tools-v2-412.png`; E2E cobre timer, cronômetro, calculadora, divisão por zero, isolamento e viewport 320px; checkpoint responsivo cobre 360/412/480px.
+- Testes executados: E2E das Ferramentas `2/2`, checkpoint responsivo `360/412/480px` `3/3`, `pnpm test` `66/66`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34845146685` verde, incluindo Gate responsivo completo e Build Android QA APK.
+- Revisão: Cicero PASS no SHA `4d2381a`; Banach PASS visual sem blocker.
+- Commit/PR: `4d2381a` (`P1: harden classroom tools flow`), PR [#37](https://github.com/SayvaBR/assistente-ped/pull/37) integrado em `62b7ce9`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `FUNCTIONAL HARDENING`; o Perfil profissional V2 foi integrado, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
+- Resultado: `FUNCTIONAL HARDENING`; as Ferramentas de sala V2 foram integradas, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
 - Próxima ação: sincronizar a integration, conferir issues/PRs ativos e escolher a próxima DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
 
 ### BNCC — evidência e contratos
