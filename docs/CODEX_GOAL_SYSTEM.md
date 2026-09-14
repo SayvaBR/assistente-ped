@@ -1,187 +1,335 @@
 # Codex Goal System — Assistente Pedagógico
 
-## Por que este sistema existe
+## Objetivo
 
-O Codex não deve trabalhar sem objetivo, mas também não deve receber como objetivo operacional de uma única sessão algo tão amplo quanto `ANDROID 1.0 PRODUCT COMPLETION CANDIDATE`.
+O Android 1.0 é uma missão contínua. O erro não é deixar o Codex trabalhar por horas; o erro é fazer **um único contexto, branch e PR** tentarem carregar o aplicativo inteiro.
 
-Uma meta infinita mantém o agente ocupado, porém depois de muitas horas tende a acumular contexto obsoleto, ampliar escopo silenciosamente, misturar mudanças independentes, produzir PRs gigantes e reduzir a qualidade das decisões visuais e técnicas.
+A regra passa a ser:
 
-A solução é separar **direção permanente** de **execução limitada**.
+> **North Star longa, orquestrador contínuo, workers descartáveis, Delivery Units pequenas.**
+
+A continuidade deve vir do Git, da execution board e do orquestrador — não de uma única conversa ficando cada vez maior.
 
 ---
 
 ## 1. North Star permanente
 
-Esta meta nunca muda durante o ciclo Android 1.0:
-
 > **Um professor conseguiria confiar neste aplicativo amanhã durante uma aula real?**
 
-Se a resposta for não, o produto ainda tem trabalho a fazer.
+Estado final:
 
-Isso é uma bússola de produto, não a tarefa de uma única sessão.
+`ANDROID 1.0 PRODUCT COMPLETION CANDIDATE`
 
-`ANDROID 1.0 PRODUCT COMPLETION CANDIDATE` continua sendo o estado final do produto, mas nunca deve ser usado como escopo ilimitado de um único chat/agente.
-
----
-
-## 2. Milestone atual
-
-A cada início de sessão, o orquestrador deve identificar o milestone P0/P1 mais prioritário e desbloqueado a partir de:
-
-1. `docs/ANDROID_1_0_EXECUTION_BOARD.md`;
-2. issues abertas;
-3. PRs ativos que apontam para `integration/android-1.0`;
-4. blockers reais já registrados.
-
-Não replanejar o produto inteiro se a board já contém uma próxima ação válida.
+O orquestrador pode perseguir esta meta por muitas horas. Nenhum worker individual recebe o Android 1.0 inteiro como seu escopo.
 
 ---
 
-## 3. Delivery Unit da sessão
+## 2. Dois níveis de agente
 
-Cada sessão principal deve possuir **uma única Delivery Unit**.
+### Orquestrador contínuo
 
-Uma Delivery Unit é pequena o bastante para ser revisável e grande o bastante para entregar valor real. Exemplos:
+É o chat principal/Tech Lead.
 
-- uma tela/fluxo real V2;
-- uma integração funcional entre duas superfícies;
-- hardening de uma área já implementada;
-- correção de um blocker P0;
+Pode permanecer ativo por horas e deve:
+
+- ler a board e o estado real do GitHub;
+- priorizar P0/P1 desbloqueado;
+- criar workers/subagentes/worktrees frescos;
+- acompanhar PRs, CI e reviewers;
+- integrar unidades seguras em `integration/android-1.0` conforme política de risco;
+- atualizar a board;
+- seguir para a próxima unidade independente.
+
+Ele **não implementa o produto inteiro no mesmo branch/PR**.
+
+### Worker de Delivery Unit
+
+É um contexto temporário com uma única missão.
+
+Ele:
+
+- nasce de `integration/android-1.0` atualizada;
+- trabalha em branch/worktree próprio;
+- entrega um único resultado revisável;
+- abre PR para `integration/android-1.0`;
+- produz evidências/testes;
+- para de expandir escopo em `READY FOR REVIEW`;
+- pode ser descartado depois da integração/checkpoint.
+
+Isso preserva contexto fresco sem interromper a missão geral.
+
+---
+
+## 3. Delivery Unit
+
+Uma Delivery Unit é pequena o bastante para ser revisável e grande o bastante para gerar valor real.
+
+Exemplos:
+
+- uma tela/fluxo V2 real;
+- uma integração entre tela e dados;
+- hardening funcional de uma superfície;
+- um bug P0/P1;
 - uma etapa de billing/restore;
-- uma migração de storage;
-- uma rodada de Android QA;
-- uma melhoria de DevEx que reduz tempo de produção.
+- uma melhoria de storage/backup;
+- uma rodada de QA/DevEx.
 
-Uma Delivery Unit deve ter:
+Cada unidade deve ter:
 
-- objetivo explícito;
-- arquivos/área de ownership previsíveis;
-- critérios de aceite objetivos;
-- testes/evidências proporcionais ao risco;
+- objetivo claro;
+- ownership previsível;
+- critérios de aceite;
+- evidência/testes proporcionais ao risco;
 - branch própria;
 - PR próprio para `integration/android-1.0`.
 
----
-
-## 4. Regra de escopo
-
-O orquestrador pode manter a visão do Android 1.0 inteiro, mas **não deve implementar várias áreas grandes dentro do mesmo PR/sessão apenas porque ainda há tempo disponível**.
-
-Regra prática:
-
-`NORTH STAR -> MILESTONE -> DELIVERY UNIT -> PR -> REVIEW -> MERGE NA INTEGRATION -> PRÓXIMA DELIVERY UNIT`
-
-Quando uma Delivery Unit chegar a `READY FOR REVIEW`, a implementação daquela unidade deve parar, salvo:
-
-- CI quebrado pela própria mudança;
-- bug objetivo detectado pelo reviewer/QA;
-- correção pequena necessária para completar os critérios já definidos.
-
-Não aproveitar o mesmo PR para iniciar uma tela não relacionada.
+Não usar a mesma branch para começar uma área não relacionada só porque ainda há tempo de execução disponível.
 
 ---
 
-## 5. Continuidade sem sessão infinita
+## 4. Loop contínuo do Android 1.0
 
-A continuidade do projeto deve vir da documentação e do Git, não da memória de um chat de 10+ horas.
+Enquanto houver trabalho seguro e útil:
 
-Ao concluir uma Delivery Unit:
+`BOARD/GITHUB -> ESCOLHER UNIT -> WORKER NOVO -> IMPLEMENTAR -> RENDER/TESTAR -> PR -> REVIEWERS -> CORRIGIR -> GATE -> INTEGRAR NA INTEGRATION QUANDO SEGURO -> ATUALIZAR BOARD -> PRÓXIMA UNIT`
 
-1. commit pequeno e claro;
-2. push;
-3. abrir/atualizar PR para `integration/android-1.0`;
-4. anexar evidências;
-5. atualizar `docs/ANDROID_1_0_EXECUTION_BOARD.md`;
-6. registrar blockers reais;
-7. produzir um checkpoint curto;
-8. encerrar ou renovar a sessão antes da próxima unidade importante.
+O marco `READY FOR REVIEW` pertence à **Delivery Unit**, não à missão inteira.
 
-Se o chat estiver longo, tiver atravessado múltiplas grandes decisões ou começar a citar instruções antigas, iniciar um novo chat/agente e retomar pela board e pelo PR atual.
+O orquestrador não deve encerrar a missão porque um worker chegou a esse ponto.
+
+Se o PR atual estiver aguardando CI/review e a próxima unidade for independente, o orquestrador pode iniciar outro worker sem misturar branches/arquivos.
 
 ---
 
-## 6. Paralelismo controlado
+## 5. Autoridade obrigatória para UI
 
-Paralelizar apenas trabalho realmente independente.
+Quando uma Delivery Unit tocar UI/UX, o worker deve ler antes de editar:
 
-Padrão recomendado:
+- `AGENTS.md`;
+- `docs/WORKING_CONTEXT.md`;
+- `docs/DESIGN_SUPERVISION_WORKFLOW.md`;
+- `docs/DESIGN_AUTHORITY.md`;
+- spec específica da tela/fluxo quando existir;
+- skills relevantes em `.agents/skills/`.
 
-- 1 orquestrador/Tech Lead;
-- até 2 lanes com escrita em paralelo;
-- reviewers/read-only adicionais podem trabalhar em paralelo sem limite rígido quando o custo fizer sentido.
-
-Workers de escrita não devem editar simultaneamente os mesmos arquivos compartilhados.
-
-Arquivos compartilhados — router, tokens globais, primitives, `package.json`, storage/billing contracts, app shell — têm um único owner por rodada.
-
----
-
-## 7. Regra de Git
-
-Base de desenvolvimento: `integration/android-1.0`.
-
-- feature/fix nasce de `integration/android-1.0`;
-- feature/fix abre PR de volta para `integration/android-1.0`;
-- nenhuma feature nova diretamente em `main`;
-- nenhuma feature nova diretamente na integration;
-- PR #10 é o trem de integração da base consolidada para `main`;
-- PRs #2, #4, #7 e #8 são históricos e não recebem trabalho novo.
+As regras visuais não são opcionais em nome de velocidade.
 
 ---
 
-## 8. Qualidade não negociável
+## 6. Cadência visual obrigatória
 
-Velocidade nunca autoriza relaxar:
+Para UI:
+
+`HIPÓTESE -> IMPLEMENTAÇÃO -> APP REAL -> SCREENSHOT -> OBSERVAÇÃO -> CORREÇÃO -> NOVA SCREENSHOT`
+
+Durante uma rodada visual significativa, gerar screenshot fresca do app realmente executando aproximadamente a cada 5–10 minutos quando isso for prático.
+
+Não vale apenas versionar um PNG no final sem olhar o resultado durante a construção.
+
+Após feedback visual:
+
+1. registrar 3–5 diferenças/problemas perceptivos de maior impacto;
+2. corrigir pelo menos o principal;
+3. gerar nova screenshot após a correção.
+
+Uma UI não pode chegar a `READY FOR REVIEW` apenas porque funciona.
+
+Rejeitar entrega visual:
+
+- genérica;
+- inconsistente;
+- inacessível;
+- claramente abaixo da Home V2/North Star;
+- parecendo dashboard SaaS/fintech/Material default/template de IA;
+- com card para tudo;
+- com mascote/coruja;
+- com CTA falso ou jornada cenográfica.
+
+Identidade:
+
+Friendly Professional + Candy UI + Tactile + Educational + Motion-led.
+
+---
+
+## 7. Responsividade sem travar produção
+
+Durante composição, usar o viewport Android principal atual (412 CSS px), salvo target específico em outra largura para comparação.
+
+O layout deve nascer fluido/adaptativo.
+
+Não fazer benchmark manual de todas as resoluções a cada microajuste.
+
+Responsividade ampla entra em checkpoint/hardening automatizado.
+
+A regra é:
+
+- microiteração: render principal + screenshot;
+- candidata: compacto + principal + largo quando necessário;
+- gate de produção: matriz automatizada completa.
+
+Texto essencial não pode ser truncado ou reduzido até ficar ilegível para caber.
+
+---
+
+## 8. Profundidade de validação proporcional ao risco
+
+Velocidade não significa rodar Android/full E2E a cada mudança de CSS.
+
+Use:
+
+- checks rápidos durante iteração;
+- testes direcionados durante a unidade;
+- candidate checks no checkpoint;
+- Android/QA profundo em mudanças nativas, marcos importantes, integração e release.
+
+Nunca relaxar:
 
 - integridade de dados;
 - LGPD/privacidade;
 - segurança;
 - billing/entitlement;
 - backup/restore;
-- BNCC e regras pedagógicas;
+- BNCC/regras pedagógicas;
 - offline essencial;
 - acessibilidade;
 - ausência de dead ends;
 - nenhum CTA falso;
 - nenhuma jornada principal retornando silenciosamente para UI V1.
 
-Para UI, qualidade visual também é gate real: `funciona` não equivale a `está aprovado`.
+---
+
+## 9. Reviewers independentes
+
+O autor da unidade não deve ser o único juiz da própria entrega.
+
+Usar reviewers independentes conforme o tipo de trabalho:
+
+- UI: `visual_director` e/ou `qa_reviewer`;
+- código/dados: reviewer independente;
+- domínio sensível: reviewer especializado.
+
+O reviewer deve apontar problemas concretos. O worker corrige no mesmo PR e atualiza evidência.
+
+A prática recomendada é iterar reviewer -> correção -> reviewer até não haver finding bloqueante relevante.
 
 ---
 
-## 9. Cadência visual
+## 10. Política de integração automática
 
-Durante construção visual:
+### Baixo risco
 
-`HIPÓTESE -> IMPLEMENTAÇÃO -> RENDER PRINCIPAL -> SCREENSHOT -> OBSERVAÇÃO -> CORREÇÃO -> NOVA SCREENSHOT`
+Pode ser integrado automaticamente em `integration/android-1.0` pelo orquestrador quando:
 
-Use o viewport principal definido na política Android atual para velocidade. Responsividade ampla é checkpoint automatizado/hardening, não ritual manual a cada ajuste.
+- PR mergeable;
+- CI verde no SHA exato;
+- testes relevantes verdes;
+- reviewer independente sem finding bloqueante;
+- evidência visual completa se aplicável.
 
-A Home V2 é North Star visual, não um template para copiar mecanicamente.
+Exemplos: correção visual isolada, copy, espaçamento, DevEx, testes, bug não destrutivo com regressão coberta.
+
+### Médio risco
+
+Pode integrar na integration apenas depois de revisão independente mais forte e teste de jornada.
+
+Exemplos: feature normal, navegação entre fluxos reais, persistência local sem migração, offline/recovery.
+
+### Alto risco
+
+Não fazer auto-integração. Exige checkpoint humano antes de merge.
+
+Inclui:
+
+- billing/purchase/trial/entitlement/restore;
+- migração de schema/storage;
+- backup/restore que pode sobrescrever dados;
+- auth/exclusão de conta;
+- LGPD/privacidade/segurança;
+- permissões, secrets, keystore, signing;
+- operação destrutiva;
+- mudança de semântica BNCC/pedagógica;
+- merge/release para `main` / Play Store.
+
+Enquanto uma unidade de alto risco espera humano, continuar outras Delivery Units independentes seguras.
 
 ---
 
-## 10. Stop conditions
+## 11. Git
 
-Uma sessão deve parar/renovar quando ocorrer qualquer um destes eventos:
+Base operacional:
 
-- Delivery Unit chegou a `READY FOR REVIEW`;
-- PR foi aberto e evidências anexadas;
-- blocker externo/irreversível real exige decisão humana;
-- contexto do chat ficou claramente obsoleto ou contraditório;
-- a próxima tarefa exige ownership totalmente diferente;
-- a sessão começou a expandir escopo sem relação com a Delivery Unit.
+`integration/android-1.0`
 
-Não usar `continue until Android 1.0 is complete` como stop condition.
+- feature/fix nasce da integration;
+- PR retorna para integration;
+- feature não entra diretamente em main;
+- feature não é desenvolvida diretamente na integration;
+- PR #10 é o trem de consolidação para `main`;
+- PRs #2/#4/#7/#8 são históricos.
+
+PRs pequenos são parte da qualidade, não burocracia.
 
 ---
 
-## 11. Resultado desejado
+## 12. Paralelismo
 
-O agente deve ser **ambicioso no produto e limitado na execução**.
+Padrão:
 
-Ele sempre tenta aproximar o app da North Star, mas faz isso através de pequenas entregas fortes, revisáveis e integráveis.
+- 1 orquestrador contínuo;
+- até 2 lanes de escrita simultâneas com ownership disjunto;
+- reviewers/mappers read-only adicionais quando útil.
 
-A frase operacional é:
+Não permitir dois writers editando ao mesmo tempo router, tokens globais, primitives, package/build config, storage/billing contracts ou app shell sem ownership explícito.
 
-> **Continue avançando o Android 1.0 por uma Delivery Unit de cada vez, sem sacrificar qualidade nem acumular contexto e escopo indefinidamente.**
+---
+
+## 13. Stop conditions do worker
+
+Um worker para de expandir escopo quando:
+
+- sua Delivery Unit chegou a `READY FOR REVIEW`;
+- blocker específico exige decisão externa;
+- o escopo começou a escapar da unidade;
+- o trabalho deve ser entregue a outro especialista.
+
+Isso não encerra o orquestrador.
+
+---
+
+## 14. Stop conditions do orquestrador
+
+A missão contínua só deve parar quando:
+
+1. `ANDROID 1.0 PRODUCT COMPLETION CANDIDATE` foi objetivamente atingido; ou
+2. todo trabalho restante está bloqueado por decisão humana/externa/alto risco e não existe nenhuma unidade segura independente para continuar; ou
+3. ocorreu incidente sério de segurança/integridade de dados; ou
+4. Git/CI/repositório ficou inconsistente e precisa ser reconciliado antes de continuar; ou
+5. ambiente/rate limit impede execução.
+
+Não parar apenas porque uma Delivery Unit chegou a `READY FOR REVIEW`.
+
+---
+
+## 15. Regra de contexto
+
+O orquestrador pode ser longo; os workers não devem ser.
+
+Quando um worker acumular decisões demais, fechar/checkpoint e criar worker novo.
+
+A execução ideal é:
+
+> **contexto longo para direção, contextos curtos para implementação.**
+
+Se o próprio orquestrador começar a citar instruções obsoletas, replanejar tudo do zero ou perder o estado real do GitHub, fazer checkpoint do orquestrador e iniciar outro a partir desta documentação + board.
+
+---
+
+## 16. Resultado desejado
+
+O Codex pode trabalhar a noite inteira sem transformar o projeto em um PR de 500 arquivos.
+
+Cada resultado continua pequeno, testado, visualmente revisado e rastreável, enquanto a missão geral continua avançando.
+
+Frase operacional:
+
+> **Continue a missão Android 1.0 sem parar em READY FOR REVIEW: encerre apenas o worker atual, revise/integrar a unidade conforme risco e inicie uma nova Delivery Unit independente até a North Star ou um blocker real.**
