@@ -1,12 +1,20 @@
 @import "./tokens.css";
 
 :root {
-  /* MainActivity publishes the real Android navigation inset here. */
+  /*
+   * Web safe-area values come from the user agent. Native Android inset vars
+   * are fallbacks/overrides for cases where the Capacitor WebView needs an
+   * explicit WindowInsets bridge. They default to zero until a native bridge
+   * publishes verified values.
+   */
+  --android-safe-top: 0px;
+  --android-safe-right: 0px;
   --android-safe-bottom: 0px;
-  --v2-safe-bottom: max(
-    env(safe-area-inset-bottom, 0px),
-    var(--android-safe-bottom, 0px)
-  );
+  --android-safe-left: 0px;
+  --v2-safe-top: max(env(safe-area-inset-top, 0px), var(--android-safe-top, 0px));
+  --v2-safe-right: max(env(safe-area-inset-right, 0px), var(--android-safe-right, 0px));
+  --v2-safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--android-safe-bottom, 0px));
+  --v2-safe-left: max(env(safe-area-inset-left, 0px), var(--android-safe-left, 0px));
 }
 
 .v2-root {
@@ -26,8 +34,8 @@
 
 /*
  * The application shell intentionally clips its chrome. First-run V2 screens
- * still need their own scroll viewport so Android system navigation insets
- * cannot hide the final action row.
+ * still need their own scroll viewport so system insets cannot hide the final
+ * action row.
  */
 .v2-first-run-scroll {
   width: 100%;
@@ -35,8 +43,7 @@
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  /* Keep the final helper copy above gesture navigation on Android. */
-  padding-bottom: 72px;
+  padding-bottom: max(72px, calc(24px + var(--v2-safe-bottom, 0px)));
   overscroll-behavior-y: contain;
 }
 
@@ -44,7 +51,11 @@
   width: min(100%, var(--v2-content-max));
   min-height: 100dvh;
   margin: 0 auto;
-  padding: max(16px, env(safe-area-inset-top)) 16px max(88px, env(safe-area-inset-bottom));
+  padding:
+    max(16px, var(--v2-safe-top, 0px))
+    max(16px, var(--v2-safe-right, 0px))
+    max(88px, var(--v2-safe-bottom, 0px))
+    max(16px, var(--v2-safe-left, 0px));
 }
 
 .v2-surface {

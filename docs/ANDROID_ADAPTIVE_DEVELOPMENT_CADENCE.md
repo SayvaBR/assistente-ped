@@ -1,160 +1,195 @@
 # Android Adaptive Development Cadence — Assistente Pedagógico V2
 
 > **Status:** regra operacional obrigatória para desenvolvimento visual Android
-> **Decisão de produto:** responsividade é um requisito do produto, mas **não pode dominar nem atrasar o ciclo de construção das telas**.
+> **Decisão de produto:** responsividade é requisito do produto, mas não pode dominar nem atrasar o ciclo de construção.
 
-## 1. Regra central
+## 1. Unidade correta no nosso stack
 
-O aplicativo deve se adaptar à tela. O desenvolvimento não deve virar uma rotina de redesenhar e recapturar a mesma tela em sete larguras diferentes.
+O app usa React/Vite dentro do WebView do Capacitor.
 
-Durante construção normal de UI, use **um único viewport de trabalho** para manter velocidade e consistência visual.
+Por isso, na UI web usamos **CSS logical pixels**, `rem`, `%`, flex/grid, viewport dinâmico e insets. `dp`/`sp` continuam corretos para UI nativa Android, mas não são unidades CSS.
 
-### Viewport de trabalho padrão
+Nunca transformar a resolução física do painel em largura/altura de layout.
 
-Use **412 CSS px de largura** como viewport principal de desenvolvimento visual em telefone Android, salvo quando um target aprovado exigir outra geometria específica para comparação.
+Referência obrigatória: `docs/ANDROID_LOGICAL_UNITS_AND_INSETS.md`.
 
-412 é uma régua de trabalho interna — não é breakpoint fixo, não é largura obrigatória do app e não representa todos os Androids.
+## 2. Regra central
 
-Quando houver screenshot/target aprovado em outra largura, pode-se usar temporariamente a largura do target para comparação lado a lado. Depois, volte ao viewport de trabalho normal.
+O aplicativo deve se adaptar à tela. O desenvolvimento não deve redesenhar e recapturar a mesma tela em várias larguras a cada alteração.
 
-## 2. O que o Codex deve fazer enquanto cria uma tela
+### Viewport-âncora
 
-O loop normal deve ser:
+Use **412 CSS px** como viewport principal de criação visual em telefone Android, salvo target aprovado específico.
+
+412 é:
+
+- uma régua de trabalho;
+- aproximadamente representativo de um telefone Android amplo em espaço lógico;
+- útil para screenshots e comparação.
+
+412 **não é**:
+
+- largura fixa do app;
+- breakpoint obrigatório;
+- conversão direta de pixels físicos;
+- target exclusivo do POCO.
+
+## 3. Loop de microiteração
 
 ```text
 hipótese
 -> implementar
--> renderizar em 412px
+-> render 412
 -> screenshot
--> comparar visualmente
+-> observar
 -> corrigir
 -> repetir
 ```
 
-O foco é:
+Durante esse loop, normalmente use apenas:
 
-- composição;
-- hierarquia;
-- qualidade visual;
-- fluxo funcional;
-- persistência;
-- estados;
-- navegação;
-- acessibilidade básica;
-- ausência de problemas responsivos óbvios.
+```bash
+pnpm run check:fast
+```
 
-**Não** parar cada iteração para testar 320/360/390/412/432/480/600.
+Não rodar matriz multi-device, Android build ou E2E completo em cada ajuste de composição/CSS.
 
-**Não** produzir screenshots manuais de todas as larguras a cada alteração.
+## 4. Responsividade nasce da implementação
 
-**Não** gastar mais tempo no laboratório responsivo do que construindo o produto.
+Preferir:
 
-## 3. Responsividade deve vir da implementação
-
-A tela deve nascer fluida desde o início usando:
-
-- `flex` e `grid`;
-- `minmax()` quando útil;
+- flex/grid;
+- `minmax()`;
 - `flex-wrap`;
-- largura relativa;
+- width relativa;
 - altura automática;
-- `min-width: 0` onde necessário;
+- `min-width: 0`;
 - `clamp()` com moderação;
-- media/container queries apenas quando houver mudança estrutural real;
-- safe areas;
-- layout que reorganiza conteúdo em vez de cortar conteúdo.
+- media/container queries apenas para mudança estrutural real;
+- `100dvh`/viewport dinâmico onde adequado;
+- safe areas/WindowInsets;
+- reorganizar conteúdo em vez de cortar.
+
+Evitar:
+
+- largura raiz fixa;
+- altura fixa da tela;
+- `height: 830px` ou equivalente por aparelho;
+- breakpoints 390/412/432 só para fazer screenshots passarem;
+- posicionamento absoluto do conteúdo principal.
 
 A regra mental é:
 
-> **não criar um layout para cada tela; criar um layout que sabe se adaptar.**
+> **o componente se adapta ao espaço que recebeu.**
 
-## 4. Texto nunca é sacrificado
-
-Mesmo no viewport único de desenvolvimento, o Codex deve evitar soluções frágeis.
+## 5. Texto nunca é sacrificado
 
 Proibido para copy essencial:
 
 - cortar texto;
 - `ellipsis` por conveniência;
 - `line-clamp` em título/CTA/status importante;
-- quebrar palavra artificialmente no meio;
+- quebrar palavra artificialmente;
 - reduzir fonte até ficar pequena demais;
-- esconder ação porque faltou espaço;
-- usar largura/altura rígida que dependa de uma string curta.
+- esconder ação porque faltou espaço.
 
-Se uma palavra ou ação não cabe, mude a composição.
+Se não couber, mude a composição.
 
-Exemplo de falha:
+## 6. Safe areas e altura útil
 
-- `Presentes` -> `Present` + `es`;
-- `Pendentes` -> `Pendent` + `es`.
+Não calcular manualmente “quanto sobra entre as barras”.
 
-## 5. Quando testar outras larguras
+A tela deve preencher o viewport lógico disponível e respeitar insets dinâmicos de:
 
-A matriz multi-device continua existindo, mas vira **checkpoint automatizado e de hardening**, não ferramenta de microiteração.
+- status bar;
+- navigation/gesture bar;
+- cutout;
+- teclado/IME.
 
-Rodar testes multi-device principalmente:
+Não existe uma altura útil universal em dp/CSS px para o POCO ou qualquer outro Android.
 
-1. depois que a tela já estiver visualmente convincente;
-2. antes de `PRODUCTION GATE READY`;
-3. quando uma mudança estrutural de layout puder causar regressão;
-4. no CI;
-5. antes de release;
-6. quando um bug responsivo real for encontrado.
+Usar `env(safe-area-inset-*)` e, quando necessário, WindowInsets reais publicados pela camada nativa.
 
-O teste automatizado pode continuar cobrindo múltiplas larguras sem interromper o ritmo humano de desenvolvimento.
+## 7. Checkpoint local barato
 
-O Codex não precisa olhar manualmente cada screenshot se os testes não apontarem problema e não houver motivo visual específico.
+Quando a candidata estiver visualmente forte em 412, faça apenas um smoke check representativo da superfície alterada:
 
-## 6. POCO X7 Pro
-
-O POCO X7 Pro é o principal aparelho físico disponível para QA.
-
-Ele serve como validação de realidade do Android, não como alvo único de design.
-
-Fluxo recomendado:
-
-```text
-construir em 412px
--> validar visual/funcional
--> continuar desenvolvimento
--> checkpoint automatizado responsivo
--> APK no POCO em marcos importantes
+```bash
+pnpm run test:v2-responsive:checkpoint -- <preview> "<texto esperado>"
 ```
 
-Não instalar APK no aparelho a cada ajuste pequeno.
+Esse checkpoint exercita:
 
-## 7. Androids diferentes continuam protegidos
+- 360 CSS px — compacto;
+- 412 CSS px — âncora;
+- 480 CSS px — amplo.
 
-Esta simplificação **não revoga** a obrigação de o produto funcionar em aparelhos diferentes.
+Exemplo:
 
-Antes do Gate B/release, os testes automatizados e QA devem continuar cobrindo faixas estreitas, médias e largas conforme `docs/ANDROID_MULTI_DEVICE_RESPONSIVE_POLICY.md`.
+```bash
+pnpm run test:v2-responsive:checkpoint -- planning-day "Planejamento diário"
+```
 
-A diferença é de **cadência**:
+Não redesenhar a tela para cada um desses pontos. O objetivo é detectar overflow/corte estrutural óbvio.
 
-- durante construção: um viewport principal;
-- durante hardening: validação ampla;
-- antes de release: matriz e aparelho real.
+## 8. Matriz completa é gate, não rotina
 
-## 8. Gate A versus Gate B
+A matriz completa multi-device permanece obrigatória, mas fica principalmente em:
+
+- CI;
+- Gate B / production hardening;
+- release;
+- mudanças estruturais relevantes;
+- investigação de bug responsivo real.
+
+Comando explícito:
+
+```bash
+pnpm run test:v2-responsive:full
+```
+
+`pnpm run test:v2-responsive` continua alias de compatibilidade para o gate completo.
+
+Uma Delivery Unit comum **não deve repetir localmente a matriz inteira** se o CI já a executará, salvo justificativa de risco.
+
+## 9. POCO X7 Pro
+
+O POCO é o principal aparelho físico disponível para QA.
+
+Ele valida realidade do Android, mas não define o layout.
+
+Fluxo normal:
+
+```text
+construir em 412 lógico
+-> validar visual/funcional
+-> checkpoint local 360/412/480
+-> abrir PR
+-> CI roda matriz completa
+-> Android real em marcos relevantes
+```
+
+Não instalar APK no aparelho a cada microajuste.
+
+## 10. Gate A x Gate B
 
 ### Gate A — direção visual
 
-Para `READY FOR DESIGN REVIEW` / `VISUAL DIRECTION APPROVED`, não exigir ritual manual de múltiplas larguras.
-
 Exigir:
 
-- tela convincente no viewport de trabalho/target;
+- composição forte no viewport-âncora/target;
 - nenhuma falha responsiva óbvia;
-- sem texto essencial cortado;
-- sem dependência explícita de largura fixa;
-- fluxo principal visível e coerente.
+- sem copy essencial cortada;
+- sem dependência de largura/altura fixa;
+- fluxo principal coerente.
+
+Não exigir matriz completa manual.
 
 ### Gate B — produção
 
-Para `PRODUCTION GATE READY`, aí sim exigir:
+Exigir:
 
-- testes responsivos automatizados;
+- matriz responsiva completa no CI;
 - texto ampliado nas superfícies críticas;
 - safe areas;
 - teclado;
@@ -162,54 +197,10 @@ Para `PRODUCTION GATE READY`, aí sim exigir:
 - ausência de overflow/corte;
 - validação de faixas diferentes.
 
-## 9. Regra contra overfitting de viewport
-
-Não escrever CSS do tipo:
-
-```css
-@media (width: 390px) { ... }
-@media (width: 412px) { ... }
-@media (width: 432px) { ... }
-```
-
-apenas para fazer cada screenshot passar.
-
-Breakpoints só existem quando a composição realmente precisa mudar por falta/excesso de espaço.
-
-A pergunta correta não é:
-
-> “Como fazer funcionar em 390 e 412?”
-
-É:
-
-> “Como fazer este componente se adaptar quando o espaço disponível muda?”
-
-## 10. Prioridade de produto
-
-Responsividade é uma preocupação transversal, não a feature principal.
-
-O foco do projeto continua sendo entregar:
-
-- todas as telas;
-- todos os fluxos;
-- integração real;
-- dados persistentes;
-- offline;
-- onboarding;
-- planejamento;
-- frequência;
-- BNCC;
-- arquivos;
-- billing;
-- acessibilidade;
-- qualidade visual.
-
-Não permitir que o laboratório de resolução substitua o desenvolvimento do aplicativo.
-
 ## 11. Regra final
 
-> **Desenvolva rápido em um viewport Android representativo. Implemente de forma fluida. Deixe CI e checkpoints provarem a adaptação ampla.**
+> **Desenvolva em espaço lógico, com um viewport-âncora. Faça o código ser fluido. Deixe o CI provar a família Android.**
 
 > **O app se adapta à tela; o time não redesenha o app para cada tela.**
 
-Esta regra **supersede qualquer instrução anterior que exija testar manualmente várias larguras durante cada ciclo visual**. A matriz multi-device permanece obrigatória apenas como hardening/gate de produção e release.
+Esta regra supersede instruções antigas que exigiam testar manualmente várias larguras em cada ciclo visual.
