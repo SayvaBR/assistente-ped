@@ -21,3 +21,9 @@
 .v2-planning-calendar__activity strong { color: #102b72; font-size: .91rem; line-height: 1.12; }
 .v2-planning-calendar__activity small { color: #5f7ead; font: 600 .71rem/1.25 var(--v2-font-family); }
 @media (prefers-reduced-motion: reduce) { .v2-planning-calendar *, .v2-planning-calendar *::before, .v2-planning-calendar *::after { transition: none !important; animation: none !important; } }
+
+/* Weekly hardening: keep untimed labels readable at the narrowest Android width. */
+.v2-planning-calendar__plan time { min-width: 0; white-space: normal; line-height: 1.15; }
+@media (max-width: 359px) {
+  .v2-planning-calendar__plan { grid-template-columns: minmax(54px, auto) 40px minmax(0, 1fr) 18px; }
+}

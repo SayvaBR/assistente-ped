@@ -33,9 +33,9 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
-4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
+4. Planejamento Dia/Semana/Mês — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `Planejamento diário V2 — hardening funcional/responsivo`; PR `#14` integrado em `integration/android-1.0`.
-   - Próxima unidade candidata: `Planejamento semanal V2 — hardening funcional/responsivo`.
+   - Delivery Unit atual: `Planejamento semanal V2 — hardening funcional/responsivo`; branch `codex/delivery-planning-week-v2`; pronta para PR contra `integration/android-1.0`.
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
@@ -195,12 +195,13 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint após integração do PR #14
-- Base: `origin/integration/android-1.0` em `6ae981b`
-- Tela/fluxo: Planejamento diário V2 recebeu hardening de produção: planos/atividades arquivados são excluídos dos pontos ativos, erro de carregamento de atividades oferece retry em overview/dia/semana/mês, momentos sem horário permanecem visíveis com rótulo explícito, e a jornada cobre preview e App real.
-- Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412-hardening.png`, `docs/qa/clean-room/planning-day-v2-320-untimed.png`, `docs/qa/clean-room/planning-day-v2-412-untimed.png`
-- Testes executados: `pnpm test` (52/52), `pnpm run test:v2-responsive -- --reporter=line` (98/98), jornada de planejamento (13/13), `check:fast`, TypeScript, `git diff --check` e build passaram; CI do PR #14 verde em `bdb8f09`; APK Android QA do PR #14 verde.
-- PR #14: integrado em `integration/android-1.0` com merge commit `6ae981b03b9f556c4ca7df4893491390ec967f45`.
+- Data/hora: 14/09/2026 — checkpoint do hardening semanal V2
+- Base: `origin/integration/android-1.0` em `c54bf01`; branch `codex/delivery-planning-week-v2`
+- Tela/fluxo: a visão semanal mantém planos e atividades reais do dia selecionado, exclui arquivados, preserva planos sem momentos, ordena horários e mostra `Sem horário` de forma explícita; o card semanal estreito mantém a label inteira em 320px.
+- Escopo não tocado: visão mensal, outras telas, billing, auth e migração de storage.
+- Screenshot/evidência: `docs/qa/clean-room/planning-week-v2-hardening-412.png`, `docs/qa/clean-room/planning-week-v2-hardening-390.png`, `docs/qa/clean-room/planning-week-v2-hardening-320.png`; baseline `docs/qa/clean-room/planning-week-v2-412.png`.
+- Testes executados: `pnpm test` (53/53), jornada semanal Playwright (9/9), `check:fast` e `git diff --check` passaram; matriz semanal cobre 320/360/390/412/432/480/600px e texto 130%.
+- PR: pendente de abertura após commit/push desta branch.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
