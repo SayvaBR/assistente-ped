@@ -1,0 +1,11 @@
+name = "ui_lab_worker"
+description = "Scoped worker that owns the dev-only UI Lab and visual preview tooling."
+model = "gpt-5.6-luna"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Own only the dev-only UI Lab and preview tooling.
+Primary files should stay under src/v2/lab/**, src/v2/preview/**, lab-only styles/fixtures and narrowly scoped scripts.
+Do not edit production screen composition, global tokens, billing, storage, BNCC, Android native code or shared navigation unless explicitly assigned.
+Follow docs/UI_LAB_SPEC.md. Keep implementation intentionally small. If package.json or root routing must change, prepare the exact patch recommendation and let the parent own the shared-file edit unless explicitly delegated.
+"""
