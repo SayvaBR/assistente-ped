@@ -76,3 +76,46 @@ test('Home V2 keeps hero CTAs above the fixed nav at short 412px height', async 
   expect(geometry.actionHeight).toBeGreaterThanOrEqual(48);
   expect(geometry.actionsBottom).toBeLessThanOrEqual(geometry.navTop - 8);
 });
+
+test('Home V2 keeps nav labels separated at 200% text scale on 360px', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('/?v2-preview=home&width=360');
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+
+  const device = page.locator('.v2-preview-device');
+  await expect(device).toBeVisible();
+
+  const result = await device.evaluate((root) => {
+    const items = Array.from(root.querySelectorAll<HTMLElement>('.v2-home__nav-item')).map((item) => {
+      const label = item.querySelector<HTMLElement>('span');
+      const itemRect = item.getBoundingClientRect();
+      const labelRect = label?.getBoundingClientRect();
+      return {
+        text: label?.textContent?.trim() ?? '',
+        ariaLabel: item.getAttribute('aria-label'),
+        target: { width: itemRect.width, height: itemRect.height },
+        label: labelRect ? { left: labelRect.left, right: labelRect.right, top: labelRect.top, bottom: labelRect.bottom } : null,
+      };
+    });
+    const labelOverlaps = items.flatMap((item, index) => {
+      if (!item.label) return [`${item.text}: missing label`];
+      const itemElement = root.querySelectorAll<HTMLElement>('.v2-home__nav-item')[index];
+      const itemRect = itemElement.getBoundingClientRect();
+      const issues: string[] = [];
+      if (item.label.left < itemRect.left - 1 || item.label.right > itemRect.right + 1) {
+        issues.push(`${item.text}: label escapes item`);
+      }
+      const next = items[index + 1]?.label;
+      if (next && item.label.right > next.left + 1) {
+        issues.push(`${item.text}: label overlaps ${items[index + 1].text}`);
+      }
+      return issues;
+    });
+    return { items, labelOverlaps };
+  });
+
+  expect(result.items.map(({ text }) => text)).toEqual(['Início', 'Plano', 'Turmas', 'Arquivos', 'Mais']);
+  expect(result.items.map(({ ariaLabel }) => ariaLabel)).toEqual(['Início', 'Planejamento', 'Turmas', 'Arquivos', 'Mais']);
+  expect(result.items.every(({ target }) => target.width >= 48 && target.height >= 48)).toBe(true);
+  expect(result.labelOverlaps, result.labelOverlaps.join('\n')).toEqual([]);
+});

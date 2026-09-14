@@ -557,6 +557,10 @@
   .v2-home__screen { padding-inline: 24px; }
 }
 
+@media (min-width: 360px) {
+  .v2-home__nav-item { font-size: clamp(0.5rem, 2.75vw, 0.67rem); }
+}
+
 @media (max-height: 760px) and (min-width: 360px) {
   .v2-home__screen { padding-top: 14px; }
   .v2-home__header { margin-bottom: 12px; }
