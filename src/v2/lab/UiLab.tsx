@@ -1,14 +1,17 @@
 import { useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { OnboardingEntryV2 } from '../screens/OnboardingEntryV2';
 import './ui-lab.css';
+import { labScreens, renderLabScreen, type LabScreenId, type LabState } from './labRegistry';
 
-type LabState = 'default' | 'error';
 type LabWidth = 360 | 412 | 480;
+
+function readScreen(value: string | null): LabScreenId {
+  return labScreens.some((item) => item.id === value) ? value as LabScreenId : 'onboarding-entry';
+}
 
 export function UiLab() {
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const [screen, setScreen] = useState(params.get('screen') || 'onboarding-entry');
+  const [screen, setScreen] = useState<LabScreenId>(readScreen(params.get('screen')));
   const [state, setState] = useState<LabState>(params.get('state') === 'error' ? 'error' : 'default');
   const requestedWidth = Number(params.get('width'));
   const [width, setWidth] = useState<LabWidth>(requestedWidth === 360 ? 360 : requestedWidth === 480 ? 480 : 412);
@@ -28,7 +31,7 @@ export function UiLab() {
         <a href="/" aria-label="Sair do UI Lab">Sair</a>
       </header>
       <section className="ui-lab__controls" aria-label="Controles do UI Lab">
-        <label>Screen<select value={screen} onChange={(event) => { setScreen(event.target.value); updateUrl('screen', event.target.value); }}><option value="onboarding-entry">Onboarding Entry V2</option></select></label>
+        <label>Screen<select value={screen} onChange={(event) => { const value = readScreen(event.target.value); setScreen(value); updateUrl('screen', value); }} aria-label="Screen"><option value="onboarding-entry">Onboarding Entry V2</option>{labScreens.slice(1).map((item) => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label>
         <label>State<select value={state} onChange={(event) => { const value = event.target.value as LabState; setState(value); updateUrl('state', value); }}><option value="default">Default</option><option value="error">Erro recuperável</option></select></label>
         <label>Viewport<select value={width} onChange={(event) => { const value = Number(event.target.value) as LabWidth; setWidth(value); updateUrl('width', String(value)); }}><option value={360}>360px · compacto</option><option value={412}>412px · âncora</option><option value={480}>480px · amplo</option></select></label>
         <label>Texto<select value={textScale} onChange={(event) => { setTextScale(event.target.value); updateUrl('scale', event.target.value); }}><option value="100">100%</option><option value="115">115%</option><option value="130">130%</option><option value="150">150%</option></select></label>
@@ -36,7 +39,7 @@ export function UiLab() {
       </section>
       <section className="ui-lab__stage" aria-label="Render da superfície">
         <div className="ui-lab__device" style={{ width, '--v2-text-scale': Number(textScale) / 100 } as CSSProperties} data-reduced-motion={reducedMotion} data-screen={screen}>
-          <OnboardingEntryV2 state={state} onContinue={() => setState('default')} onSkip={() => setState('default')} />
+          {renderLabScreen(screen, { state, onStateChange: setState })}
         </div>
       </section>
     </main>

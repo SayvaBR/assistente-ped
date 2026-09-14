@@ -59,24 +59,26 @@ for (const width of [360, 412, 480] as const) {
     const device = page.locator('.ui-lab__device');
     await expect(device).toBeAttached();
 
-    const before = await page.evaluate(() => ({
-      maxScroll: document.documentElement.scrollHeight - innerHeight,
+    const before = await device.evaluate((root: HTMLElement) => ({
+      maxScroll: root.scrollHeight - root.clientHeight,
       horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-    deviceOverflowY: getComputedStyle(document.querySelector('.ui-lab__device')!).overflowY,
+      deviceOverflowY: getComputedStyle(root).overflowY,
       stageHorizontalOverflow: document.querySelector('.ui-lab__stage')!.scrollWidth > document.querySelector('.ui-lab__stage')!.clientWidth + 1,
     }));
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    const after = await page.evaluate(() => {
-      const device = document.querySelector('.ui-lab__device');
-      const rect = device?.getBoundingClientRect();
-      return { top: rect?.top, bottom: rect?.bottom };
+    await device.evaluate((root: HTMLElement) => { root.scrollTop = root.scrollHeight; });
+    const after = await device.evaluate((root: HTMLElement) => {
+      const footer = root.querySelector('.v2-entry__footer');
+      const rect = footer?.getBoundingClientRect();
+      const deviceRect = root.getBoundingClientRect();
+      return { scrollTop: root.scrollTop, footerBottom: rect?.bottom, deviceBottom: deviceRect.bottom };
     });
 
     expect(before.maxScroll, `UI Lab ${width}px não tem altura rolável`).toBeGreaterThan(0);
     expect(before.horizontalOverflow, `UI Lab ${width}px tem scroll horizontal`).toBe(false);
-    expect(before.deviceOverflowY, 'UI Lab voltou a ocultar a rolagem vertical do device').toBe('visible');
+    expect(before.deviceOverflowY, 'UI Lab precisa rolar a superfície dentro do device').toBe('auto');
     expect(before.stageHorizontalOverflow, `UI Lab ${width}px tem scroll horizontal interno`).toBe(false);
-    expect(after?.bottom, `UI Lab ${width}px não chegou ao conteúdo inferior`).toBeLessThanOrEqual(720);
+    expect(after?.scrollTop, `UI Lab ${width}px não rolou o device`).toBeGreaterThan(0);
+    expect(after?.footerBottom, `UI Lab ${width}px não chegou ao conteúdo inferior`).toBeLessThanOrEqual(after?.deviceBottom ?? 0);
   });
 }
 
