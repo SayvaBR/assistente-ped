@@ -22,8 +22,10 @@ test('Home V2 abre o workspace V2 da turma sem voltar para a carroceria legada',
   await expect(attendanceSummary).toContainText('2');
   await expect(device.getByRole('button', { name: /quarta-feira, 28 de agosto/ })).toContainText('2 presentes · 2 faltas');
   await expect(device.getByRole('button', { name: /terça-feira, 27 de agosto/ })).toContainText('3 presentes · 2 faltas');
-  await device.getByRole('button', { name: /quarta-feira, 28 de agosto/ }).click();
+  await device.getByRole('button', { name: /terça-feira, 27 de agosto/ }).click();
   await expect(device.getByRole('heading', { name: '5º Ano A', exact: true })).toBeVisible();
+  await expect(device.getByRole('region', { name: 'Dia da chamada' })).toContainText('terça-feira, 27 de agosto');
+  await expect(device.getByRole('button', { name: 'Atrasado', exact: true })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Salvar frequência', exact: true })).toBeVisible();
 });
 
