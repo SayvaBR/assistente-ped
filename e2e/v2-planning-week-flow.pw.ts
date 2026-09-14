@@ -30,6 +30,18 @@ test('Planejamento semanal V2 preserva copy e layout em texto ampliado', async (
   expect(result).toEqual({ overflow: false, hasTitle: true, hasPreparation: true, hasCreate: true });
 });
 
+test('Planejamento semanal V2 mantém rótulos da navegação separados em 320px', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto('/?v2-preview=planning-week&width=320');
+  const labels = await page.locator('.v2-planning-calendar__nav-item span').evaluateAll((elements) => elements.map((element) => {
+    const rect = element.getBoundingClientRect();
+    return { text: element.textContent?.trim(), left: rect.left, right: rect.right };
+  }));
+
+  expect(labels).toHaveLength(5);
+  expect(labels.slice(1).every((label, index) => label.left >= labels[index].right + 2)).toBe(true);
+});
+
 for (const width of viewports) {
   test(`Planejamento semanal V2 mantém composição adaptativa em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: width >= 600 ? 960 : 900 });
