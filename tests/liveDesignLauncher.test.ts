@@ -1,9 +1,9 @@
 import { execFile, spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import { existsSync, mkdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const launcher = join(repoRoot, 'scripts', 'live-design.mjs');
@@ -11,6 +11,8 @@ const testRoot = join(tmpdir(), `assistente-live-design-${process.pid}`);
 const children: ChildProcessWithoutNullStreams[] = [];
 
 mkdirSync(testRoot, { recursive: true });
+
+beforeEach(() => mkdirSync(testRoot, { recursive: true }));
 
 function runLauncher(args: string[], env: Record<string, string>) {
   const child = spawn(process.execPath, [launcher, ...args], {
@@ -43,12 +45,18 @@ async function waitForOutput(run: ReturnType<typeof runLauncher>, text: string) 
 
 async function stop(child: ChildProcessWithoutNullStreams) {
   if (child.exitCode !== null || child.signalCode !== null) return;
-  if (process.platform === 'win32') {
+  child.kill('SIGINT');
+  try {
+    await Promise.race([
+      waitForExit(child),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error('graceful stop timed out')), 5_000)),
+    ]);
+  } catch {
     await new Promise<void>((resolve) => {
       execFile('taskkill', ['/pid', String(child.pid), '/t', '/f'], () => resolve());
     });
-  } else child.kill('SIGTERM');
-  await waitForExit(child);
+    await waitForExit(child);
+  }
 }
 
 afterEach(async () => {
@@ -88,6 +96,8 @@ describe('live design launcher ownership', () => {
     await waitForOutput(owner, 'LIVE_DESIGN_URL=http://127.0.0.1:46103/');
     expect(existsSync(ownerMarker)).toBe(true);
 
+    writeFileSync(foreignMarker, JSON.stringify({ cwd: 'C:\\another-worktree', pid: process.pid }));
+
     const reused = runLauncher(['home', '--width=480'], {
       LIVE_DESIGN_PORT: port,
       LIVE_DESIGN_MARKER: ownerMarker,
@@ -102,9 +112,27 @@ describe('live design launcher ownership', () => {
     });
     expect(await waitForExit(foreign.child)).not.toBe(0);
     expect(foreign.output).toContain('Port 46103 is already in use');
+    expect(existsSync(foreignMarker)).toBe(false);
 
     await stop(owner.child);
-    if (process.platform === 'win32') rmSync(ownerMarker, { force: true });
-    expect(existsSync(ownerMarker)).toBe(false);
+    if (process.platform !== 'win32') expect(existsSync(ownerMarker)).toBe(false);
+  });
+
+  it('discards stale markers and reports startup timeout with cleanup', async () => {
+    const marker = join(testRoot, 'stale-marker.json');
+    const fakeVite = join(testRoot, 'fake-vite.mjs');
+    writeFileSync(marker, JSON.stringify({ cwd: repoRoot, pid: 999999 }));
+    writeFileSync(fakeVite, 'setInterval(() => {}, 1000);\n');
+
+    const timedOut = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46104',
+      LIVE_DESIGN_MARKER: marker,
+      LIVE_DESIGN_VITE_BIN: fakeVite,
+      LIVE_DESIGN_STARTUP_TIMEOUT_MS: '300',
+      LIVE_DESIGN_POLL_INTERVAL_MS: '50',
+    });
+    expect(await waitForExit(timedOut.child)).toBe(1);
+    expect(timedOut.output).toContain('não ficou pronto em 300ms');
+    expect(existsSync(marker)).toBe(false);
   });
 });

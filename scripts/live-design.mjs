@@ -9,6 +9,8 @@ const widthArg = args.find((arg) => arg.startsWith('--width='));
 const width = Number(widthArg?.split('=')[1] || 412);
 const host = '127.0.0.1';
 const port = Number(process.env.LIVE_DESIGN_PORT || 5173);
+const startupTimeoutMs = Number(process.env.LIVE_DESIGN_STARTUP_TIMEOUT_MS || 15000);
+const pollIntervalMs = Number(process.env.LIVE_DESIGN_POLL_INTERVAL_MS || 150);
 const supportedPreviews = new Set([
   'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
   'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
@@ -77,7 +79,7 @@ if (ownedServer && await isReady()) {
 } else {
   if (ownedServer) removeMarker();
 
-const viteBin = resolve('node_modules/vite/bin/vite.js');
+const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
 const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
   stdio: 'inherit',
   env: process.env,
@@ -96,14 +98,14 @@ const poll = setInterval(async () => {
     readyPrinted = true;
     clearInterval(poll);
     printReady(false);
-  } else if (Date.now() - startedAt > 15000) {
+  } else if (Date.now() - startedAt > startupTimeoutMs) {
     clearInterval(poll);
-    console.error('[live-design] Vite não ficou pronto em 15s. Verifique a saída acima.');
+    console.error(`[live-design] Vite não ficou pronto em ${startupTimeoutMs}ms. Verifique a saída acima.`);
     startupTimedOut = true;
     stop('SIGTERM');
     process.exitCode = 1;
   }
-}, 150);
+}, pollIntervalMs);
 
 const stop = (signal) => {
   clearInterval(poll);
