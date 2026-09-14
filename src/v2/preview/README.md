@@ -17,8 +17,8 @@ http://127.0.0.1:5173/?v2-preview=home&width=390
 Larguras rápidas:
 
 - `width=360`
-- `width=390`
-- `width=432`
+- `width=412`
+- `width=480`
 
 O toolbar também permite trocar a largura.
 
@@ -26,6 +26,6 @@ O toolbar também permite trocar a largura.
 
 Permitir que o Codex renderize e refine a V2 sem atravessar onboarding, navegação ou shell legado a cada alteração.
 
-A primeira tarefa é substituir o placeholder por `src/v2/screens/HomeV2.tsx` e iterar visualmente até a composição ficar convincente.
+O preview já monta as superfícies V2 com fixtures sintéticas; novas superfícies devem entrar pela mesma rota direta e passar pelo loop de observação antes da conexão profunda com dados reais.
 
 O Visual Lab só é ativado em `import.meta.env.DEV`; produção continua iniciando o app real.

@@ -17,7 +17,7 @@ src/v2/
 
 ## Android responsivo
 
-A largura de `390px` no Visual Lab é apenas um viewport-âncora para comparar com targets produzidos nessa geometria.
+A largura de `412px` no Visual Lab é o viewport-âncora para comparar a composição durante o Live Design Mode.
 
 A UI real deve adaptar-se continuamente a Androids diferentes. O Visual Lab oferece stress points em 320, 360, 390, 412, 432, 480 e 600 px.
 

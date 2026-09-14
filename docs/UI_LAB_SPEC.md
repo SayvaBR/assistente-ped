@@ -35,8 +35,8 @@ Seletores mínimos:
 ### Viewports
 
 - 360;
-- 390 default;
-- 430.
+- 412 default/âncora;
+- 480.
 
 Sem bezel de aparelho.
 
