@@ -3,9 +3,11 @@ name: V2 validation
 on:
   pull_request:
     branches:
-      - codex/1-import-baseline
+      - main
+      - integration/android-1.0
   push:
     branches:
+      - integration/android-1.0
       - codex/5-v2-clean-room
   workflow_dispatch:
 
