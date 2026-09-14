@@ -186,6 +186,18 @@ describe('live design launcher ownership', () => {
     expect(existsSync(`${marker}.lock`)).toBe(true);
   });
 
+  it('removes the startup lock when marker creation fails', async () => {
+    const marker = join(testRoot, 'marker-directory');
+    mkdirSync(marker);
+    const failed = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46108',
+      LIVE_DESIGN_MARKER: marker,
+    });
+    expect(await waitForExit(failed.child)).toBe(1);
+    expect(failed.output).toContain('não foi possível assumir o marker');
+    expect(existsSync(`${marker}.lock`)).toBe(false);
+  });
+
   it('rolls back the child when marker ownership changes during startup', async () => {
     const marker = join(testRoot, 'claim-race-marker.json');
     const fakeVite = join(testRoot, 'claim-race-vite.mjs');

@@ -193,6 +193,7 @@ try {
     viteBin,
   }), { flag: 'wx' });
 } catch {
+  removeOwnedStartupLock();
   console.error(`[live-design] não foi possível assumir o marker ${markerPath}; outro launcher já o possui.`);
   process.exit(1);
 }
