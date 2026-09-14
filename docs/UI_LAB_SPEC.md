@@ -35,8 +35,8 @@ Seletores mínimos:
 ### Viewports
 
 - 360;
-- 390 default;
-- 430.
+- 412 default/âncora;
+- 480.
 
 Sem bezel de aparelho.
 
@@ -93,7 +93,7 @@ Durante composição:
 - não abrir Android;
 - não executar toda a aplicação se a tela puder ser isolada;
 - manter Vite/HMR rodando;
-- 390px como default;
+- 412px como default/âncora;
 - não atualizar documentação a cada microajuste.
 
 ## Guardrails
@@ -113,7 +113,7 @@ Depois de aprovada no Lab, a tela ainda passa pelo fluxo real antes do PR final.
 
 - `/__lab` abre em dev sem atravessar onboarding;
 - Onboarding Entry V2 abre diretamente;
-- 360/390/430 funcionam;
+- 360/412/480 funcionam;
 - default + pelo menos um estado secundário;
 - HMR funciona;
 - produção não expõe Lab;
