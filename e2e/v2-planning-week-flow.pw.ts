@@ -31,6 +31,7 @@ test('Planejamento mensal V2 mantém seleção, planos sem momento e filtros', a
   await expect(device.getByText('4 itens', { exact: true })).toBeVisible();
   await expect(device.getByText('Sem horário', { exact: true })).toHaveCount(0);
   await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
+  await expect(device.getByRole('button', { name: /Atividade arquivada/ })).toHaveCount(0);
 
   await device.getByRole('button', { name: /terça-feira, 27 de agosto/ }).click();
   await expect(device.getByRole('heading', { name: 'terça-feira, 27 de agosto' })).toBeVisible();
