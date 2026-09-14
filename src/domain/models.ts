@@ -26,9 +26,12 @@ export interface LessonPlan {
   tituloTema: string;
   horaInicio: string;
   horaFim: string;
-  status: "rascunho" | "concluido";
+  status: "rascunho" | "pronto" | "concluido";
   objetivoGeral: string;
   objetivosEspecificos: string[];
+  disciplina?: string;
+  objetoConhecimento?: string;
+  justificativa?: string;
   bncc: { habilidades: string[] };
   momentos: LessonMoment[];
   recursos: string;

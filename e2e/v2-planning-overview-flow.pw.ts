@@ -44,4 +44,10 @@ test('Novo plano V2 recupera rascunho local após sair do editor', async ({ page
   await expect(page.getByRole('heading', { name: 'Planejamento', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Criar plano de aula', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Tema ou título' })).toHaveValue('Leitura compartilhada');
+  await page.getByRole('button', { name: /RITMO DA AULA/ }).click();
+  await page.getByRole('textbox', { name: 'Momento' }).fill('Abertura');
+  await page.getByRole('button', { name: 'Adicionar momento', exact: true }).click();
+  await page.getByRole('button', { name: 'Marcar como pronto', exact: true }).click();
+  await expect(page.getByText('Plano marcado como pronto.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Pronto', { exact: true })).toBeVisible();
 });

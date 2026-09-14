@@ -34,13 +34,14 @@ const shortDate = (value: string) => new Date(`${value}T12:00:00`).toLocaleDateS
 function statusLabel(plan: LessonPlan) {
   if (plan.arquivadoEm) return 'Arquivado';
   if (plan.status === 'concluido') return 'Concluído';
+  if (plan.status === 'pronto') return 'Pronto';
   return 'Rascunho';
 }
 
 export function PlanningOverviewV2({ className = 'Sua turma', plans, loading = false, error = '', offline = false, onBack = () => undefined, onRetry = () => undefined, onOpenPlan = () => undefined, onCreatePlan = () => undefined, onViewChange = () => undefined, onTabChange = () => undefined }: Props) {
   const activePlans = React.useMemo(() => plans.filter((plan) => !plan.arquivadoEm).sort((a, b) => keyOf(a.dataKey) - keyOf(b.dataKey) || (a.horaInicio || '99:99').localeCompare(b.horaInicio || '99:99')), [plans]);
   const nextPlan = activePlans[0];
-  const drafts = activePlans.filter((plan) => plan.status !== 'concluido').length;
+  const drafts = activePlans.filter((plan) => plan.status === 'rascunho').length;
   const plannedMoments = activePlans.reduce((total, plan) => total + (plan.momentos?.length || 0), 0);
 
   return <main className="v2-root v2-planning-overview" aria-labelledby="planning-overview-v2-title">
