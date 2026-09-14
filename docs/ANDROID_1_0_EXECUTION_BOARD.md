@@ -33,7 +33,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
-4. Planejamento Dia/Semana/Mês — `Planejamento diário READY FOR DESIGN REVIEW; Semana/Mês IN PROGRESS`
+4. Planejamento diário — `READY FOR DESIGN REVIEW`; Planejamento semanal/mensal — `IN PROGRESS`
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
@@ -195,11 +195,11 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 14/09/2026 — checkpoint de conclusão parcial; Planejamento Diário V2
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `96b9ddd` + alterações locais do lote de Planejamento Diário V2
+- HEAD: `93ff617`
 - Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente. FilesV2 ganhou retorno hierárquico e abertura real de documentos; ActivityV2 agora mantém feedback de salvamento visível antes do retorno. ClassWorkspaceV2 substitui ClassScreen V1 no detalhe profundo, com contexto, tabs operacionais e BottomNavigation V2. A aba Registros consulta os registros pedagógicos reais e exibe contagem/data por aluno, com loading e erro recuperável; Histórico agora combina a timeline de observações com chamadas locais agrupadas por data e abre a Frequência no dia selecionado.
 - Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412-final.png`, além de `class-workspace-v2-390.png`, `class-workspace-v2-history-attendance-412.png`, `academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, `activity-v2-412.png` e evidências anteriores.
 - Testes executados: fluxo direcionado `pnpm exec playwright test e2e/v2-planning-day-flow.pw.ts --config playwright.config.ts --reporter=line` (11/11), cobrindo CTA real para `Nova atividade`, 320/360/390/412/432/480/600px e texto ampliado. A suíte oficial, `pnpm test`, TypeScript, boundary, build e Android permanecem registrados no checkpoint anterior e não foram repetidos nesta microiteração visual.
-- PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
+- PR #8: fechado e marcado `FROZEN — SUPERSEDED BY #10` pelo remoto; a branch continua atualizada em `origin/codex/5-v2-clean-room`; não reabrir automaticamente
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
 - Resultado: `Planejamento diário READY FOR DESIGN REVIEW`; nenhuma aprovação visual adicional foi declarada
