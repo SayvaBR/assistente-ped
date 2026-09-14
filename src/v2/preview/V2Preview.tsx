@@ -16,7 +16,7 @@ import { BnccV2 } from '../screens/BnccV2';
 import { ReportsV2 } from '../screens/ReportsV2';
 import { SettingsV2 } from '../screens/SettingsV2';
 import { AppearanceV2 } from '../screens/AppearanceV2';
-import { OnboardingV2 } from '../screens/OnboardingV2';
+import { OnboardingDiscoveryV2 } from '../screens/OnboardingDiscoveryV2';
 import { SplashV2 } from '../screens/SplashV2';
 import { SetupWizardV2 } from '../screens/SetupWizardV2';
 import { NewStudentV2 } from '../screens/NewStudentV2';
@@ -186,7 +186,7 @@ export function V2Preview() {
           ) : activeScreen === 'splash' ? (
             <SplashV2 autoAdvance={false} onDone={() => setActiveScreen('onboarding')} />
           ) : activeScreen === 'onboarding' ? (
-            <OnboardingV2 storage={previewStorage} onDone={() => setActiveScreen('home')} />
+            <OnboardingDiscoveryV2 storage={previewStorage} onDone={() => setActiveScreen('wizard')} />
           ) : activeScreen === 'attendance' ? (
             <FrequencyV2 data={frequencyStateData} onBack={() => setActiveScreen('home')} onRetry={() => undefined} onSave={() => undefined} />
           ) : activeScreen === 'observation' ? (
@@ -204,7 +204,7 @@ export function V2Preview() {
           ) : activeScreen === 'planning-overview' ? (
             <PlanningOverviewV2 plans={planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onRestorePlan={() => undefined} onCreatePlan={() => setActiveScreen('plan-editor')} onCreateActivity={() => setActiveScreen('activity')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-day' ? (
-            <PlanningDayV2 plans={planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} />
+            <PlanningDayV2 plans={planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} onCreateActivity={() => setActiveScreen('activity')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
             <PlanningCalendarV2 plans={planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }]} dateKey="2024-08-28" mode={activeScreen === 'planning-week' ? 'week' : 'month'} className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} onDateChange={() => undefined} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'class-manager' ? (

@@ -891,6 +891,7 @@ function App() {
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
     onOpenActivity: (activity) => zt("atividade-v2", { activity, isEditing: true }),
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
+    onCreateActivity: () => zt("atividade-v2", { activity: newTeachingActivity({ turmaId: M?.id || "", dataKey: planningV2Date }) }),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const planningCalendarV2 = (mode) => React.createElement(PlanningCalendarV2, {

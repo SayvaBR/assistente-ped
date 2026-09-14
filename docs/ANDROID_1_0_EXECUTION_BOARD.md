@@ -33,7 +33,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
 2. Registrar observação — `READY FOR DESIGN REVIEW`
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
-4. Planejamento Dia/Semana/Mês — `IN PROGRESS`
+4. Planejamento Dia/Semana/Mês — `Planejamento diário READY FOR DESIGN REVIEW; Semana/Mês IN PROGRESS`
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
@@ -42,7 +42,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 10. Relatórios — `IN PROGRESS`
 11. Configurações — `IN PROGRESS`
 12. Aparência — `IN PROGRESS`
-13. Onboarding — `IN PROGRESS`
+13. Onboarding — `IN PROGRESS` (o carrossel de apresentação anterior foi retirado do caminho real; a substituição por descoberta adaptativa começou em `OnboardingDiscoveryV2`, com respostas locais, ramificação por dor e handoff para o Setup Wizard)
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -50,7 +50,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Frequência — `READY FOR DESIGN REVIEW`
 - Registrar observação — `READY FOR DESIGN REVIEW`
 - Compromissos / Agenda — `READY FOR DESIGN REVIEW`
-- Planejamento diário — `IN PROGRESS`
+- Planejamento diário — `READY FOR DESIGN REVIEW` (composição V2 refinada em 412px; planos arquivados filtrados; ação contextual real abre o editor de atividade)
 - Planejamento semanal — `IN PROGRESS`
 - Planejamento mensal — `IN PROGRESS`
 - Turmas — `IN PROGRESS`
@@ -97,8 +97,8 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 ## Milestone M5 — Onboarding, conta e monetização
 
-- Splash — `IN PROGRESS`
-- Onboarding — `IN PROGRESS`
+- Splash — `IN PROGRESS` (a composição atual continua provisória; a próxima unidade deve fechar bootstrap, timeout/recovery e safe area sobre a nova entrada)
+- Onboarding — `IN PROGRESS` (Issue #3 agora é a referência do fluxo: conversa sem texto livre, consequência visível, persistência local e configuração progressiva; `OnboardingV2` legado não é mais usado pelo caminho real)
 - Cadastro — `IN PROGRESS`
 - Login / recuperação — `BLOCKED — não há provedor/contrato de autenticação no repositório; não simular login remoto. Recuperação local por backup permanece disponível e precisa ser apresentada como tal.`
 - Configuração professor — `IN PROGRESS`
@@ -144,7 +144,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 - Multi-device responsive — `TODO`
 - Text scale 100/130/150% — `TODO`
 - 200% em fluxos críticos — `TODO`
-- Safe areas — `TODO`
+- Safe areas — `IN PROGRESS` (inset inferior nativo via `WindowInsetsCompat` + viewport de rolagem isolado para first-run V2; validação física final do fluxo novo ainda pendente)
 - Teclado — `TODO`
 - Reduced Motion — `TODO`
 - Boundary V2 — `TODO`
@@ -193,17 +193,17 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint de conclusão parcial
+- Data/hora: 14/09/2026 — checkpoint de conclusão parcial; Planejamento Diário V2
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `b6458bc`
+- HEAD: `96b9ddd` + alterações locais do lote de Planejamento Diário V2
 - Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente. FilesV2 ganhou retorno hierárquico e abertura real de documentos; ActivityV2 agora mantém feedback de salvamento visível antes do retorno. ClassWorkspaceV2 substitui ClassScreen V1 no detalhe profundo, com contexto, tabs operacionais e BottomNavigation V2. A aba Registros consulta os registros pedagógicos reais e exibe contagem/data por aluno, com loading e erro recuperável; Histórico agora combina a timeline de observações com chamadas locais agrupadas por data e abre a Frequência no dia selecionado.
-- Screenshot/evidência: `docs/qa/clean-room/class-workspace-v2-390.png`, `docs/qa/clean-room/class-workspace-v2-history-attendance-412.png`, `academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, `activity-v2-412.png`, além das evidências anteriores `commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: suíte oficial `pnpm run test:v2-responsive -- --reporter=line` (91/91), fluxo direcionado ClassWorkspace (2/2), além de Academic (4/4), Activity + Academic (7/7) e Files (3/3); `pnpm test` (51/51), TypeScript, boundary e build passaram após o lote. A execução ampla de `e2e/` continua separada por failures de harness legado (`academic-saving`/`bncc`) que esperam controles V1 ausentes na instância reaproveitada em `5173`; isso não afeta os cenários V2. `node scripts/android-sync.mjs` e `pnpm run android:qa` OK; APK gerado em `android/app/build/outputs/apk/qa/app-qa.apk`.
+- Screenshot/evidência: `docs/qa/clean-room/planning-day-v2-412-final.png`, além de `class-workspace-v2-390.png`, `class-workspace-v2-history-attendance-412.png`, `academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, `activity-v2-412.png` e evidências anteriores.
+- Testes executados: fluxo direcionado `pnpm exec playwright test e2e/v2-planning-day-flow.pw.ts --config playwright.config.ts --reporter=line` (11/11), cobrindo CTA real para `Nova atividade`, 320/360/390/412/432/480/600px e texto ampliado. A suíte oficial, `pnpm test`, TypeScript, boundary, build e Android permanecem registrados no checkpoint anterior e não foram repetidos nesta microiteração visual.
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: validar no APK atual o fluxo de turma/histórico e continuar auditando superfícies profundas que ainda dependem de V1 antes de marcar M3 concluído
+- Resultado: `Planejamento diário READY FOR DESIGN REVIEW`; nenhuma aprovação visual adicional foi declarada
+- Próxima ação: avançar para Planejamento semanal V2 mantendo a mesma linguagem e validar o APK atual quando o lote de planejamento formar um fluxo coerente
 
 ### BNCC — evidência e contratos
 

@@ -13,6 +13,15 @@ test('Planejamento diário V2 exibe os momentos e a ação de adicionar', async 
   await expect(device.getByRole('button', { name: /Caça às palavras/ })).toBeVisible();
 });
 
+test('Planejamento diário V2 abre o editor pela próxima ação', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=planning-day&width=412');
+  const device = page.locator('.v2-preview-device');
+  await device.getByRole('button', { name: 'Criar atividade' }).click();
+  await expect(device.getByRole('heading', { name: 'Nova atividade' })).toBeVisible();
+  await expect(device.getByRole('button', { name: 'Salvar atividade' })).toBeVisible();
+});
+
 test('Planejamento diário V2 preserva copy e layout em texto ampliado', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 1200 });
   await page.goto('/?v2-preview=planning-day&width=412');
