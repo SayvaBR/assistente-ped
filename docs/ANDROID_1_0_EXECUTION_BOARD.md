@@ -195,14 +195,14 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `d2060d2`
+- HEAD: `4388a28`
 - Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planning overview V2 abre/cria planos reais, recupera rascunhos locais por turma/data, expõe campos profissionais, ciclo de rascunho/pronto/concluído/arquivado com restauração reversível e agora lê atividades pedagógicas locais persistentes com reabertura para edição; Perfil do aluno V2 possui galeria local real com adicionar/excluir e estado vazio honesto
 - Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `activity-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: `pnpm test` (51/51), `pnpm run test:v2-responsive` (82/82 antes desta jornada de troca de turma), fluxos direcionados de atividade (3/3), planejamento (6/6) e turmas (3/3), boundary, TypeScript e build; `node scripts/android-sync.mjs` OK; `pnpm run android:qa` OK com APK em `android/app/build/outputs/apk/qa/app-qa.apk`; `pnpm run android:device:check` bloqueado sem dispositivo autorizado
+- Testes executados: `pnpm test` (51/51), `pnpm run test:v2-responsive` (84/84, incluindo persistência de atividade, calendário e troca real de turma), boundary, TypeScript e build; `node scripts/android-sync.mjs` OK; `pnpm run android:qa` OK com APK em `android/app/build/outputs/apk/qa/app-qa.apk`; `pnpm run android:device:check` bloqueado sem dispositivo autorizado
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: atualizar a regressão completa com as jornadas de atividades/calendário/troca de turma e continuar a fila de superfícies; repetir sync/APK após o próximo lote
+- Próxima ação: auditar as superfícies acadêmicas e arquivos que ainda dependem de V1, priorizando contratos locais e caminhos de recuperação; repetir sync/APK após o próximo lote
 
 ### BNCC — evidência e contratos
 
