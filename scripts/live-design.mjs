@@ -12,6 +12,7 @@ const port = Number(process.env.LIVE_DESIGN_PORT || 5173);
 const startupTimeoutMs = Number(process.env.LIVE_DESIGN_STARTUP_TIMEOUT_MS || 15000);
 const pollIntervalMs = Number(process.env.LIVE_DESIGN_POLL_INTERVAL_MS || 150);
 const markerUpdateDelayMs = Number(process.env.LIVE_DESIGN_MARKER_UPDATE_DELAY_MS || 0);
+const claimDelayMs = Number(process.env.LIVE_DESIGN_CLAIM_DELAY_MS || 0);
 const supportedPreviews = new Set([
   'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
   'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
@@ -163,6 +164,7 @@ if (ownedServer) {
     process.exit(1);
   }
 } else {
+  if (claimDelayMs > 0) await new Promise((resolve) => setTimeout(resolve, claimDelayMs));
   if (!claimStartupLock()) {
     console.error(`[live-design] startup lock ocupado em ${startupLockPath}; não iniciando um segundo servidor.`);
     process.exit(1);

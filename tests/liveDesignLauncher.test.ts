@@ -28,6 +28,7 @@ function runLauncher(args: string[], env: Record<string, string>) {
 }
 
 function waitForExit(child: ChildProcessWithoutNullStreams) {
+  if (child.exitCode !== null || child.signalCode !== null) return Promise.resolve(child.exitCode ?? 1);
   return new Promise<number>((resolve, reject) => {
     child.once('error', reject);
     child.once('exit', (code) => resolve(code ?? 1));
@@ -181,6 +182,42 @@ describe('live design launcher ownership', () => {
     expect(await waitForExit(launching.child)).toBe(1);
     expect(launching.output).toContain('ownership do marker');
     expect(readFileSync(marker, 'utf8')).toContain('foreign-worktree');
+    expect(existsSync(`${marker}.lock`)).toBe(false);
+    await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
+  });
+
+  it('serializes two launchers reclaiming the same stale marker', async () => {
+    const marker = join(testRoot, 'concurrent-marker.json');
+    const fakeVite = join(testRoot, 'concurrent-vite.mjs');
+    const fakePidFile = join(testRoot, 'concurrent-vite.pid');
+    writeFileSync(marker, JSON.stringify({ cwd: process.cwd(), pid: 999999, viteBin: fakeVite }));
+    writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
+
+    const delayed = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46106',
+      LIVE_DESIGN_MARKER: marker,
+      LIVE_DESIGN_VITE_BIN: fakeVite,
+      LIVE_DESIGN_CLAIM_DELAY_MS: '500',
+      LIVE_DESIGN_STARTUP_TIMEOUT_MS: '1000',
+      FAKE_PID_FILE: fakePidFile,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    const winner = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46106',
+      LIVE_DESIGN_MARKER: marker,
+      LIVE_DESIGN_VITE_BIN: fakeVite,
+      LIVE_DESIGN_STARTUP_TIMEOUT_MS: '400',
+      LIVE_DESIGN_POLL_INTERVAL_MS: '50',
+      FAKE_PID_FILE: fakePidFile,
+    });
+
+    const delayedCode = await waitForExit(delayed.child);
+    expect(delayedCode).toBe(1);
+    expect(delayed.output).toContain('startup lock ocupado');
+    const winnerCode = await waitForExit(winner.child);
+    expect(winnerCode).toBe(1);
+    expect(winner.output).toContain('não ficou pronto em 400ms');
+    expect(existsSync(marker)).toBe(false);
     expect(existsSync(`${marker}.lock`)).toBe(false);
     await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
   });
