@@ -95,7 +95,7 @@ import { ReportsV2 } from "../v2/screens/ReportsV2";
 import { SettingsV2 } from "../v2/screens/SettingsV2";
 import { AppearanceV2 } from "../v2/screens/AppearanceV2";
 import { newLessonPlan } from "../domain/lessonPlans";
-import { newTeachingActivity, saveActivity } from "../domain/activities";
+import { listActivities, newTeachingActivity, saveActivity } from "../domain/activities";
 import { ActivityV2 } from "../v2/screens/ActivityV2";
 
 const ReportsScreen = React.lazy(() =>
@@ -165,7 +165,8 @@ function App() {
     [frequencyV2Reload, setFrequencyV2Reload] = ReactHooks.useState(0),
     [planningV2Date, setPlanningV2Date] = ReactHooks.useState(dateKey()),
     [planningV2Reload, setPlanningV2Reload] = ReactHooks.useState(0),
-    [planningV2State, setPlanningV2State] = ReactHooks.useState({ status: "ready", plans: [], error: "" });
+    [planningV2State, setPlanningV2State] = ReactHooks.useState({ status: "ready", plans: [], error: "" }),
+    [activityV2State, setActivityV2State] = ReactHooks.useState({ status: "ready", activities: [], error: "" });
   (ReactHooks.useEffect(() => {
     ((async () => {
       try {
@@ -447,6 +448,7 @@ function App() {
     saveActivityV2 = async (activity) => {
       if (!M?.id) throw new Error("Selecione uma turma antes de criar uma atividade.");
       await saveActivity(activity, storage);
+      setPlanningV2Reload((value) => value + 1);
     },
     Ya = async (ae = repository.turmaAtivaId) => {
       if (ae)
@@ -712,6 +714,15 @@ function App() {
       .catch((error) => active && setPlanningV2State({ status: "error", plans: [], error: error?.message || "Não foi possível carregar o planejamento." }));
     return () => { active = false; };
   }, [f, Re?.name, M?.id, planningV2Date, planningV2Reload]);
+  ReactHooks.useEffect(() => {
+    if (f !== "plano" || !M?.id) return undefined;
+    let active = true;
+    setActivityV2State((state) => ({ ...state, status: "loading", error: "" }));
+    listActivities(M.id, storage)
+      .then((activities) => active && setActivityV2State({ status: "ready", activities, error: "" }))
+      .catch((error) => active && setActivityV2State({ status: "error", activities: [], error: error?.message || "Não foi possível carregar as atividades." }));
+    return () => { active = false; };
+  }, [f, M?.id, planningV2Reload]);
   const frequencyV2DateKey =
     Re?.name === "chamada" ? Re.data?.dataKey || yn : yn;
   ReactHooks.useEffect(() => {
@@ -897,6 +908,8 @@ function App() {
   const planningOverviewV2 = () => React.createElement(PlanningOverviewV2, {
     className: M?.nome || "Sua turma",
     plans: planningV2State.plans,
+    activities: activityV2State.activities,
+    activityError: activityV2State.error,
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
     offline: !homeIsOnline,
@@ -904,6 +917,7 @@ function App() {
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
     onCreateActivity: () => zt("atividade-v2", { activity: newTeachingActivity({ turmaId: M?.id || "", dataKey: planningV2Date }) }),
+    onOpenActivity: (activity) => zt("atividade-v2", { activity, isEditing: true }),
     onRestorePlan: (plan) => { void restorePlanV2(plan); },
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onViewChange: (view) => zt(view === "day" ? "planejamento-dia" : view === "week" ? "planejamento-semana" : "planejamento-mes", { dataKey: planningV2Date }),
@@ -1316,6 +1330,7 @@ function App() {
                                                               "atividade-v2"
                                                             ? (ht = React.createElement(ActivityV2, {
                                                                 activity: Re.data?.activity || newTeachingActivity({ turmaId: M?.id || "", dataKey: planningV2Date }),
+                                                                isEditing: Boolean(Re.data?.isEditing),
                                                                 className: M?.nome || "Sua turma",
                                                                 offline: !homeIsOnline,
                                                                 onBack: _t,

@@ -5,9 +5,9 @@ import '@fontsource/fredoka/600.css';
 import '../styles/foundation.css';
 import './activity-v2.css';
 
-type Props = { activity: TeachingActivity; className?: string; offline?: boolean; onBack: () => void; onSalvar: (activity: TeachingActivity) => Promise<unknown> | unknown; onSaved?: () => void; onTabChange?: (tab: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais') => void };
+type Props = { activity: TeachingActivity; className?: string; offline?: boolean; isEditing?: boolean; onBack: () => void; onSalvar: (activity: TeachingActivity) => Promise<unknown> | unknown; onSaved?: () => void; onTabChange?: (tab: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais') => void };
 
-export function ActivityV2({ activity, className = 'Sua turma', offline = false, onBack, onSalvar, onSaved = () => undefined, onTabChange = () => undefined }: Props) {
+export function ActivityV2({ activity, className = 'Sua turma', offline = false, isEditing = false, onBack, onSalvar, onSaved = () => undefined, onTabChange = () => undefined }: Props) {
   const [draft, setDraft] = useState(activity);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -17,7 +17,7 @@ export function ActivityV2({ activity, className = 'Sua turma', offline = false,
   const save = async () => { setSaving(true); setError(''); setMessage(''); try { await onSalvar({ ...draft, status: 'pronta' }); setMessage('Atividade salva no dispositivo.'); onSaved(); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Não foi possível salvar a atividade.'); } finally { setSaving(false); } };
   const navItems = [{ id: 'inicio', label: 'Início', icon: House }, { id: 'planejamento', label: 'Planejamento', icon: BookOpenCheck }, { id: 'turmas', label: 'Turmas', icon: Users }, { id: 'arquivos', label: 'Arquivos', icon: FileText }, { id: 'mais', label: 'Mais', icon: LayoutGrid }] as const;
   return <main className="v2-root v2-activity" aria-labelledby="activity-v2-title"><div className="v2-screen v2-activity__screen">
-    <header className="v2-activity__header"><button className="v2-activity__back v2-pressable" type="button" onClick={onBack} aria-label="Voltar"><ArrowLeft size={24} /></button><div><span className="v2-eyebrow">{className}</span><h1 id="activity-v2-title">Nova atividade</h1><p>Prepare uma proposta para levar à turma.</p></div><span className="v2-activity__mark"><BookOpenCheck size={22} /></span></header>
+    <header className="v2-activity__header"><button className="v2-activity__back v2-pressable" type="button" onClick={onBack} aria-label="Voltar"><ArrowLeft size={24} /></button><div><span className="v2-eyebrow">{className}</span><h1 id="activity-v2-title">{isEditing ? 'Editar atividade' : 'Nova atividade'}</h1><p>Prepare uma proposta para levar à turma.</p></div><span className="v2-activity__mark"><BookOpenCheck size={22} /></span></header>
     {offline && <p className="v2-activity__notice" role="status">Você está offline. A atividade será guardada neste dispositivo.</p>}
     {error && <p className="v2-activity__error" role="alert">{error}</p>}
     <section className="v2-activity__context v2-surface"><span className="v2-eyebrow">VINCULADA AO PLANEJAMENTO</span><strong>{draft.dataKey}</strong><small>O conteúdo fica disponível para esta turma.</small></section>
