@@ -195,14 +195,14 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `4388a28`
-- Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente
-- Screenshot/evidência: `docs/qa/clean-room/academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, além das evidências anteriores `commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `activity-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: `pnpm test` (51/51), `pnpm run test:v2-responsive` (88/88 após incluir o fluxo acadêmico), `pnpm exec playwright test e2e/v2-academic-flow.pw.ts` (4/4), boundary, TypeScript e build; `node scripts/android-sync.mjs` OK; `pnpm run android:qa` OK com APK em `android/app/build/outputs/apk/qa/app-qa.apk`; `pnpm run android:device:check` bloqueado sem dispositivo autorizado
+- HEAD: `5b450b3`
+- Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente. FilesV2 ganhou retorno hierárquico e abertura real de documentos; ActivityV2 agora mantém feedback de salvamento visível antes do retorno.
+- Screenshot/evidência: `docs/qa/clean-room/academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, `activity-v2-412.png`, além das evidências anteriores `commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
+- Testes executados: fluxos direcionados Academic (4/4), Activity + Academic (7/7) e Files (3/3); `pnpm test` (51/51), TypeScript, boundary e build já passaram após os lotes. A execução ampla de `e2e/` foi interrompida após falhas de harness nos testes legados (`academic-saving`/`bncc`) que esperavam controles ausentes na instância reaproveitada em `5173`; a suíte oficial `test:v2-responsive` precisa ser repetida com servidor limpo/porta controlada. `node scripts/android-sync.mjs` OK; `pnpm run android:qa` OK com APK em `android/app/build/outputs/apk/qa/app-qa.apk`; `pnpm run android:device:check` bloqueado sem dispositivo autorizado
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: repetir a regressão completa, endurecer arquivos/relatórios com dados persistidos e seguir auditando as superfícies profundas que ainda dependem de V1
+- Próxima ação: repetir a suíte oficial V2 com servidor controlado, endurecer arquivos/relatórios com dados persistidos e seguir auditando as superfícies profundas que ainda dependem de V1
 
 ### BNCC — evidência e contratos
 
