@@ -123,6 +123,10 @@ const planningDayPreviewPlans: LessonPlan[] = [
 ];
 const classesPreview = [{ id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' }, { id: 'class-b', nome: '4º Ano B', nivel: 'Ensino Fundamental', turno: 'Vespertino' }];
 const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id, name, color }) => ({ id, nome: name, cor: color }));
+const attendancePreviewDays: Record<string, Attendance> = {
+  '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'atrasado', enzo: 'falta_justificada', fernanda: 'saida_antecipada' },
+  '2024-08-27': { ana: 'presente', bruno: 'falta', caio: 'presente', daniela: 'presente', enzo: 'falta_justificada', fernanda: 'atrasado' },
+};
 const studentProfilePreview = { id: 'ana', nome: 'Ana Clara Souza', cor: '#1cb0f6', dataNascimento: '2015-03-12', responsavel: 'Carolina Souza', contato: '11987654321', presencas: 18, faltas: 2, atrasos: 1 };
 const reportPreviewDays: Record<string, Attendance> = { '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'presente', enzo: 'presente', fernanda: 'falta' } };
 const reportPreviewClass = { id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' };
@@ -141,15 +145,18 @@ export function V2Preview() {
   const [previewAccent, setPreviewAccent] = useState('#168be0');
   const [previewSounds, setPreviewSounds] = useState(true);
   const [planningPreviewDateKey, setPlanningPreviewDateKey] = useState('2024-08-28');
+  const [attendancePreviewDateKey, setAttendancePreviewDateKey] = useState('2024-08-28');
   const [classTab, setClassTab] = useState<'dia' | 'criancas' | 'registros' | 'historico' | 'gestao'>('dia');
   const [planPrefill, setPlanPrefill] = useState<Partial<LessonPlan>>({});
   const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
   const frequencyStateData: FrequencyV2Data = {
     ...frequencyPreviewData,
+    dateKey: attendancePreviewDateKey,
+    dateLabel: new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${attendancePreviewDateKey}T12:00:00`)),
+    students: previewState === 'empty' ? [] : frequencyPreviewData.students.map((student) => ({ ...student, status: attendancePreviewDays[attendancePreviewDateKey]?.[student.id] })),
     status: previewState === 'loading' || previewState === 'error' || previewState === 'empty' ? previewState : 'ready',
     error: previewState === 'error' ? 'O armazenamento local demorou para responder.' : '',
     offline: previewState === 'offline',
-    students: previewState === 'empty' ? [] : frequencyPreviewData.students,
   };
 
   return (
@@ -225,7 +232,7 @@ export function V2Preview() {
           ) : activeScreen === 'student-profile' ? (
             <StudentProfileV2 student={studentProfilePreview} className="5º Ano A" onBack={() => setActiveScreen('classes')} onEditar={async () => undefined} onExcluir={async () => undefined} loadObservations={async () => [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade e explicou sua estratégia para o grupo.' }]} />
           ) : activeScreen === 'class-workspace' ? (
-            <ClassWorkspaceV2 turma={classesPreview[0]} alunos={classStudentsPreview} aba={classTab} dataKey="2024-08-28" setDataKey={() => undefined} setAba={setClassTab} onBack={() => setActiveScreen('classes')} goTo={(route) => route === 'chamada' ? setActiveScreen('attendance') : route === 'observacao' ? setActiveScreen('observation') : route === 'academico' ? setActiveScreen('academic') : route === 'relatorios' ? setActiveScreen('reports') : route === 'perfil' ? setActiveScreen('student-profile') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} loadObservations={async (studentId) => studentId === 'ana' ? [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade.' }] : []} loadAttendance={async () => ({ '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'atrasado' } })} />
+            <ClassWorkspaceV2 turma={classesPreview[0]} alunos={classStudentsPreview} aba={classTab} dataKey="2024-08-28" setDataKey={() => undefined} setAba={setClassTab} onBack={() => setActiveScreen('classes')} goTo={(route, data) => { if (route === 'chamada') { if (data && typeof data === 'object' && 'dataKey' in data) setAttendancePreviewDateKey(String(data.dataKey)); setActiveScreen('attendance'); } else if (route === 'observacao') setActiveScreen('observation'); else if (route === 'academico') setActiveScreen('academic'); else if (route === 'relatorios') setActiveScreen('reports'); else if (route === 'perfil') setActiveScreen('student-profile'); }} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : tab === 'mais' ? setActiveScreen('more') : undefined} loadObservations={async (studentId) => studentId === 'ana' ? [{ id: 'obs-1', data: '12/09/2026', texto: 'Participou da atividade.' }] : []} loadAttendance={async () => attendancePreviewDays} />
           ) : activeScreen === 'classes' ? (
             <ClassesV2 classes={classesPreview} activeClass={classesPreview[0]} students={classStudentsPreview} onBack={() => setActiveScreen('home')} onOpenClass={() => setActiveScreen('class-workspace')} onOpenStudent={() => setActiveScreen('student-profile')} onNewStudent={() => setActiveScreen('new-student')} onAttendance={() => setActiveScreen('attendance')} onObservation={() => setActiveScreen('observation')} onAcademic={() => setActiveScreen('academic')} />
           ) : activeScreen === 'profile' ? (
