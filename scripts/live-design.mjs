@@ -1,5 +1,5 @@
 import { execFileSync, spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
 const args = process.argv.slice(2);
@@ -11,6 +11,7 @@ const host = '127.0.0.1';
 const port = Number(process.env.LIVE_DESIGN_PORT || 5173);
 const startupTimeoutMs = Number(process.env.LIVE_DESIGN_STARTUP_TIMEOUT_MS || 15000);
 const pollIntervalMs = Number(process.env.LIVE_DESIGN_POLL_INTERVAL_MS || 150);
+const markerUpdateDelayMs = Number(process.env.LIVE_DESIGN_MARKER_UPDATE_DELAY_MS || 0);
 const supportedPreviews = new Set([
   'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
   'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
@@ -35,13 +36,19 @@ const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=
 const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
 const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
 
-function removeMarker(expectedPid) {
+function removeOwnedMarker(expectedPid) {
   try {
-    if (expectedPid !== undefined) {
-      const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
-      if (marker.launcherPid !== process.pid || marker.pid !== expectedPid) return;
-    }
+    const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+    if (marker.cwd !== process.cwd() || marker.launcherPid !== process.pid) return;
+    if (expectedPid !== undefined && marker.pid !== expectedPid) return;
     unlinkSync(markerPath);
+  } catch { /* stale marker already gone */ }
+}
+
+function removeStaleMarker() {
+  try {
+    const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+    if (marker.cwd === process.cwd()) unlinkSync(markerPath);
   } catch { /* stale marker already gone */ }
 }
 
@@ -129,7 +136,7 @@ if (ownedServer) {
     process.exit(1);
   }
 } else {
-  if (initialMarkerState === 'stale' || ownedServer) removeMarker();
+  if (initialMarkerState === 'stale') removeStaleMarker();
 
 try {
   mkdirSync(dirname(markerPath), { recursive: true });
@@ -149,11 +156,28 @@ const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String
   env: process.env,
 });
 if (!child.pid) {
-  removeMarker();
+  removeOwnedMarker();
   console.error('[live-design] não foi possível iniciar o processo Vite.');
   process.exit(1);
 }
-writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, phase: 'running', pid: child.pid, viteBin }));
+const childExit = new Promise((resolve) => child.once('exit', resolve));
+const markerTempPath = `${markerPath}.${process.pid}.tmp`;
+try {
+  if (markerUpdateDelayMs > 0) await new Promise((resolve) => setTimeout(resolve, markerUpdateDelayMs));
+  const startingMarker = JSON.parse(readFileSync(markerPath, 'utf8'));
+  if (startingMarker.cwd !== process.cwd() || startingMarker.launcherPid !== process.pid || startingMarker.phase !== 'starting') {
+    throw new Error('marker ownership changed before Vite became ready');
+  }
+  writeFileSync(markerTempPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, phase: 'running', pid: child.pid, viteBin }), { flag: 'wx' });
+  renameSync(markerTempPath, markerPath);
+} catch (error) {
+  try { unlinkSync(markerTempPath); } catch { /* temporary marker already gone */ }
+  if (!child.killed) child.kill('SIGTERM');
+  await childExit;
+  removeOwnedMarker();
+  console.error(`[live-design] não foi possível finalizar o ownership do marker: ${error.message}`);
+  process.exit(1);
+}
 
   let readyPrinted = false;
   let startupTimedOut = false;
@@ -178,13 +202,13 @@ const stop = (signal) => {
   if (!child.killed) child.kill(signal);
 };
 
-process.on('exit', () => removeMarker(child.pid));
+process.on('exit', () => removeOwnedMarker(child.pid));
 process.on('SIGINT', () => stop('SIGINT'));
 process.on('SIGTERM', () => stop('SIGTERM'));
 
   child.on('exit', (code, signal) => {
     clearInterval(poll);
-    removeMarker(child.pid);
+    removeOwnedMarker(child.pid);
     if (signal) process.exit(startupTimedOut ? 1 : 0);
   process.exit(code ?? 1);
 });

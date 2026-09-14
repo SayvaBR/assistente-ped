@@ -159,4 +159,26 @@ describe('live design launcher ownership', () => {
     expect(existsSync(marker)).toBe(false);
     await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
   });
+
+  it('rolls back the child when marker ownership changes during startup', async () => {
+    const marker = join(testRoot, 'claim-race-marker.json');
+    const fakeVite = join(testRoot, 'claim-race-vite.mjs');
+    const fakePidFile = join(testRoot, 'claim-race-vite.pid');
+    writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
+    const launching = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46105',
+      LIVE_DESIGN_MARKER: marker,
+      LIVE_DESIGN_VITE_BIN: fakeVite,
+      LIVE_DESIGN_MARKER_UPDATE_DELAY_MS: '500',
+      FAKE_PID_FILE: fakePidFile,
+    });
+    while (!existsSync(marker) || !readFileSync(marker, 'utf8').includes('"phase":"starting"') || !existsSync(fakePidFile)) {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    writeFileSync(marker, JSON.stringify({ cwd: 'C:\\foreign-worktree', launcherPid: process.pid, phase: 'foreign' }));
+    expect(await waitForExit(launching.child)).toBe(1);
+    expect(launching.output).toContain('ownership do marker');
+    expect(readFileSync(marker, 'utf8')).toContain('foreign-worktree');
+    await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
+  });
 });
