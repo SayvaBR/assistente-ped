@@ -145,7 +145,6 @@ describe('live design launcher ownership', () => {
       pid: process.pid,
       viteBin: fakeVite,
     }));
-    writeFileSync(`${marker}.lock`, JSON.stringify({ cwd: process.cwd(), launcherPid: 999999, viteBin: fakeVite }));
     writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
 
     const timedOut = runLauncher(['home'], {
@@ -161,6 +160,18 @@ describe('live design launcher ownership', () => {
     expect(existsSync(marker)).toBe(false);
     expect(existsSync(`${marker}.lock`)).toBe(false);
     await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
+  });
+
+  it('fails closed when an old startup lock remains', async () => {
+    const marker = join(testRoot, 'blocked-marker.json');
+    writeFileSync(`${marker}.lock`, JSON.stringify({ cwd: process.cwd(), launcherPid: 999999, viteBin: 'vite.js' }));
+    const blocked = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: '46107',
+      LIVE_DESIGN_MARKER: marker,
+    });
+    expect(await waitForExit(blocked.child)).toBe(1);
+    expect(blocked.output).toContain('startup lock ocupado');
+    expect(existsSync(`${marker}.lock`)).toBe(true);
   });
 
   it('rolls back the child when marker ownership changes during startup', async () => {

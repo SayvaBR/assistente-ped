@@ -42,6 +42,8 @@ O launcher só reutiliza um Vite que ele próprio iniciou para este checkout. Se
 
 O ownership é confirmado pelo marker do checkout e pela linha de comando do processo Vite. Marker estrangeiro não é sobrescrito; marker stale é descartado antes de uma nova inicialização.
 
+Se um lock de startup antigo permanecer depois de uma interrupção abrupta, o launcher falha fechado e preserva o lock; remova somente o arquivo exato `tmp/live-design-server.json.lock` após confirmar que não há outro launcher ativo.
+
 Por padrão o servidor fica preso em `127.0.0.1`. Não expor na LAN durante o MVP.
 
 ## 3. Browser-first

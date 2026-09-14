@@ -1,4 +1,5 @@
 import { execFileSync, spawn } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
@@ -37,6 +38,7 @@ const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=
 const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
 const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
 const startupLockPath = `${markerPath}.lock`;
+const liveDesignToken = randomUUID();
 
 function removeOwnedMarker(expectedPid) {
   try {
@@ -65,7 +67,7 @@ function claimStartupLock() {
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       mkdirSync(dirname(startupLockPath), { recursive: true });
-      writeFileSync(startupLockPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, viteBin }), { flag: 'wx' });
+      writeFileSync(startupLockPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, viteBin, mode: liveDesignToken }), { flag: 'wx' });
       return true;
     } catch {
       try {
@@ -73,8 +75,8 @@ function claimStartupLock() {
         if (lock.cwd !== process.cwd()) return false;
         process.kill(lock.launcherPid, 0);
         if (isLiveLauncher(lock.launcherPid)) return false;
-      } catch { /* stale lock can be reclaimed */ }
-      try { unlinkSync(startupLockPath); } catch { return false; }
+      } catch { /* stale lock remains fail-closed for explicit recovery */ }
+      return false;
     }
   }
   return false;
@@ -99,9 +101,10 @@ function processCommandLine(pid) {
   }
 }
 
-function isExpectedProcess(pid, expectedPath) {
+function isExpectedProcess(pid, expectedPath, expectedToken) {
   const commandLine = processCommandLine(pid).toLowerCase().replaceAll('\\', '/');
-  return commandLine.includes(expectedPath.toLowerCase().replaceAll('\\', '/'));
+  return commandLine.includes(expectedPath.toLowerCase().replaceAll('\\', '/'))
+    && (!expectedToken || commandLine.includes(`--mode ${expectedToken}`.toLowerCase()));
 }
 
 function isLiveLauncher(pid) {
@@ -121,7 +124,7 @@ function markerState() {
     }
     if (!Number.isInteger(marker.pid)) return 'stale';
     process.kill(marker.pid, 0);
-    return isExpectedProcess(marker.pid, viteBin) ? 'owned' : 'stale';
+    return isExpectedProcess(marker.pid, viteBin, marker.mode) ? 'owned' : 'stale';
   } catch {
     return 'stale';
   }
@@ -176,6 +179,7 @@ try {
   writeFileSync(markerPath, JSON.stringify({
     cwd: process.cwd(),
     launcherPid: process.pid,
+    mode: liveDesignToken,
     phase: 'starting',
     viteBin,
   }), { flag: 'wx' });
@@ -184,7 +188,7 @@ try {
   process.exit(1);
 }
 
-const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
+const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort', '--mode', liveDesignToken], {
   stdio: 'inherit',
   env: process.env,
 });
@@ -202,7 +206,7 @@ try {
   if (startingMarker.cwd !== process.cwd() || startingMarker.launcherPid !== process.pid || startingMarker.phase !== 'starting') {
     throw new Error('marker ownership changed before Vite became ready');
   }
-  writeFileSync(markerTempPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, phase: 'running', pid: child.pid, viteBin }), { flag: 'wx' });
+  writeFileSync(markerTempPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, mode: liveDesignToken, phase: 'running', pid: child.pid, viteBin }), { flag: 'wx' });
   renameSync(markerTempPath, markerPath);
 } catch (error) {
   try { unlinkSync(markerTempPath); } catch { /* temporary marker already gone */ }
