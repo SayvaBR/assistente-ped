@@ -195,10 +195,10 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `d465c3a`
-- Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planejamento overview V2 substitui o tab principal V1, abre/cria planos reais e mantém editor com estado novo/edição sem arquivamento prematuro; Perfil do aluno V2 agora possui galeria local real com adicionar/excluir e estado vazio honesto
+- HEAD: `c5d8229`
+- Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planejamento overview V2 substitui o tab principal V1, abre/cria planos reais, recupera rascunhos locais por turma/data e mantém editor com estado novo/edição sem arquivamento prematuro; Perfil do aluno V2 agora possui galeria local real com adicionar/excluir e estado vazio honesto
 - Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (78/78 no checkpoint anterior), fluxo Perfil/Biblioteca/Mais (10/10), fluxo Planejamento/Editor (4/4), boundary e TypeScript; build, sync Android e APK QA permanecem verdes no checkpoint anterior e serão repetidos após este lote
+- Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (78/78 no checkpoint anterior), fluxo Perfil/Biblioteca/Mais (10/10), fluxo Planejamento/Editor/autosave (3/3), boundary e TypeScript; build, sync Android e APK QA permanecem verdes no checkpoint anterior e serão repetidos após este lote
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
