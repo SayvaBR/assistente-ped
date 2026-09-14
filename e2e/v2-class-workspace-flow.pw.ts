@@ -10,6 +10,8 @@ test('Home V2 abre o workspace V2 da turma sem voltar para a carroceria legada',
   await expect(device.getByRole('heading', { name: 'Fazer chamada', exact: true })).toBeVisible();
   await device.getByRole('button', { name: 'Alunos', exact: true }).click();
   await expect(device.getByText('Ana Clara Souza', { exact: true })).toBeVisible();
+  await device.getByRole('button', { name: 'Registros', exact: true }).click();
+  await expect(device.getByText('1 registro · 12/09/2026', { exact: true })).toBeVisible();
   await device.getByRole('button', { name: 'Histórico', exact: true }).click();
   await expect(device.getByRole('heading', { name: 'Histórico da turma', exact: true })).toBeVisible();
 });

@@ -33,6 +33,8 @@ type Student = {
   atrasos?: number;
 };
 
+type Observation = { id?: string; data?: string; texto?: string };
+
 type ClassItem = {
   id: string;
   nome: string;
@@ -55,6 +57,7 @@ type Props = {
   dataKey: string;
   setDataKey: (key: string) => void;
   onTabChange?: (tab: 'inicio' | 'planejamento' | 'turmas' | 'arquivos' | 'mais') => void;
+  loadObservations?: (studentId: string) => Promise<Observation[]>;
 };
 
 const tabs: Array<{ id: Tab; label: string; icon: typeof CalendarCheck2 }> = [
@@ -83,12 +86,16 @@ function studentAttendance(student: Student) {
 
 const navItems = [{ id: 'inicio', label: 'Início', icon: House }, { id: 'planejamento', label: 'Planejamento', icon: BookOpenCheck }, { id: 'turmas', label: 'Turmas', icon: Users }, { id: 'arquivos', label: 'Arquivos', icon: FileText }, { id: 'mais', label: 'Mais', icon: LayoutGrid }] as const;
 
-export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBack, onRenomear, aba, setAba, dataKey, setDataKey, onTabChange = () => undefined }: Props) {
+export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBack, onRenomear, aba, setAba, dataKey, setDataKey, onTabChange = () => undefined, loadObservations = async () => [] }: Props) {
   const [query, setQuery] = React.useState('');
   const [editingName, setEditingName] = React.useState(false);
   const [name, setName] = React.useState(turma?.nome || '');
   const [savingName, setSavingName] = React.useState(false);
   const [nameError, setNameError] = React.useState('');
+  const [recordState, setRecordState] = React.useState<{ status: 'idle' | 'loading' | 'ready' | 'error'; items: Record<string, Observation[]>; error: string }>({ status: 'idle', items: {}, error: '' });
+  const recordLoader = React.useRef(loadObservations);
+  recordLoader.current = loadObservations;
+  const studentIds = alunos.map((student) => student.id).join('|');
   const filteredStudents = alunos.filter((student) => student.nome.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
   const totals = alunos.reduce((sum, student) => {
     const item = studentAttendance(student);
@@ -97,6 +104,17 @@ export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBa
   const activeTab = tabs.find((item) => item.id === aba) || tabs[0];
 
   React.useEffect(() => setName(turma?.nome || ''), [turma?.nome]);
+  React.useEffect(() => {
+    if (aba !== 'registros') return undefined;
+    let active = true;
+    setRecordState({ status: 'loading', items: {}, error: '' });
+    Promise.all(alunos.map(async (student) => [student.id, await recordLoader.current(student.id)] as const)).then((entries) => {
+      if (active) setRecordState({ status: 'ready', items: Object.fromEntries(entries), error: '' });
+    }).catch((error) => {
+      if (active) setRecordState({ status: 'error', items: {}, error: error instanceof Error ? error.message : 'Não foi possível carregar os registros.' });
+    });
+    return () => { active = false; };
+  }, [aba, studentIds]);
 
   const saveName = async () => {
     const nextName = name.trim();
@@ -154,7 +172,7 @@ export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBa
     {carregando ? <div className="v2-class-workspace__state" role="status"><Users size={28} /><strong>Carregando turma…</strong><p>Buscando os dados salvos neste aparelho.</p></div> : !turma ? <div className="v2-class-workspace__state"><Users size={28} /><strong>Nenhuma turma selecionada</strong><p>Volte para Turmas e escolha um contexto para continuar.</p><button type="button" className="v2-primary-action v2-pressable" onClick={onBack}>Voltar para turmas</button></div> : <>
       {aba === 'dia' && <section className="v2-class-workspace__section v2-class-workspace__today" aria-labelledby="class-today-title"><div className="v2-class-workspace__section-heading"><div><span className="v2-eyebrow">ROTINA DE HOJE</span><h2 id="class-today-title">{formatDate(dataKey)}</h2></div><button type="button" className="v2-class-workspace__date-button v2-pressable" onClick={() => setDataKey(new Date().toISOString().slice(0, 10))}>Hoje</button></div><div className="v2-class-workspace__focus"><span className="v2-class-workspace__focus-number">01</span><div><span className="v2-eyebrow">PRÓXIMA AÇÃO</span><h3>Fazer chamada</h3><p>Registre a presença de {alunos.length || 'sua'} alunos e siga com o contexto da aula.</p></div><CalendarCheck2 size={28} aria-hidden="true" /></div><div className="v2-class-workspace__quick-actions"><button type="button" className="v2-primary-action v2-pressable" onClick={() => goTo('chamada')}><CalendarCheck2 size={18} />Fazer chamada</button><button type="button" className="v2-class-workspace__secondary v2-pressable" onClick={() => goTo('observacao')}><NotebookPen size={18} />Nova observação</button></div><div className="v2-class-workspace__next-line"><FileText size={20} /><span><strong>Depois da aula</strong><small>Deixe uma observação enquanto o contexto ainda está fresco.</small></span><ChevronRight size={19} /></div></section>}
       {aba === 'criancas' && renderStudents()}
-      {aba === 'registros' && <section className="v2-class-workspace__section" aria-labelledby="class-records-title"><div className="v2-class-workspace__section-heading"><div><span className="v2-eyebrow">MEMÓRIA PEDAGÓGICA</span><h2 id="class-records-title">Registros da turma</h2></div><button type="button" className="v2-class-workspace__text-action v2-pressable" onClick={() => goTo('observacao')}><Plus size={17} />Novo</button></div><div className="v2-class-workspace__record-intro"><NotebookPen size={23} /><p>As observações ficam vinculadas a cada aluno para preservar o contexto e o histórico pedagógico.</p></div>{alunos.length ? <div className="v2-class-workspace__record-list">{alunos.map((student) => <button type="button" key={student.id} className="v2-class-workspace__wide-action v2-pressable" onClick={() => goTo('perfil', student)}><span className="v2-class-workspace__student-avatar" style={{ background: student.cor || '#dff3ff' }}>{initials(student.nome)}</span><span><strong>{student.nome}</strong><small>Abrir registros e adicionar observação</small></span><ChevronRight size={19} /></button>)}</div> : <div className="v2-class-workspace__empty"><FileText size={28} /><strong>Nenhum aluno para registrar</strong><p>Cadastre um aluno antes de criar uma observação.</p></div>}</section>}
+      {aba === 'registros' && <section className="v2-class-workspace__section" aria-labelledby="class-records-title"><div className="v2-class-workspace__section-heading"><div><span className="v2-eyebrow">MEMÓRIA PEDAGÓGICA</span><h2 id="class-records-title">Registros da turma</h2></div><button type="button" className="v2-class-workspace__text-action v2-pressable" onClick={() => goTo('observacao')}><Plus size={17} />Novo</button></div><div className="v2-class-workspace__record-intro"><NotebookPen size={23} /><p>As observações ficam vinculadas a cada aluno para preservar o contexto e o histórico pedagógico.</p></div>{recordState.error && <p className="v2-class-workspace__error" role="alert">{recordState.error}</p>}{alunos.length ? <div className="v2-class-workspace__record-list">{alunos.map((student) => { const records = recordState.items[student.id] || []; const latest = records[0]; return <button type="button" key={student.id} className="v2-class-workspace__wide-action v2-pressable" onClick={() => goTo('perfil', student)}><span className="v2-class-workspace__student-avatar" style={{ background: student.cor || '#dff3ff' }}>{initials(student.nome)}</span><span><strong>{student.nome}</strong><small>{recordState.status === 'loading' ? 'Carregando registros…' : recordState.status === 'error' ? 'Não foi possível carregar agora' : records.length ? `${records.length} registro${records.length === 1 ? '' : 's'}${latest?.data ? ` · ${latest.data}` : ''}` : 'Nenhuma observação ainda · Abrir para adicionar'}</small></span><ChevronRight size={19} /></button>; })}</div> : <div className="v2-class-workspace__empty"><FileText size={28} /><strong>Nenhum aluno para registrar</strong><p>Cadastre um aluno antes de criar uma observação.</p></div>}</section>}
       {aba === 'historico' && renderHistory()}
       {aba === 'gestao' && renderManagement()}
     </>}

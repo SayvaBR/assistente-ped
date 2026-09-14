@@ -76,7 +76,7 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 ## Milestone M3 — Turmas e alunos
 
 - Visão geral de turmas — `IN PROGRESS` (Classes V2 exibe contexto ativo, alunos e ações reais; troca de turma foi corrigida e coberta no app real; agora encaminha também para AcademicV2 sem retornar à carroceria V1)
-- Detalhe da turma — `IN PROGRESS` (ClassWorkspaceV2 substitui ClassScreen V1 no caminho real; abas Hoje, Alunos, Registros, Histórico e Gestão preservam callbacks de chamada, observação, perfil, relatórios, BNCC/avaliações, importação e configuração)
+- Detalhe da turma — `IN PROGRESS` (ClassWorkspaceV2 substitui ClassScreen V1 no caminho real; abas Hoje, Alunos, Registros, Histórico e Gestão preservam callbacks de chamada, observação, perfil, relatórios, BNCC/avaliações, importação e configuração; Registros agora lê contagem/data dos registros pedagógicos reais)
 - Lista de alunos — `IN PROGRESS`
 - Perfil do aluno — `IN PROGRESS`
 - Frequência — `IN PROGRESS` (Frequência V2 já é o destino real da chamada; o workspace mantém o retorno contextual e o acesso por histórico)
@@ -195,14 +195,14 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `cb04935`
-- Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente. FilesV2 ganhou retorno hierárquico e abertura real de documentos; ActivityV2 agora mantém feedback de salvamento visível antes do retorno. ClassWorkspaceV2 substitui ClassScreen V1 no detalhe profundo, com contexto, tabs operacionais, histórico local e BottomNavigation V2.
+- HEAD: `a846221`
+- Tela/fluxo: AcademicV2 substitui a carroceria AcademicScreen V1 no caminho de Turmas; visão por turma, filtros, períodos/médias, criação de avaliação, resultados por aluno, nota em lote e exportação CSV foram reconstruídos em `src/v2/` com persistência acadêmica existente. FilesV2 ganhou retorno hierárquico e abertura real de documentos; ActivityV2 agora mantém feedback de salvamento visível antes do retorno. ClassWorkspaceV2 substitui ClassScreen V1 no detalhe profundo, com contexto, tabs operacionais, histórico local e BottomNavigation V2. A aba Registros consulta os registros pedagógicos reais e exibe contagem/data por aluno, com loading e erro recuperável.
 - Screenshot/evidência: `docs/qa/clean-room/class-workspace-v2-390.png`, `academic-v2-overview-390-full.png`, `academic-v2-results-390.png`, `activity-v2-412.png`, além das evidências anteriores `commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
-- Testes executados: suíte oficial `pnpm run test:v2-responsive -- --reporter=line` (91/91), fluxo direcionado ClassWorkspace (2/2), além de Academic (4/4), Activity + Academic (7/7) e Files (3/3); `pnpm test` (51/51), TypeScript, boundary e build passaram após o lote. A execução ampla de `e2e/` continua separada por failures de harness legado (`academic-saving`/`bncc`) que esperam controles V1 ausentes na instância reaproveitada em `5173`; isso não afeta os cenários V2. `node scripts/android-sync.mjs` OK; `pnpm run android:sync` ainda precisa ser executado novamente após este lote; `pnpm run android:device:check` permanece bloqueado sem dispositivo autorizado
+- Testes executados: suíte oficial `pnpm run test:v2-responsive -- --reporter=line` (91/91), fluxo direcionado ClassWorkspace (2/2), além de Academic (4/4), Activity + Academic (7/7) e Files (3/3); `pnpm test` (51/51), TypeScript, boundary e build passaram após o lote. A execução ampla de `e2e/` continua separada por failures de harness legado (`academic-saving`/`bncc`) que esperam controles V1 ausentes na instância reaproveitada em `5173`; isso não afeta os cenários V2. `node scripts/android-sync.mjs` e `pnpm run android:qa` OK; APK gerado em `android/app/build/outputs/apk/qa/app-qa.apk`.
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
-- Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
+- Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: validar o detalhe de turma com dados persistidos, aprofundar registros/histórico e continuar auditando superfícies profundas que ainda dependem de V1 antes de marcar M3 concluído
+- Próxima ação: validar o detalhe de turma com dados persistidos, ampliar a linha do tempo de histórico e continuar auditando superfícies profundas que ainda dependem de V1 antes de marcar M3 concluído
 
 ### BNCC — evidência e contratos
 

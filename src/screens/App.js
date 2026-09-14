@@ -1515,6 +1515,7 @@ function App() {
                                                                                   setDataKey: vi,
                                                                                   onBack: _t,
                                                                                   onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
+                                                                                  loadObservations: loadStudentObservationsV2,
                                                                                 },
                                                                               ))
                                                                           : f ===
