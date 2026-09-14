@@ -23,9 +23,9 @@
 @media (prefers-reduced-motion: reduce) { .v2-planning-calendar *, .v2-planning-calendar *::before, .v2-planning-calendar *::after { transition: none !important; animation: none !important; } }
 
 /* Weekly hardening: keep untimed labels readable at the narrowest Android width. */
-.v2-planning-calendar__plan time { min-width: 0; white-space: normal; line-height: 1.15; }
+.v2-planning-calendar[data-mode="week"] .v2-planning-calendar__plan time { min-width: 0; white-space: normal; line-height: 1.15; }
 @media (max-width: 359px) {
-  .v2-planning-calendar__plan { grid-template-columns: minmax(54px, auto) 40px minmax(0, 1fr) 18px; }
-  .v2-planning-calendar__bottom-nav { padding-inline: 6px; }
-  .v2-planning-calendar__nav-item { min-width: 0; font-size: .6rem; letter-spacing: -.015em; }
+  .v2-planning-calendar[data-mode="week"] .v2-planning-calendar__plan { grid-template-columns: minmax(54px, auto) 40px minmax(0, 1fr) 18px; }
+  .v2-planning-calendar[data-mode="week"] .v2-planning-calendar__bottom-nav { padding-inline: 6px; }
+  .v2-planning-calendar[data-mode="week"] .v2-planning-calendar__nav-item { min-width: 0; font-size: .6rem; letter-spacing: -.015em; }
 }

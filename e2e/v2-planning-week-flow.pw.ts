@@ -10,10 +10,23 @@ test('Planejamento semanal V2 mantém preparo, planos e estados úteis', async (
   await expect(device.getByRole('heading', { name: 'Planejamento semanal' })).toBeVisible();
   await expect(device.getByRole('button', { name: /Matemática/ })).toBeVisible();
   await expect(device.getByRole('button', { name: /Ciências/ })).toBeVisible();
+  await expect(device.getByText('Leitura silenciosa', { exact: true })).toBeVisible();
+  await expect(device.getByText('Sem horário', { exact: true })).toBeVisible();
   await expect(device.getByRole('heading', { name: 'Atividades preparadas', exact: true })).toBeVisible();
   await expect(device.getByRole('button', { name: /Caça às palavras/ })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Criar plano neste dia' })).toBeVisible();
   await expect(device.getByRole('button', { name: /Plano arquivado/ })).toHaveCount(0);
+});
+
+test('Planejamento mensal V2 preserva a composição base fora do hardening semanal', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=planning-month&width=412');
+  const device = page.locator('.v2-preview-device');
+
+  await expect(device.locator('.v2-planning-calendar[data-mode="month"] .v2-planning-calendar__month')).toBeVisible();
+  await expect(device.locator('.v2-planning-calendar[data-mode="month"] .v2-planning-calendar__plan time')).toHaveText(['10:00', '13:00']);
+  await expect(device.getByText('Sem horário', { exact: true })).toHaveCount(0);
+  await expect(device.getByText('Leitura silenciosa', { exact: true })).toHaveCount(0);
 });
 
 test('Planejamento semanal V2 preserva copy e layout em texto ampliado', async ({ page }) => {
