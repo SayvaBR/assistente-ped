@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Compartilhamento usa somente arquivos criados pelo próprio aplicativo. -->
+    <files-path name="app_files" path="." />
+    <cache-path name="app_cache" path="." />
+    <!-- O plugin de câmera usa o diretório externo específico deste app para
+         criar a foto temporária; não expõe o armazenamento externo amplo. -->
+    <external-files-path name="app_external_files" path="." />
+</paths>

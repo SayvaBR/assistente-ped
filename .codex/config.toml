@@ -1,0 +1,29 @@
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 6
+default_subagent_model = "gpt-5.6-luna"
+default_subagent_reasoning_effort = "high"
+
+[agents.visual_director]
+config_file = "agents/visual-director.toml"
+description = "Read-only visual director for composition, hierarchy, identity and screenshot critique."
+
+[agents.live_visual_director]
+config_file = "agents/live-visual-director.toml"
+description = "Read-only live visual director for browser/HMR-driven iteration with DOM/CDP-first objective inspection."
+
+[agents.code_mapper]
+config_file = "agents/code-mapper.toml"
+description = "Read-only explorer that maps the smallest code/data path before implementation."
+
+[agents.ui_worker]
+config_file = "agents/ui-worker.toml"
+description = "Scoped UI implementation worker for one isolated V2 screen or component set."
+
+[agents.ui_lab_worker]
+config_file = "agents/ui-lab-worker.toml"
+description = "Scoped worker that owns the dev-only UI Lab and visual preview tooling."
+
+[agents.qa_reviewer]
+config_file = "agents/qa-reviewer.toml"
+description = "Read-only reviewer for regressions, accessibility, responsive behavior and test gaps."

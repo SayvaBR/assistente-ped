@@ -1,0 +1,121 @@
+@import "./tokens.css";
+
+:root {
+  /*
+   * Web safe-area values come from the user agent. Native Android inset vars
+   * are fallbacks/overrides for cases where the Capacitor WebView needs an
+   * explicit WindowInsets bridge. They default to zero on web preview and are
+   * updated with verified native values when the Android shell is running.
+   */
+  --android-safe-top: 0px;
+  --android-safe-right: 0px;
+  --android-safe-bottom: 0px;
+  --android-safe-left: 0px;
+  --v2-safe-top: max(env(safe-area-inset-top, 0px), var(--android-safe-top, 0px));
+  --v2-safe-right: max(env(safe-area-inset-right, 0px), var(--android-safe-right, 0px));
+  --v2-safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--android-safe-bottom, 0px));
+  --v2-safe-left: max(env(safe-area-inset-left, 0px), var(--android-safe-left, 0px));
+}
+
+.v2-root {
+  min-height: 100dvh;
+  background: var(--v2-color-bg);
+  color: var(--v2-color-text);
+  font-family: var(--v2-font-family);
+  font-weight: var(--v2-font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Keep every V2 fixed/flowing bottom navigation above gesture navigation. */
+.v2-root [class*="__bottom-nav"] {
+  padding-bottom: max(10px, var(--v2-safe-bottom, 0px)) !important;
+}
+
+/*
+ * The application shell intentionally clips its chrome. First-run V2 screens
+ * still need their own scroll viewport so system insets cannot hide the final
+ * action row.
+ */
+.v2-first-run-scroll {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: max(72px, calc(24px + var(--v2-safe-bottom, 0px)));
+  overscroll-behavior-y: contain;
+}
+
+.v2-screen {
+  width: min(100%, var(--v2-content-max));
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding:
+    max(16px, var(--v2-safe-top, 0px))
+    max(16px, var(--v2-safe-right, 0px))
+    max(88px, var(--v2-safe-bottom, 0px))
+    max(16px, var(--v2-safe-left, 0px));
+}
+
+.v2-surface {
+  background: var(--v2-color-surface);
+  border: 1px solid var(--v2-color-border);
+  border-radius: var(--v2-radius-lg);
+}
+
+.v2-pressable {
+  min-width: var(--v2-touch-min);
+  min-height: var(--v2-touch-min);
+  transition:
+    transform var(--v2-motion-fast) ease,
+    border-bottom-width var(--v2-motion-fast) ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.v2-pressable:active {
+  transform: translateY(var(--v2-depth-sm));
+}
+
+.v2-primary-action {
+  background: var(--v2-color-primary);
+  color: #fff;
+  border: 0;
+  border-bottom: var(--v2-depth-md) solid var(--v2-color-primary-depth);
+  border-radius: var(--v2-radius-md);
+  font: inherit;
+  font-weight: var(--v2-font-weight-strong);
+}
+
+.v2-primary-action:active {
+  border-bottom-width: 1px;
+}
+
+.v2-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  line-height: 1.05;
+  font-weight: var(--v2-font-weight-display);
+  letter-spacing: -0.025em;
+}
+
+.v2-section-title {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  font-weight: var(--v2-font-weight-display);
+  letter-spacing: -0.015em;
+}
+
+.v2-muted {
+  color: var(--v2-color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-root *,
+  .v2-root *::before,
+  .v2-root *::after {
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:5177",
+      "localStorage": [
+        {
+          "name": "perfil:professor",
+          "value": "{\"id\":\"home_visual\",\"nome\":\"Docente\",\"tratamento\":\"docente\"}"
+        },
+        {
+          "name": "turmas:lista",
+          "value": "[{\"id\":\"home_visual_class\",\"nome\":\"Turma A\",\"nivel\":\"Nível I\",\"turno\":\"Manhã\"}]"
+        },
+        {
+          "name": "turmas:ativa",
+          "value": "home_visual_class"
+        },
+        {
+          "name": "turma:home_visual_class:alunos",
+          "value": "[]"
+        },
+        {
+          "name": "config:sons",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:5177",
+      "localStorage": [
+        {
+          "name": "perfil:professor",
+          "value": "{\"id\":\"home_visual\",\"nome\":\"Docente\",\"tratamento\":\"docente\"}"
+        },
+        {
+          "name": "turmas:lista",
+          "value": "[{\"id\":\"home_visual_class\",\"nome\":\"Turma A\",\"nivel\":\"Nível I\",\"turno\":\"Manhã\"}]"
+        },
+        {
+          "name": "turmas:ativa",
+          "value": "home_visual_class"
+        },
+        {
+          "name": "turma:home_visual_class:alunos",
+          "value": "[{\"id\":\"student_ana\",\"nome\":\"Ana Souza\"},{\"id\":\"student_luca\",\"nome\":\"Luca Lima\"},{\"id\":\"student_bia\",\"nome\":\"Bia Alves\"},{\"id\":\"student_joao\",\"nome\":\"João Reis\"}]"
+        },
+        {
+          "name": "turma:home_visual_class:planejamento:2026-09-12",
+          "value": "[{\"id\":\"plan_visual\",\"turmaId\":\"home_visual_class\",\"dataKey\":\"2026-09-12\",\"tituloTema\":\"Explorando as cores\",\"horaInicio\":\"08:00\",\"horaFim\":\"09:00\",\"status\":\"planejado\",\"objetivoGeral\":\"Observar e nomear cores no cotidiano.\",\"objetivosEspecificos\":[],\"bncc\":{\"habilidades\":[]},\"momentos\":[{\"id\":\"moment_visual\",\"horario\":\"08:30\",\"titulo\":\"Roda das cores\",\"descricao\":\"Exploração guiada com cartões coloridos.\",\"tipo\":\"acolhida\"}],\"recursos\":\"Cartões coloridos\",\"avaliacao\":\"\",\"inclusao\":\"\",\"observacoes\":\"\",\"posAula\":{\"comoFoi\":null,\"observacoesPosAula\":\"\"},\"criadoEm\":\"2026-09-12T10:00:00.000Z\",\"atualizadoEm\":\"2026-09-12T10:00:00.000Z\"}]"
+        },
+        {
+          "name": "turma:home_visual_class:agenda:eventos",
+          "value": "[{\"id\":\"event_reunion\",\"turmaId\":\"home_visual_class\",\"titulo\":\"Reunião com famílias\",\"tipo\":\"reuniao\",\"data\":\"2026-09-10\",\"hora\":\"14:30\",\"observacoes\":\"\",\"concluido\":false,\"notificacaoId\":null,\"criadoEm\":\"2026-09-12T10:00:00.000Z\",\"atualizadoEm\":\"2026-09-12T10:00:00.000Z\"}]"
+        },
+        {
+          "name": "config:sons",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}
