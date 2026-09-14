@@ -86,12 +86,12 @@ Nenhuma ação principal da Home cai em V1 e todos os destinos parecem o mesmo p
 
 ## Milestone M4 — Arquivos e relatórios
 
-- Arquivos overview — `TODO` (FilesV2 existe em rotas de navegação, mas o caminho completo de pastas/importação/visualização ainda precisa ser auditado)
-- Pastas — `TODO`
-- Recentes — `TODO`
-- Favoritos — `TODO`
-- Importação/captura — `TODO`
-- Visualização — `TODO`
+- Arquivos overview — `IN PROGRESS` (FilesV2 é a rota real V2, com filtros, estados, criação de pasta, importação/captura e ações locais; abertura de documento e retorno entre níveis de pasta foram corrigidos neste lote)
+- Pastas — `IN PROGRESS` (criação, entrada e retorno hierárquico locais cobertos; mover/renomear e visualização profunda ainda faltam)
+- Recentes — `IN PROGRESS` (filtro existe e ordena por atualização; falta QA completo com dados persistidos)
+- Favoritos — `IN PROGRESS` (pastas e arquivos podem ser marcados localmente; falta fechar cobertura de restauração/edge cases)
+- Importação/captura — `IN PROGRESS` (input de arquivos e captura usam contratos Capacitor existentes; falta validar no Android real)
+- Visualização — `IN PROGRESS` (ação de abrir usa `vp`/FileViewer existente; falta evidência em WebView/Android real)
 - Lixeira — `IN PROGRESS`
 - Relatórios — `IN PROGRESS`
 
@@ -202,7 +202,7 @@ Atualizar a cada rodada significativa:
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: repetir a regressão completa, revisar arquivos/relatórios que ainda dependem de V1 e endurecer estados acadêmicos antes de avançar para a próxima unidade visual
+- Próxima ação: repetir a regressão completa, endurecer arquivos/relatórios com dados persistidos e seguir auditando as superfícies profundas que ainda dependem de V1
 
 ### BNCC — evidência e contratos
 

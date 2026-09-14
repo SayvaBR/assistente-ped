@@ -18,3 +18,14 @@ test('Arquivos V2 mantém texto ampliado sem overflow horizontal', async ({ page
   const result = await page.locator('.v2-preview-device').evaluate((root) => ({ overflow: root.scrollWidth > root.clientWidth + 1, hasDocument: (root.textContent || '').includes('BNCC_2024.pdf') }));
   expect(result).toEqual({ overflow: false, hasDocument: true });
 });
+
+test('Arquivos V2 entra na pasta e volta sem abandonar a biblioteca', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 1000 });
+  await page.goto('/?v2-preview=files');
+  const device = page.locator('.v2-preview-device');
+  await device.getByRole('button', { name: /Planos de aula Abrir pasta/ }).click();
+  await expect(device.getByText('Materiais dentro desta pasta.')).toBeVisible();
+  await expect(device.getByRole('button', { name: 'Voltar para a pasta anterior' })).toBeVisible();
+  await device.getByRole('button', { name: 'Voltar para a pasta anterior' }).click();
+  await expect(device.getByText('Seus materiais pedagógicos, sempre à mão.')).toBeVisible();
+});
