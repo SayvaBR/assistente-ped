@@ -7,14 +7,22 @@ const widthArg = args.find((arg) => arg.startsWith('--width='));
 const width = Number(widthArg?.split('=')[1] || 412);
 const host = '127.0.0.1';
 const port = 5173;
+const supportedPreviews = new Set([
+  'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
+  'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
+  'class-workspace', 'student-profile', 'profile', 'files', 'more', 'activity', 'plan-editor', 'bncc',
+  'reports', 'settings', 'appearance', 'subscription', 'privacy', 'backup', 'notifications', 'tools',
+  'help', 'legal', 'trash', 'organization', 'academic',
+]);
+const supportedWidths = new Set([320, 360, 390, 412, 432, 480, 600]);
 
-if (!/^[a-z0-9-]+$/i.test(preview)) {
-  console.error('[live-design] preview inválido. Use letras, números e hífen.');
+if (!supportedPreviews.has(preview)) {
+  console.error(`[live-design] preview inválido: ${preview}. Use uma superfície suportada do V2.`);
   process.exit(2);
 }
 
-if (!Number.isFinite(width) || width < 280 || width > 1200) {
-  console.error('[live-design] width inválida.');
+if (!supportedWidths.has(width)) {
+  console.error(`[live-design] width inválida: ${width}. Use 320, 360, 390, 412, 432, 480 ou 600.`);
   process.exit(2);
 }
 
@@ -24,7 +32,9 @@ const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=
 async function isReady() {
   try {
     const response = await fetch(baseUrl, { signal: AbortSignal.timeout(750) });
-    return response.ok || response.status < 500;
+    if (!response.ok) return false;
+    const body = await response.text();
+    return body.includes('/@vite/client') && body.includes('/src/main.tsx');
   } catch {
     return false;
   }
@@ -61,6 +71,8 @@ const poll = setInterval(async () => {
   } else if (Date.now() - startedAt > 15000) {
     clearInterval(poll);
     console.error('[live-design] Vite não ficou pronto em 15s. Verifique a saída acima.');
+    stop('SIGTERM');
+    process.exitCode = 1;
   }
 }, 150);
 
