@@ -195,14 +195,14 @@ Atualizar a cada rodada significativa:
 
 - Data/hora: 13/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
-- HEAD: `86ea28f`
-- Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planejamento overview V2 substitui o tab principal V1, abre/cria planos reais, recupera rascunhos locais por turma/data e mantém editor V2 com campos de disciplina, objeto de conhecimento, justificativa e ciclo de rascunho/pronto/concluído/arquivado sem arquivamento prematuro; Perfil do aluno V2 agora possui galeria local real com adicionar/excluir e estado vazio honesto
+- HEAD: `743d1d0`
+- Tela/fluxo: Compromissos V2 encaminha Dia/Semana/Mês para as superfícies de planejamento; Planejamento overview V2 substitui o tab principal V1, abre/cria planos reais, recupera rascunhos locais por turma/data e mantém editor V2 com campos de disciplina, objeto de conhecimento, justificativa e ciclo de rascunho/pronto/concluído/arquivado; planos arquivados agora podem ser restaurados sem apagar dados; Perfil do aluno V2 possui galeria local real com adicionar/excluir e estado vazio honesto
 - Screenshot/evidência: `docs/qa/clean-room/commitments-v2-before-period-routing-412.png`, `commitments-v2-after-period-routing-412.png`, `planning-overview-v2-412.png`, `plan-editor-v2-412.png`, `student-gallery-empty-v2-390.png`, `docs/qa/android-1.0/notifications-v2-390.png`, `tools-v2-390.png`, `student-profile-v2-390.png`, `class-manager-v2-390.png`, `help-v2-390.png`, `legal-v2-320.png`, `trash-v2-390.png`, `organization-v2-390.png`
 - Testes executados: `pnpm test` (50/50), `pnpm run test:v2-responsive` (80/80), fluxo BNCC (3/3), fluxo Perfil/Biblioteca/Mais (10/10), boundary, TypeScript e build; `node scripts/android-sync.mjs` OK; `pnpm run android:qa` OK com APK em `android/app/build/outputs/apk/qa/app-qa.apk`; `pnpm run android:device:check` bloqueado sem dispositivo autorizado
 - PR #8: aberto, draft, branch atualizada após integração dos commits remotos de CI/APK; checks devem ser repollados após este push
 - Blocker externo: `android-device-check` não encontrou telefone Android autorizado; POCO X7 Pro e Android compacto ainda precisam de validação física
 - Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: fechar o ciclo de atividade e integrar uma entrada recuperável para itens arquivados; depois repetir QA de lifecycle e continuar a fila de superfícies
+- Próxima ação: fechar o ciclo de atividade; depois repetir QA de lifecycle e continuar a fila de superfícies
 
 ### BNCC — evidência e contratos
 
