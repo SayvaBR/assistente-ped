@@ -139,7 +139,11 @@ describe('live design launcher ownership', () => {
     const marker = join(testRoot, 'stale-marker.json');
     const fakeVite = join(testRoot, 'fake-vite.mjs');
     const fakePidFile = join(testRoot, 'fake-vite.pid');
-    writeFileSync(marker, JSON.stringify({ cwd: process.cwd(), pid: process.pid }));
+    writeFileSync(marker, JSON.stringify({
+      cwd: process.cwd(),
+      pid: process.pid,
+      viteBin: fakeVite,
+    }));
     writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
 
     const timedOut = runLauncher(['home'], {

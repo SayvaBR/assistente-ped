@@ -33,18 +33,19 @@ if (!supportedWidths.has(width)) {
 const baseUrl = `http://${host}:${port}`;
 const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=${Math.round(width)}`;
 const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
+const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
 
 function removeMarker(expectedPid) {
   try {
     if (expectedPid !== undefined) {
       const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
-      if (marker.pid !== expectedPid) return;
+      if (marker.launcherPid !== process.pid || marker.pid !== expectedPid) return;
     }
     unlinkSync(markerPath);
   } catch { /* stale marker already gone */ }
 }
 
-function isExpectedViteProcess(pid) {
+function processCommandLine(pid) {
   try {
     let commandLine = '';
     if (process.platform === 'win32') {
@@ -57,19 +58,35 @@ function isExpectedViteProcess(pid) {
     } else {
       commandLine = execFileSync('ps', ['-p', String(pid), '-o', 'command='], { encoding: 'utf8' });
     }
-    return /vite[\\/\\s].*--host|vite[\\/]bin[\\/]vite\\.js/i.test(commandLine);
+    return commandLine;
   } catch {
-    return false;
+    return '';
   }
+}
+
+function isExpectedProcess(pid, expectedPath) {
+  const commandLine = processCommandLine(pid).toLowerCase().replaceAll('\\', '/');
+  return commandLine.includes(expectedPath.toLowerCase().replaceAll('\\', '/'));
+}
+
+function isLiveLauncher(pid) {
+  return isExpectedProcess(pid, resolve('scripts/live-design.mjs'));
 }
 
 function markerState() {
   if (!existsSync(markerPath)) return 'missing';
   try {
     const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
-    if (marker.cwd !== process.cwd() || !Number.isInteger(marker.pid)) return 'foreign';
+    if (marker.cwd !== process.cwd()) return 'foreign';
+    if (marker.viteBin !== viteBin) return 'stale';
+    if (marker.phase === 'starting') {
+      if (!Number.isInteger(marker.launcherPid)) return 'stale';
+      process.kill(marker.launcherPid, 0);
+      return isLiveLauncher(marker.launcherPid) ? 'foreign' : 'stale';
+    }
+    if (!Number.isInteger(marker.pid)) return 'stale';
     process.kill(marker.pid, 0);
-    return isExpectedViteProcess(marker.pid) ? 'owned' : 'stale';
+    return isExpectedProcess(marker.pid, viteBin) ? 'owned' : 'stale';
   } catch {
     return 'stale';
   }
@@ -104,26 +121,39 @@ if (initialMarkerState === 'foreign') {
 }
 
 const ownedServer = initialMarkerState === 'owned';
-if (ownedServer && await isReady()) {
-  printReady(true);
+if (ownedServer) {
+  if (await isReady()) {
+    printReady(true);
+  } else {
+    console.error('[live-design] Vite deste checkout ainda está iniciando; não iniciando um segundo servidor.');
+    process.exit(1);
+  }
 } else {
   if (initialMarkerState === 'stale' || ownedServer) removeMarker();
 
-const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
+try {
+  mkdirSync(dirname(markerPath), { recursive: true });
+  writeFileSync(markerPath, JSON.stringify({
+    cwd: process.cwd(),
+    launcherPid: process.pid,
+    phase: 'starting',
+    viteBin,
+  }), { flag: 'wx' });
+} catch {
+  console.error(`[live-design] não foi possível assumir o marker ${markerPath}; outro launcher já o possui.`);
+  process.exit(1);
+}
+
 const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
   stdio: 'inherit',
   env: process.env,
 });
-if (child.pid) {
-  mkdirSync(dirname(markerPath), { recursive: true });
-  try {
-    writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), pid: child.pid }), { flag: 'wx' });
-  } catch {
-    console.error(`[live-design] não foi possível assumir o marker ${markerPath}; outro launcher já o possui.`);
-    child.kill('SIGTERM');
-    process.exit(1);
-  }
+if (!child.pid) {
+  removeMarker();
+  console.error('[live-design] não foi possível iniciar o processo Vite.');
+  process.exit(1);
 }
+writeFileSync(markerPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, phase: 'running', pid: child.pid, viteBin }));
 
   let readyPrinted = false;
   let startupTimedOut = false;
