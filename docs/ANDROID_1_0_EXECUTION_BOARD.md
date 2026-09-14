@@ -6,7 +6,7 @@
 ## Estado global
 
 - Base de integração: `integration/android-1.0`
-- Último PR integrado: `#29` (`b0dc7e4` → `b9bb3b3`)
+- Último PR integrado: `#31` (`7fb8f83` → `d7752c0`)
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -36,7 +36,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 4. Planejamento Dia/Semana/Mês — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `Planejamento diário V2 — hardening funcional/responsivo`; PR `#14` integrado em `integration/android-1.0`.
    - Delivery Unit concluída: `Planejamento semanal V2 — hardening funcional/responsivo`; PR `#20` integrado em `integration/android-1.0`.
-   - Planejamento mensal permanece `IN PROGRESS`; nenhuma nova decisão de produto foi aplicada nesta rodada.
+   - Delivery Unit concluída: `Planejamento mensal V2 — hardening funcional`; PR `#31` integrado em `integration/android-1.0`.
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
@@ -55,7 +55,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 - Planejamento diário — `FUNCTIONAL HARDENING` (PR #14 integrado; filtros de arquivados, erro/retry de atividades, momentos sem horário e evidência 320/412 px cobertos)
 - Planejamento semanal — `FUNCTIONAL HARDENING` (PR #20 integrado; jornada semanal e matriz 320/360/390/412/432/480/600px cobertas)
-- Planejamento mensal — `IN PROGRESS`
+- Planejamento mensal — `FUNCTIONAL HARDENING` (PR #31 integrado; seleção mensal, clamp de dias inválidos, planos sem momento, filtros arquivados e matriz 360/412/480px cobertos)
 - Turmas — `IN PROGRESS`
 - Perfil — `IN PROGRESS`
 - Arquivos — `IN PROGRESS`
@@ -196,17 +196,17 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do DevEx Live Design vertical scroll
-- Base: `origin/integration/android-1.0` em `b9bb3b3`; worker `codex/fix-live-preview-scroll`
-- Tela/fluxo: o harness do Live Design e do UI Lab permite rolagem vertical real, mantém a toolbar fora da superfície móvel e contém overflow horizontal por eixo; planning-day foi observado em 412 CSS px com HMR na mesma página, scroll até `Atividades para levar` e nova observação após a correção.
+- Data/hora: 14/09/2026 — checkpoint do Planejamento mensal V2
+- Base: `origin/integration/android-1.0` em `d7752c0`; worker `codex/planning-month-v2-hardening`
+- Tela/fluxo: o calendário mensal mantém o dia selecionado ao navegar, limita datas inválidas ao último dia do mês destino, exibe planos sem momento com `—` e filtra planos/atividades arquivados. A superfície planning-month foi observada em 412 CSS px com HMR na mesma página; o diretor visual confirmou `scrollY=616`, conteúdo inferior acessível e 50 px de folga antes da bottom nav.
 - Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, billing, auth, migração de storage e telas de produto.
-- Evidência: `e2e/v2-preview-scroll.pw.ts` cobre planning-day/files/student-profile/planning-week e UI Lab em 360/412/480px; screenshot formal foi capturada no navegador Codex durante a sessão.
-- Testes executados: E2E direcionado `8/8`, `pnpm test` `60/60`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34835256454` verde, incluindo Gate responsivo e Build Android QA APK.
-- Commit/PR: `b0dc7e4` (`fix(devex): clip preview overflow by axis`), PR [#29](https://github.com/SayvaBR/assistente-ped/pull/29) integrado em `b9bb3b3`.
+- Evidência: screenshot formal em 412 CSS px, DOM/AX com `Atividades preparadas`, CTA e planos mensais; E2E mensal e checkpoint responsivo em 360/412/480px.
+- Testes executados: E2E do arquivo de planejamento `14/14`, E2E mensal após finding `4/4`, `pnpm test` `60/60`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34838339264` verde, incluindo Gate responsivo e Build Android QA APK.
+- Commit/PR: `7fb8f83` (`test(planning): cover archived monthly activities`), PR [#31](https://github.com/SayvaBR/assistente-ped/pull/31) integrado em `d7752c0`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `IN PROGRESS`; a unidade DevEx foi integrada, sem mudança de tela ou regra pedagógica.
-- Próxima ação: sincronizar a integration, escolher uma DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
+- Resultado: `FUNCTIONAL HARDENING`; a unidade mensal foi integrada, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
+- Próxima ação: sincronizar a integration, conferir issues/PRs ativos e escolher a próxima DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
 
 ### BNCC — evidência e contratos
 
