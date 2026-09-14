@@ -540,7 +540,8 @@ function App() {
         $n("dia"));
     },
     dr = async (ae) => {
-      const qe = await ph(storage, se, ae);
+      const classId = typeof ae === "string" ? ae : ae?.id;
+      const qe = await ph(storage, se, classId);
       (Xa(qe), kn("inicio"));
     },
     Pa = async (ae) => {
