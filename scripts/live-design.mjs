@@ -8,7 +8,7 @@ const preview = requestedPreview === 'frequency' ? 'attendance' : requestedPrevi
 const widthArg = args.find((arg) => arg.startsWith('--width='));
 const width = Number(widthArg?.split('=')[1] || 412);
 const host = '127.0.0.1';
-const port = 5173;
+const port = Number(process.env.LIVE_DESIGN_PORT || 5173);
 const supportedPreviews = new Set([
   'home', 'splash', 'onboarding', 'wizard', 'new-student', 'attendance', 'observation', 'commitments',
   'planning-overview', 'planning-day', 'planning-week', 'planning-month', 'class-manager', 'classes',
@@ -30,7 +30,7 @@ if (!supportedWidths.has(width)) {
 
 const baseUrl = `http://${host}:${port}`;
 const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=${Math.round(width)}`;
-const markerPath = resolve('tmp/live-design-server.json');
+const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
 
 function removeMarker() {
   try { unlinkSync(markerPath); } catch { /* stale marker already gone */ }
@@ -110,6 +110,7 @@ const stop = (signal) => {
   if (!child.killed) child.kill(signal);
 };
 
+process.on('exit', removeMarker);
 process.on('SIGINT', () => stop('SIGINT'));
 process.on('SIGTERM', () => stop('SIGTERM'));
 
