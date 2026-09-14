@@ -7,6 +7,9 @@ import './tools-v2.css';
 
 type ToolId = 'timer' | 'cronometro' | 'calculadora' | 'lanterna';
 type Props = { onBack: () => void };
+type CalculatorOperator = '+' | '−' | '×' | '÷';
+
+const DEFAULT_TIMER_DURATION = 5 * 60 * 1000;
 
 const tools: { id: ToolId; label: string; icon: typeof Timer; detail: string }[] = [
   { id: 'timer', label: 'Temporizador', icon: Timer, detail: 'Marque o ritmo da atividade' },
@@ -15,18 +18,25 @@ const tools: { id: ToolId; label: string; icon: typeof Timer; detail: string }[]
   { id: 'lanterna', label: 'Lanterna', icon: Flashlight, detail: 'Ilumine um cantinho' },
 ];
 
-function formatTime(value: number, stopwatch: boolean) {
-  const totalSeconds = Math.floor(value / 1000);
+export function formatTime(value: number, stopwatch: boolean) {
+  const safeValue = Math.max(0, value);
+  const totalSeconds = Math.floor(safeValue / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  const tenths = Math.floor((value % 1000) / 100);
+  const tenths = Math.floor((safeValue % 1000) / 100);
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}${stopwatch ? `.${tenths}` : ''}`;
+}
+
+export function calculateResult(operator: CalculatorOperator, left: number, right: number) {
+  const result = operator === '+' ? left + right : operator === '−' ? left - right : operator === '×' ? left * right : right === 0 ? Number.NaN : left / right;
+  return Number.isFinite(result) ? result : null;
 }
 
 export function ToolsV2({ onBack }: Props) {
   const [tool, setTool] = useState<ToolId>('timer');
-  const [duration, setDuration] = useState(5 * 60 * 1000);
-  const [elapsed, setElapsed] = useState(5 * 60 * 1000);
+  const [timerPreset, setTimerPreset] = useState(DEFAULT_TIMER_DURATION);
+  const [duration, setDuration] = useState(DEFAULT_TIMER_DURATION);
+  const [elapsed, setElapsed] = useState(DEFAULT_TIMER_DURATION);
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [running, setRunning] = useState(false);
   const [display, setDisplay] = useState('0');
@@ -49,7 +59,7 @@ export function ToolsV2({ onBack }: Props) {
       const passed = Date.now() - startedAt;
       const next = tool === 'timer' ? Math.max(0, duration - passed) : duration + passed;
       setElapsed(next);
-      if (tool === 'timer' && next === 0) { setRunning(false); setStartedAt(null); }
+      if (tool === 'timer' && next === 0) { setDuration(0); setRunning(false); setStartedAt(null); }
     }, 100);
     return () => window.clearInterval(interval);
   }, [duration, running, startedAt, tool]);
@@ -57,8 +67,9 @@ export function ToolsV2({ onBack }: Props) {
   const activeTool = useMemo(() => tools.find((item) => item.id === tool) || tools[0], [tool]);
   const switchTool = (next: ToolId) => {
     setRunning(false); setStartedAt(null); setError(''); setTool(next);
-    if (next === 'timer') { setDuration(5 * 60 * 1000); setElapsed(5 * 60 * 1000); }
+    if (next === 'timer') { setTimerPreset(DEFAULT_TIMER_DURATION); setDuration(DEFAULT_TIMER_DURATION); setElapsed(DEFAULT_TIMER_DURATION); }
     if (next === 'cronometro') { setDuration(0); setElapsed(0); }
+    if (next === 'calculadora') { setDisplay('0'); setStored(null); setOperator(null); setClearOnInput(false); }
   };
   const toggleClock = () => {
     if (running) {
@@ -70,7 +81,7 @@ export function ToolsV2({ onBack }: Props) {
       setStartedAt(Date.now()); setRunning(true);
     }
   };
-  const resetClock = () => { setRunning(false); setStartedAt(null); const next = tool === 'timer' ? duration : 0; setDuration(next); setElapsed(next); };
+  const resetClock = () => { setRunning(false); setStartedAt(null); const next = tool === 'timer' ? timerPreset : 0; setDuration(next); setElapsed(next); };
   const calculate = (key: string) => {
     setError('');
     if (/^\d$/.test(key)) { setDisplay((value) => clearOnInput || value === '0' ? key : `${value}${key}`.slice(0, 14)); setClearOnInput(false); return; }
@@ -82,8 +93,8 @@ export function ToolsV2({ onBack }: Props) {
     const current = Number(display.replace(',', '.'));
     if (key === '=') {
       if (stored === null || !operator) return;
-      const result = operator === '+' ? stored + current : operator === '−' ? stored - current : operator === '×' ? stored * current : current === 0 ? Number.NaN : stored / current;
-      if (!Number.isFinite(result)) { setError('Não é possível dividir por zero.'); setDisplay('0'); } else setDisplay(String(Number(result.toFixed(8))).replace('.', ','));
+      const result = calculateResult(operator as CalculatorOperator, stored, current);
+      if (result === null) { setError('Não é possível dividir por zero.'); setDisplay('0'); } else setDisplay(String(Number(result.toFixed(8))).replace('.', ','));
       setStored(null); setOperator(null); setClearOnInput(true); return;
     }
     if (['+', '−', '×', '÷'].includes(key)) { setStored(current); setOperator(key); setClearOnInput(true); }
@@ -95,7 +106,7 @@ export function ToolsV2({ onBack }: Props) {
     <header className="v2-tools__header"><button type="button" className="v2-tools__back v2-pressable" onClick={onBack} aria-label="Voltar"><ArrowLeft size={23} /></button><div><span className="v2-eyebrow">PARA A SALA</span><h1>Ferramentas</h1><p>Recursos rápidos para o momento da aula.</p></div><span className="v2-tools__mark"><Timer size={22} /></span></header>
     <nav className="v2-tools__tabs" aria-label="Ferramentas de sala">{tools.map(({ id, label, icon: Icon }) => <button key={id} type="button" className={`v2-tools__tab v2-pressable${tool === id ? ' is-active' : ''}`} aria-pressed={tool === id} onClick={() => switchTool(id)}><Icon size={19} /><span>{label}</span></button>)}</nav>
     <p className="v2-tools__context"><strong>{activeTool.label}</strong><span>{activeTool.detail}</span></p>
-    {(tool === 'timer' || tool === 'cronometro') && <section className="v2-tools__clock v2-surface"><div className="v2-tools__clock-label">{tool === 'timer' ? 'TEMPO RESTANTE' : 'TEMPO DECORRIDO'}</div>{tool === 'timer' && !running && <div className="v2-tools__presets">{[1, 5, 10, 15].map((minutes) => <button type="button" className={`v2-tools__preset v2-pressable${duration === minutes * 60 * 1000 ? ' is-active' : ''}`} key={minutes} onClick={() => { setDuration(minutes * 60 * 1000); setElapsed(minutes * 60 * 1000); }}>{minutes} min</button>)}</div>}<output className="v2-tools__time" aria-live="polite">{formatTime(elapsed, tool === 'cronometro')}</output>{tool === 'timer' && elapsed === 0 && <p className="v2-tools__finished" role="status">Tempo encerrado</p>}<div className="v2-tools__clock-actions"><button type="button" className="v2-tools__secondary v2-pressable" onClick={resetClock}><RotateCcw size={18} />Zerar</button><button type="button" className="v2-primary-action v2-tools__primary v2-pressable" onClick={toggleClock} disabled={tool === 'timer' && elapsed === 0}>{running ? <><Pause size={18} />Pausar</> : <><Play size={18} />Iniciar</>}</button></div></section>}
+    {(tool === 'timer' || tool === 'cronometro') && <section className="v2-tools__clock v2-surface"><div className="v2-tools__clock-label">{tool === 'timer' ? 'TEMPO RESTANTE' : 'TEMPO DECORRIDO'}</div>{tool === 'timer' && !running && <div className="v2-tools__presets">{[1, 5, 10, 15].map((minutes) => <button type="button" className={`v2-tools__preset v2-pressable${timerPreset === minutes * 60 * 1000 ? ' is-active' : ''}`} key={minutes} onClick={() => { setTimerPreset(minutes * 60 * 1000); setDuration(minutes * 60 * 1000); setElapsed(minutes * 60 * 1000); }}>{minutes} min</button>)}</div>}<output className="v2-tools__time" aria-live="polite">{formatTime(elapsed, tool === 'cronometro')}</output>{tool === 'timer' && elapsed === 0 && <p className="v2-tools__finished" role="status">Tempo encerrado</p>}<div className="v2-tools__clock-actions"><button type="button" className="v2-tools__secondary v2-pressable" onClick={resetClock}><RotateCcw size={18} />Zerar</button><button type="button" className="v2-primary-action v2-tools__primary v2-pressable" onClick={toggleClock} disabled={tool === 'timer' && elapsed === 0}>{running ? <><Pause size={18} />Pausar</> : <><Play size={18} />Iniciar</>}</button></div></section>}
     {tool === 'calculadora' && <section className="v2-tools__calculator v2-surface"><output className="v2-tools__display" aria-label={`Resultado ${display}`}>{display}</output><div className="v2-tools__keypad">{calculatorKeys.map((key) => <button type="button" className={`v2-tools__key v2-pressable${['÷', '×', '−', '+', '='].includes(key) ? ' is-operator' : ''}`} key={key} aria-label={key === '⌫' ? 'Apagar último dígito' : key} onClick={() => calculate(key)}>{key === '⌫' ? <Delete size={20} /> : key}</button>)}</div>{error && <p className="v2-tools__error" role="alert">{error}</p>}</section>}
     {tool === 'lanterna' && <section className="v2-tools__torch v2-surface"><span className={`v2-tools__torch-icon${torchOn ? ' is-on' : ''}`}><Flashlight size={42} /></span><h2>{torchOn ? 'Lanterna ligada' : 'Lanterna desligada'}</h2><p>{torchAvailable === false ? 'Este aparelho não informou uma lanterna disponível.' : 'Use a luz traseira do aparelho sem sair do aplicativo.'}</p><button type="button" className="v2-primary-action v2-tools__primary v2-pressable" onClick={() => void toggleTorch()} disabled={!torchAvailable}>{torchOn ? 'Desligar lanterna' : 'Ligar lanterna'}<Flashlight size={18} /></button>{error && <p className="v2-tools__error" role="alert">{error}</p>}</section>}
   </div></main>;
