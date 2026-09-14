@@ -106,6 +106,10 @@
 
 @media (max-width: 640px) {
   .v2-preview-toolbar {
+    position: static;
+  }
+
+  .v2-preview-toolbar {
     align-items: flex-start;
     flex-wrap: wrap;
   }

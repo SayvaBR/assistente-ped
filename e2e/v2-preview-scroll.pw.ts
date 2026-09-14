@@ -18,6 +18,7 @@ for (const { preview, marker } of surfaces) {
     const before = await page.evaluate(() => ({
       maxScroll: document.documentElement.scrollHeight - innerHeight,
       horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      toolbarPosition: getComputedStyle(document.querySelector('.v2-preview-toolbar')!).position,
     }));
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     const after = await page.evaluate((text) => {
@@ -30,6 +31,7 @@ for (const { preview, marker } of surfaces) {
 
     expect(before.maxScroll, `preview ${preview} não tem altura rolável`).toBeGreaterThan(0);
     expect(before.horizontalOverflow, `preview ${preview} tem scroll horizontal`).toBe(false);
+    expect(before.toolbarPosition, 'toolbar não deve cobrir a superfície durante o scroll móvel').toBe('static');
     expect(after, `conteúdo inferior de ${preview} não foi encontrado`).not.toBeNull();
     expect(after?.top, `conteúdo inferior de ${preview} não ficou visível`).toBeGreaterThanOrEqual(0);
     expect(after?.bottom, `conteúdo inferior de ${preview} saiu do viewport`).toBeLessThanOrEqual(720);
