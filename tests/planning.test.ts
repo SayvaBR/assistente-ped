@@ -4,6 +4,7 @@ import { newLessonPlan } from "../src/domain/lessonPlans";
 import { newTeachingActivity, saveActivity, listActivities } from "../src/domain/activities";
 import type { StoragePort } from "../src/domain/models";
 import { buildPlanningDayRows } from "../src/v2/screens/PlanningDayV2";
+import { buildPlanningCalendarRows } from "../src/v2/screens/PlanningCalendarV2";
 
 function memoryStorage(): StoragePort {
   const values = new Map<string, string>();
@@ -31,6 +32,21 @@ describe("planning repository", () => {
     expect(buildPlanningDayRows([plan])).toEqual([
       expect.objectContaining({ time: "10:00", moment: expect.objectContaining({ id: "timed" }) }),
       expect.objectContaining({ time: "", moment: expect.objectContaining({ id: "untimed" }) }),
+    ]);
+  });
+
+  it("keeps weekly plans visible when they have no moments and sorts untimed plans last", () => {
+    const timed = newLessonPlan({ turmaId: "turma-week", dataKey: "2026-09-12" });
+    timed.tituloTema = "Experimento do ciclo da água";
+    timed.horaInicio = "09:00";
+    timed.momentos = [];
+    const untimed = newLessonPlan({ turmaId: "turma-week", dataKey: "2026-09-12" });
+    untimed.tituloTema = "Leitura compartilhada";
+    untimed.momentos = [{ id: "untimed-week", titulo: "Leitura compartilhada", horario: "", duracaoMin: null, descricao: "Biblioteca", tipo: "aula" }];
+
+    expect(buildPlanningCalendarRows([untimed, timed])).toEqual([
+      expect.objectContaining({ title: "Experimento do ciclo da água", time: "09:00" }),
+      expect.objectContaining({ title: "Leitura compartilhada", time: "" }),
     ]);
   });
 

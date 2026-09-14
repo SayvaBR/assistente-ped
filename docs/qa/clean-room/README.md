@@ -63,6 +63,20 @@ A primeira composição do planejamento usa uma timeline de momentos, troca de d
 
 Também foram capturadas as composições de continuidade: [Semana](planning-week-v2-412.png) e [Mês](planning-month-v2-412.png).
 
+## Planejamento semanal V2 — hardening funcional/responsivo
+
+Checkpoint da branch `codex/delivery-planning-week-v2`, com o app/preview real executado sem o chrome do Visual Lab. A unidade mantém a seleção espacial da semana, remove planos arquivados, mantém atividades preparadas visíveis, preserva planos válidos sem momentos e identifica momentos sem horário sem esconder informação. A visão mensal, billing, auth, storage migration e outras telas não fazem parte deste checkpoint.
+
+Baseline visual: [Semana V2 — 412px](planning-week-v2-412.png).
+
+Capturas pós-hardening, com a mesma composição fluida:
+
+![Planejamento semanal V2 — hardening 412px](planning-week-v2-hardening-412.png)
+![Planejamento semanal V2 — hardening 390px](planning-week-v2-hardening-390.png)
+![Planejamento semanal V2 — hardening 320px](planning-week-v2-hardening-320.png)
+
+Matriz exercitada: 320, 360, 390, 412, 432, 480 e 600px; texto ampliado em 130%; sem overflow horizontal, copy essencial ausente ou conteúdo fora do dispositivo.
+
 ## Turmas V2 — primeiro render
 
 O overview de Turmas usa a turma ativa e os alunos reais do controlador, com ações de chamada, observação, perfil e cadastro.
