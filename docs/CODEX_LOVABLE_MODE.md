@@ -1,281 +1,140 @@
-# Codex Lovable Mode — V2 Clean Room
+# Codex Lovable Mode — Fast Feedback V2
 
-> **Status:** regra operacional obrigatória para trabalho visual V2
-> **Objetivo:** fazer o Codex trabalhar visual-first, com o mesmo princípio que torna builders como Lovable rápidos: alvo claro, primeira renderização cedo, comparação visual imediata e integração profunda somente depois que a composição estiver correta.
+> **Objetivo:** aproximar o ciclo do projeto de builders rápidos: preview persistente, primeira renderização cedo, alterações pequenas, validação proporcional ao risco e trabalho paralelo em isolamento.
 
-## 1. Decisão
+A referência operacional principal agora é `docs/PRODUCTION_SPEED_PROTOCOL.md`.
 
-O legado do Assistente Pedagógico deixa de ser autoridade visual.
+## Por que este modo existe
 
-A partir desta regra, o legado é tratado como **backend funcional local**: fonte de dados, regras de domínio, persistência, integrações e contratos. Layouts, componentes, CSS, shell, composição e padrões visuais antigos não devem ser preservados por inércia.
+Builders rápidos não ganham velocidade porque ignoram qualidade. Eles reduzem o tempo entre:
 
-A V2 deve ser construída em **clean room** dentro da stack atual.
+`ideia -> alteração -> preview -> feedback -> próxima alteração`.
 
-## 2. Stack
+Nosso objetivo é fazer o mesmo sem abrir mão de dados, segurança, Android ou LGPD.
 
-A stack permanece:
+## Arquitetura
 
-- React;
-- TypeScript;
-- Vite;
-- Capacitor Android.
+A UI V2 nasce em `src/v2/` e pode consumir domínio/dados do legado sem herdar a arquitetura visual antiga.
 
-Não migrar para React Native, Flutter, SwiftUI ou outra stack apenas para obter uma mudança visual. A stack atual é suficiente para reproduzir os targets aprovados.
+Reutilizar domínio, repositories, persistência, BNCC, billing e adapters nativos. Reconstruir shell, composição, componentes e estilo quando necessário.
 
-O ganho de velocidade virá da arquitetura e do fluxo de trabalho, não de uma migração total.
-
-## 3. Diretório V2 isolado
-
-Toda nova interface V2 deve nascer em `src/v2/`.
-
-Estrutura esperada:
+## Loop visual
 
 ```text
-src/v2/
-  components/
-  screens/
-  styles/
-  motion/
-  hooks/
-  adapters/
-  assets/
+target
+-> implementação mínima da composição
+-> render 390px
+-> corrigir as maiores diferenças
+-> repetir com HMR
+-> candidata
+-> 360/430 + estados
+-> conectar/validar dados
+-> testes relevantes
+-> design review
 ```
 
-### Permitido reutilizar do legado
+### Mudança importante
 
-- `src/domain/**`;
-- `src/data/**`;
-- repositories e serviços de persistência;
-- adapters nativos/Capacitor;
-- billing real;
-- regras BNCC;
-- modelos e validações;
-- utilitários sem responsabilidade visual.
+**360/390/430, Android e E2E completo NÃO são obrigatórios durante cada microiteração.**
 
-### Proibido como dependência visual da V2
+Eles entram quando existe uma candidata real ou quando o risco técnico exigir.
 
-- `src/screens/**`;
-- `src/components/**` legados;
-- `src/core/recovered.js` para composição/UI;
-- classes CSS antigas;
-- tokens visuais antigos;
-- `Card`, `IconTile` ou abstrações equivalentes quando vierem da camada visual V1.
+## Paralelismo
 
-Se uma regra de negócio estiver presa a um componente legado, extrair a lógica para uma camada neutra e conectá-la à V2.
+A antiga regra de impedir todo rollout enquanto uma única tela aguardava review está removida.
 
-## 4. Git é obrigatório, não opcional
+Podem existir várias trilhas independentes em worktrees/agentes:
 
-Antes de qualquer sessão de implementação:
+- UI de uma tela;
+- preparação de outra tela já especificada;
+- integração de dados;
+- QA/testes;
+- Android/nativo;
+- assets/research.
+
+A única restrição é evitar edição concorrente dos mesmos arquivos compartilhados. Tokens, shell, package/config e primitives centrais têm um único owner por rodada.
+
+## Preview persistente
+
+Manter `pnpm dev` ativo durante trabalho visual. Vite/HMR é o caminho padrão.
+
+Não reiniciar servidor, recompilar Android ou rodar toda a suíte quando uma alteração de CSS/composição pode ser validada instantaneamente no browser.
+
+## Validação por risco
+
+### Fast loop
 
 ```bash
-git status
-git branch --show-current
-git fetch origin --prune
-git log -1 --oneline
-git log -1 --oneline origin/<branch-atual>
+pnpm run check:fast
 ```
 
-O agente deve confirmar que está trabalhando na branch correta e que conhece o estado remoto mais recente.
+Mais o teste diretamente relacionado quando necessário.
 
-Se a branch local estiver atrás, sincronizar antes de implementar. Não trabalhar horas em estado local obsoleto.
-
-Antes de encerrar a rodada:
+### Candidate
 
 ```bash
-git status
-git diff --stat
-git log -1 --oneline
+pnpm run check:candidate
 ```
 
-O PR/issue deve informar branch e commit usados nas evidências.
+Mais screenshot 360/390/430 e E2E relacionado para UI importante.
 
-## 5. Fluxo visual-first obrigatório
+### PR/release
 
-Para tela com screenshot/mockup aprovado:
+Suite profunda e Android conforme risco. CI roda checks em paralelo para tirar espera do loop local.
 
-```text
-TARGET
-  ↓
-COMPOSIÇÃO V2 CLEAN ROOM
-  ↓
-PRIMEIRO RENDER 390px
-  ↓
-COMPARAÇÃO LADO A LADO
-  ↓
-CORRIGIR AS 5 MAIORES DIFERENÇAS
-  ↓
-RENDER 360 / 390 / 430
-  ↓
-CONECTAR DADOS REAIS
-  ↓
-ESTADOS / OFFLINE / ERROS
-  ↓
-MOTION / HAPTICS
-  ↓
-TESTES / ANDROID
-  ↓
-DESIGN REVIEW
-```
+## Design System
 
-### Proibido
+Não construir Design System inteiro antes das telas.
 
-Não executar primeiro uma maratona de:
+Ordem:
 
-- refatoração ampla;
-- criação de abstrações para dezenas de telas;
-- migração de todos os componentes;
-- auditoria estética do legado inteiro;
-- criação de Design System completo antes de existir uma tela convincente.
+1. fazer uma composição convincente;
+2. observar padrões reais;
+3. extrair primitives;
+4. tokenizar o que se repetiu;
+5. reutilizar.
 
-Primeiro provar uma tela. Generalizar somente o que a tela provar ser necessário.
+## Screenshot aprovado
 
-## 6. Screenshot aprovado é target
+Mockup aprovado é target. Reproduzir hierarquia, proporção, densidade, tipografia, cor, superfícies, profundidade e personalidade.
 
-Quando o usuário fornecer uma referência aprovada, ela é a autoridade positiva da composição.
+Não reinterpretar automaticamente como dashboard SaaS, Material default, fintech, editorial corporativo ou Tailwind starter.
 
-Reproduzir com alta fidelidade:
+## Fast path
 
-- proporção;
-- hierarquia;
-- densidade;
-- balanço de branco/azul;
-- superfícies;
-- radius;
-- tipografia;
-- escala de ícones;
-- profundidade;
-- posição relativa;
-- sensação tátil;
-- personalidade.
+Pode ser agressivo em:
 
-Não é permitido reinterpretar o target como:
+- composição;
+- CSS;
+- spacing;
+- copy;
+- iconografia;
+- motion local;
+- estados visuais sem mudança de contrato.
 
-- fintech;
-- dashboard corporativo;
-- minimalismo editorial;
-- Material default;
-- Tailwind starter;
-- grid SaaS.
+Pode inclusive refazer cedo uma composição ruim em vez de remendar.
 
-A referência ganha de um padrão genérico da biblioteca.
+## Deep path
 
-## 7. Primeiro render antes de abstração
+Continua conservador em:
 
-A primeira implementação pode ser específica da tela, desde que limpa e acessível.
-
-Depois que o visual for aprovado:
-
-1. identificar padrões realmente repetidos;
-2. extrair primitives;
-3. tokenizar;
-4. conectar estados reais;
-5. reutilizar nas próximas telas.
-
-Não criar abstração especulativa.
-
-## 8. Uma tela por vez
-
-Enquanto a Home V2 não passar pelo Design Review, não fazer rollout visual em massa.
-
-Sequência atual:
-
-1. Home V2;
-2. Frequência;
-3. Registrar observação;
-4. Compromissos;
-5. Planejamento diário;
-6. Planejamento mensal.
-
-Cada tela validada alimenta o sistema de componentes da seguinte.
-
-## 9. Regra de composição positiva
-
-A linguagem deve ser:
-
-> **Friendly Professional + Candy UI + Tactile + Educational + Motion-led**
-
-Balanço visual:
-
-> **fundo azul-claro + superfícies de trabalho majoritariamente brancas + azul vivo para foco/ação + navy para texto**
-
-Anti-card não significa anti-surface.
-
-Profissional não significa corporativo.
-
-Playful não significa infantil.
-
-## 10. Velocidade com qualidade
-
-A prioridade de uma rodada visual é reduzir tempo até algo revisável.
-
-Não gastar esforço com detalhes invisíveis antes de validar:
-
-1. composição;
-2. proporção;
-3. hierarquia;
-4. tipografia;
-5. cor;
-6. superfícies;
-7. iconografia;
-8. spacing;
-9. microdetalhes.
-
-Se composição estiver errada, refazer a composição. Não tentar salvá-la com CSS fino.
-
-## 11. Legado após equivalência V2
-
-Quando uma tela V2 for aprovada e funcionalmente equivalente:
-
-- a tela V1 correspondente entra em estado `deprecated`;
-- nenhuma nova feature visual deve ser adicionada à V1;
-- correções críticas podem ser feitas enquanto a migração não terminou;
-- remover V1 somente após confirmar navegação, persistência, testes e migração.
-
-Não fazer big-bang destrutivo dos dados ou regras de negócio.
-
-## 12. Segurança funcional continua obrigatória
-
-Clean room visual NÃO autoriza quebrar:
-
-- dados;
+- dados/migração;
 - storage;
-- offline;
 - billing;
-- RevenueCat;
-- LGPD;
-- segurança;
-- backup;
-- exportação;
-- acessibilidade;
-- BNCC;
-- regras pedagógicas.
+- backup/restore;
+- criptografia;
+- permissões;
+- segurança/LGPD;
+- BNCC e regras pedagógicas.
 
-A liberdade é sobre a camada de experiência e apresentação.
+## Evidência
 
-## 13. Definition of Ready para Design Review
+Durante o loop: mínima.
 
-Para tela importante:
+Na candidata: screenshot principal + diferenças + testes relevantes.
 
-- target identificado;
-- screenshot 390px;
-- screenshots 360px e 430px;
-- comparação visual executada;
-- dados reais conectados ou claramente delimitados como protótipo visual da rodada;
-- estados essenciais implementados quando a fase já for de integração;
-- build e testes relevantes;
-- sem imports visuais proibidos do legado em `src/v2`;
-- branch/commit informados.
+No PR: consolidar tudo uma única vez.
 
-Finalizar com:
+## Regra final
 
-`READY FOR DESIGN REVIEW — <TELA>`
-
-Nunca declarar aprovação por conta própria.
-
-## 14. Princípio final
-
-A V2 não deve parecer uma versão mais bonita da aplicação antiga.
-
-Ela deve parecer um produto novo construído com a maturidade funcional que já existe por baixo.
-
-> **Preservar os motores. Construir uma carroceria nova.**
+> **Acelerar o feedback, não cortar a qualidade. Paralelizar espera. Automatizar validação. Fazer o trabalho pesado somente no checkpoint certo.**
