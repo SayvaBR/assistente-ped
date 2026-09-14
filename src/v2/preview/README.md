@@ -18,7 +18,7 @@ Larguras rápidas:
 
 - `width=360`
 - `width=390`
-- `width=430`
+- `width=432`
 
 O toolbar também permite trocar a largura.
 

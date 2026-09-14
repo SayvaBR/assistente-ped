@@ -2,7 +2,8 @@ import { spawn } from 'node:child_process';
 import { resolve } from 'node:path';
 
 const args = process.argv.slice(2);
-const preview = (args.find((arg) => !arg.startsWith('--')) || 'home').trim();
+const requestedPreview = (args.find((arg) => !arg.startsWith('--')) || 'home').trim();
+const preview = requestedPreview === 'frequency' ? 'attendance' : requestedPreview;
 const widthArg = args.find((arg) => arg.startsWith('--width='));
 const width = Number(widthArg?.split('=')[1] || 412);
 const host = '127.0.0.1';
@@ -17,7 +18,7 @@ const supportedPreviews = new Set([
 const supportedWidths = new Set([320, 360, 390, 412, 432, 480, 600]);
 
 if (!supportedPreviews.has(preview)) {
-  console.error(`[live-design] preview inválido: ${preview}. Use uma superfície suportada do V2.`);
+  console.error(`[live-design] preview inválido: ${requestedPreview}. Use uma superfície suportada do V2.`);
   process.exit(2);
 }
 
@@ -34,7 +35,9 @@ async function isReady() {
     const response = await fetch(baseUrl, { signal: AbortSignal.timeout(750) });
     if (!response.ok) return false;
     const body = await response.text();
-    return body.includes('/@vite/client') && body.includes('/src/main.tsx');
+    if (!body.includes('/@vite/client') || !body.includes('/src/main.tsx') || !body.includes('<title>Assistente Pedagógico</title>')) return false;
+    const previewModule = await fetch(`${baseUrl}/src/v2/preview/V2Preview.tsx`, { signal: AbortSignal.timeout(750) });
+    return previewModule.ok && (await previewModule.text()).includes('export function V2Preview');
   } catch {
     return false;
   }
@@ -51,8 +54,7 @@ function printReady(existing) {
 
 if (await isReady()) {
   printReady(true);
-  process.exit(0);
-}
+} else {
 
 const viteBin = resolve('node_modules/vite/bin/vite.js');
 const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(port), '--strictPort'], {
@@ -89,3 +91,4 @@ child.on('exit', (code, signal) => {
   if (signal) process.exit(0);
   process.exit(code ?? 1);
 });
+}
