@@ -1516,6 +1516,7 @@ function App() {
                                                                                   onBack: _t,
                                                                                   onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
                                                                                   loadObservations: loadStudentObservationsV2,
+                                                                                  loadAttendance: () => M?.id ? repository.listarTodasAsChamadas() : Promise.resolve({}),
                                                                                 },
                                                                               ))
                                                                           : f ===

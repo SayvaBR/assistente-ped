@@ -59,6 +59,7 @@
 .v2-class-workspace__history-event:first-of-type::before { top: 50%; }
 .v2-class-workspace__history-event:last-child::before { bottom: 50%; }
 .v2-class-workspace__history-dot { position: relative; z-index: 1; width: 12px; height: 12px; flex: 0 0 12px; margin-left: 0; border: 3px solid #fff; border-radius: 50%; background: #1aa8fa; box-shadow: 0 0 0 2px #9edcff; }
+.v2-class-workspace__history-dot--attendance { background: #168be0; box-shadow: 0 0 0 2px #b9e5fa; }
 .v2-class-workspace__history-event > span:nth-child(2) { min-width: 0; flex: 1; }
 .v2-class-workspace__history-event strong, .v2-class-workspace__history-event small, .v2-class-workspace__history-event em { display: block; overflow-wrap: normal; word-break: normal; }
 .v2-class-workspace__history-event strong { color: #102a72; font-size: 13px; font-weight: 900; }

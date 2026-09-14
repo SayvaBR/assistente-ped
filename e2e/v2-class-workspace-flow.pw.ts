@@ -14,6 +14,10 @@ test('Home V2 abre o workspace V2 da turma sem voltar para a carroceria legada',
   await expect(device.getByText('1 registro · 12/09/2026', { exact: true })).toBeVisible();
   await device.getByRole('button', { name: 'Histórico', exact: true }).click();
   await expect(device.getByRole('heading', { name: 'Histórico da turma', exact: true })).toBeVisible();
+  await expect(device.getByText('CHAMADAS RECENTES', { exact: true })).toBeVisible();
+  await device.getByRole('button', { name: /quarta-feira, 28 de agosto/ }).click();
+  await expect(device.getByRole('heading', { name: '5º Ano A', exact: true })).toBeVisible();
+  await expect(device.getByRole('button', { name: 'Salvar frequência', exact: true })).toBeVisible();
 });
 
 test('Workspace da turma preserva navegação, texto e largura compacta', async ({ page }) => {
