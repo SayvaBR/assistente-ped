@@ -25,6 +25,26 @@ test('Compromissos V2 preserva copy e layout em texto ampliado', async ({ page }
   expect(result).toEqual({ overflow: false, hasTitle: true, hasAgenda: true });
 });
 
+test('Compromissos V2 conclui e reabre sem perder o evento local', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=commitments&width=412');
+  const device = page.locator('.v2-preview-device');
+  const complete = device.getByRole('button', { name: 'Concluir Aula de Matemática' });
+  await complete.click();
+  await expect(device.getByRole('button', { name: 'Reabrir Aula de Matemática' })).toBeVisible();
+  await device.getByRole('button', { name: 'Reabrir Aula de Matemática' }).click();
+  await expect(device.getByRole('button', { name: 'Concluir Aula de Matemática' })).toBeVisible();
+});
+
+test('Compromissos V2 expõe falha de conclusão e restaura o estado', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=commitments&width=412&state=error');
+  const device = page.locator('.v2-preview-device');
+  await device.getByRole('button', { name: 'Concluir Aula de Matemática' }).click();
+  await expect(device.getByRole('alert')).toContainText('Falha de demonstração ao salvar');
+  await expect(device.getByRole('button', { name: 'Concluir Aula de Matemática' })).toBeVisible();
+});
+
 test('Compromissos V2 leva os períodos para o planejamento correspondente', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 980 });
   await page.goto('/?v2-preview=commitments&width=412');

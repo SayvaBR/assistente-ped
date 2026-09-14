@@ -223,7 +223,7 @@ export function V2Preview() {
               onSave={() => undefined}
             />
           ) : activeScreen === 'commitments' ? (
-            <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} onPeriodChange={(period) => setActiveScreen(period === 'week' ? 'planning-week' : 'planning-month')} />
+            <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" offline={previewState === 'offline'} onBack={() => setActiveScreen('home')} onSave={previewState === 'error' ? async () => { throw new Error('Falha de demonstração ao salvar.'); } : () => undefined} onDelete={() => undefined} onPeriodChange={(period) => setActiveScreen(period === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-overview' ? (
             <PlanningOverviewV2 plans={planningPreviewPlans} activities={[{ ...activityPreview, titulo: 'Caça às palavras', disciplina: 'Língua Portuguesa', instrucoes: 'Em duplas, encontrem no texto as palavras combinadas.', status: 'pronta' }, { ...activityPreview, id: 'activity-archived', titulo: 'Atividade arquivada', status: 'arquivada' }]} className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => setActiveScreen('plan-editor')} onOpenActivity={() => setActiveScreen('activity')} onRestorePlan={() => undefined} onCreatePlan={() => setActiveScreen('plan-editor')} onCreateActivity={() => setActiveScreen('activity')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-day' ? (
