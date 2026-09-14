@@ -1,5 +1,5 @@
 .v2-discovery { background: radial-gradient(circle at 50% -12%, #fbfeff 0, #e5f8ff 48%, #c7efff 100%); }
-.v2-discovery__screen { width: min(100%, var(--v2-content-max)); min-height: 100dvh; margin: 0 auto; padding: max(18px, env(safe-area-inset-top)) 16px 24px; display: flex; flex-direction: column; box-sizing: border-box; }
+.v2-discovery__screen { width: min(100%, var(--v2-content-max)); min-height: 100dvh; margin: 0 auto; padding: max(18px, var(--v2-safe-top, 0px)) 16px max(24px, var(--v2-safe-bottom, 0px)); display: flex; flex-direction: column; box-sizing: border-box; }
 .v2-discovery button, .v2-discovery h1, .v2-discovery strong { font-family: "Fredoka", ui-rounded, "Nunito Sans", system-ui, sans-serif; }
 .v2-discovery__top { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; }
 .v2-discovery__brand { display: inline-flex; min-width: 0; align-items: center; gap: 7px; color: #168be0; font: 800 .78rem/1 var(--v2-font-family); }.v2-discovery__brand b { color: #102b72; }.v2-discovery__skip { flex: 0 0 auto; min-width: 48px; padding: 0 4px; border: 0; background: transparent; color: #5278a7; font: 700 .7rem var(--v2-font-family); }

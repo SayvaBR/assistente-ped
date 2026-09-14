@@ -7,7 +7,7 @@
   width: min(100%, var(--v2-content-max));
   min-height: 100dvh;
   margin: 0 auto;
-  padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  padding: max(16px, var(--v2-safe-top, 0px)) 16px max(24px, var(--v2-safe-bottom, 0px));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
