@@ -61,7 +61,8 @@ import { TrashScreen } from "../screens/TrashScreen.js";
 import { TutorialsScreen } from "../screens/TutorialsScreen.js";
 import { App as Vf } from "@capacitor/app";
 import { WelcomeScreen } from "../screens/Onboarding";
-import { OnboardingV2 } from "../v2/screens/OnboardingV2";
+import { OnboardingDiscoveryV2 } from "../v2/screens/OnboardingDiscoveryV2";
+import { OnboardingEntryV2 } from "../v2/screens/OnboardingEntryV2";
 import { Check as Zr } from "lucide-react";
 import { colors } from "../core/recovered.js";
 import { createId } from "../core/recovered.js";
@@ -1582,14 +1583,26 @@ function App() {
             onDone: () => u(yt ? "home" : dt ? "wizard" : "onboarding"),
           }),
         o === "onboarding" &&
-          React.createElement(OnboardingV2, {
-            onDone: (plan) => {
-              storage
-                .set("assinatura:interesse", plan || "gratuito")
-                .catch(() => {})
-                .finally(() => u("wizard"));
+          React.createElement(
+            OnboardingEntryV2,
+            {
+              onContinue: () => u("onboarding-discovery"),
+              onSkip: () => u("wizard"),
             },
-          }),
+          ),
+        o === "onboarding-discovery" &&
+          React.createElement(
+            "div",
+            { className: "v2-first-run-scroll" },
+            React.createElement(OnboardingDiscoveryV2, {
+              onDone: (profile) => {
+                storage
+                  .set("onboarding:descoberta:v2", JSON.stringify(profile))
+                  .catch(() => {})
+                  .finally(() => u("wizard"));
+              },
+            }),
+          ),
         o === "wizard" &&
           React.createElement(SetupWizardV2, {
             onDone: Vt,

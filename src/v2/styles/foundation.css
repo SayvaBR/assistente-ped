@@ -1,5 +1,14 @@
 @import "./tokens.css";
 
+:root {
+  /* MainActivity publishes the real Android navigation inset here. */
+  --android-safe-bottom: 0px;
+  --v2-safe-bottom: max(
+    env(safe-area-inset-bottom, 0px),
+    var(--android-safe-bottom, 0px)
+  );
+}
+
 .v2-root {
   min-height: 100dvh;
   background: var(--v2-color-bg);
@@ -8,6 +17,27 @@
   font-weight: var(--v2-font-weight-regular);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Keep every V2 fixed/flowing bottom navigation above gesture navigation. */
+.v2-root [class*="__bottom-nav"] {
+  padding-bottom: max(10px, var(--v2-safe-bottom, 0px)) !important;
+}
+
+/*
+ * The application shell intentionally clips its chrome. First-run V2 screens
+ * still need their own scroll viewport so Android system navigation insets
+ * cannot hide the final action row.
+ */
+.v2-first-run-scroll {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Keep the final helper copy above gesture navigation on Android. */
+  padding-bottom: 72px;
+  overscroll-behavior-y: contain;
 }
 
 .v2-screen {

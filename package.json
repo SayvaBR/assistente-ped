@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "ui:lab": "vite --host 127.0.0.1",
+    "ui:shot": "node scripts/ui-shot.mjs",
+    "check:fast": "pnpm run check:v2-boundary && tsc --noEmit",
+    "check:candidate": "pnpm run check:fast && node scripts/check-onboarding-candidate.mjs",
     "check:v2-boundary": "node scripts/check-v2-boundary.mjs",
     "build": "pnpm run check:v2-boundary && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
