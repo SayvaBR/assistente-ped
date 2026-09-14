@@ -6,7 +6,7 @@
 ## Estado global
 
 - Base de integração: `integration/android-1.0`
-- Último PR integrado: `#14` (`bdb8f09` → `6ae981b`)
+- Último PR integrado: `#29` (`b0dc7e4` → `b9bb3b3`)
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -35,7 +35,8 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 4. Planejamento Dia/Semana/Mês — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `Planejamento diário V2 — hardening funcional/responsivo`; PR `#14` integrado em `integration/android-1.0`.
-   - Delivery Unit atual: `Planejamento semanal V2 — hardening funcional/responsivo`; branch `codex/delivery-planning-week-v2`; pronta para PR contra `integration/android-1.0`.
+   - Delivery Unit concluída: `Planejamento semanal V2 — hardening funcional/responsivo`; PR `#20` integrado em `integration/android-1.0`.
+   - Planejamento mensal permanece `IN PROGRESS`; nenhuma nova decisão de produto foi aplicada nesta rodada.
 5. Turmas — `IN PROGRESS`
 6. Perfil do professor — `IN PROGRESS`
 7. Arquivos — `IN PROGRESS`
@@ -53,7 +54,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Registrar observação — `READY FOR DESIGN REVIEW`
 - Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 - Planejamento diário — `FUNCTIONAL HARDENING` (PR #14 integrado; filtros de arquivados, erro/retry de atividades, momentos sem horário e evidência 320/412 px cobertos)
-- Planejamento semanal — `IN PROGRESS`
+- Planejamento semanal — `FUNCTIONAL HARDENING` (PR #20 integrado; jornada semanal e matriz 320/360/390/412/432/480/600px cobertas)
 - Planejamento mensal — `IN PROGRESS`
 - Turmas — `IN PROGRESS`
 - Perfil — `IN PROGRESS`
@@ -195,18 +196,17 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do hardening semanal V2
-- Base: `origin/integration/android-1.0` em `80b5466`; branch `codex/delivery-planning-week-v2`
-- Tela/fluxo: a visão semanal mantém planos e atividades reais do dia selecionado, exclui arquivados, preserva planos sem momentos, ordena horários e mostra `Sem horário` de forma explícita; o card semanal estreito mantém a label inteira em 320px.
-- Escopo não tocado: visão mensal, outras telas, billing, auth e migração de storage.
-- Screenshot/evidência: `docs/qa/clean-room/planning-week-v2-hardening-412.png`, `docs/qa/clean-room/planning-week-v2-hardening-390.png`, `docs/qa/clean-room/planning-week-v2-hardening-320.png`; baseline `docs/qa/clean-room/planning-week-v2-412.png`.
-- Testes executados: `pnpm test` (53/53), jornada semanal Playwright (11/11, incluindo fixture sem horário, regressão mensal e matriz 320/360/390/412/432/480/600px), `check:fast`, `git diff --check` e build passaram.
-- Commit: `91b8e41` (`fix: isolate weekly planning hardening`)
-- PR: [#20](https://github.com/SayvaBR/assistente-ped/pull/20) aberto para `integration/android-1.0`; sem merge.
+- Data/hora: 14/09/2026 — checkpoint do DevEx Live Design vertical scroll
+- Base: `origin/integration/android-1.0` em `b9bb3b3`; worker `codex/fix-live-preview-scroll`
+- Tela/fluxo: o harness do Live Design e do UI Lab permite rolagem vertical real, mantém a toolbar fora da superfície móvel e contém overflow horizontal por eixo; planning-day foi observado em 412 CSS px com HMR na mesma página, scroll até `Atividades para levar` e nova observação após a correção.
+- Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, billing, auth, migração de storage e telas de produto.
+- Evidência: `e2e/v2-preview-scroll.pw.ts` cobre planning-day/files/student-profile/planning-week e UI Lab em 360/412/480px; screenshot formal foi capturada no navegador Codex durante a sessão.
+- Testes executados: E2E direcionado `8/8`, `pnpm test` `60/60`, `check:fast`, `pnpm build`, `git diff --check` e CI exato `34835256454` verde, incluindo Gate responsivo e Build Android QA APK.
+- Commit/PR: `b0dc7e4` (`fix(devex): clip preview overflow by axis`), PR [#29](https://github.com/SayvaBR/assistente-ped/pull/29) integrado em `b9bb3b3`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `IN PROGRESS`; nenhuma aprovação visual adicional foi declarada
-- Próxima ação: validar no APK atual o fluxo de turma/histórico e continuar auditando superfícies profundas que ainda dependem de V1 antes de marcar M3 concluído
+- Resultado: `IN PROGRESS`; a unidade DevEx foi integrada, sem mudança de tela ou regra pedagógica.
+- Próxima ação: sincronizar a integration, escolher uma DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
 
 ### BNCC — evidência e contratos
 
