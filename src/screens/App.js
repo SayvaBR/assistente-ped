@@ -900,6 +900,7 @@ function App() {
     dateKey: planningV2Date,
     plans: planningV2State.plans,
     activities: activityV2State.activities,
+    activityError: activityV2State.error,
     loading: planningV2State.status === "loading",
     error: planningV2State.error,
     offline: !homeIsOnline,
