@@ -105,7 +105,7 @@ export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBa
 
   React.useEffect(() => setName(turma?.nome || ''), [turma?.nome]);
   React.useEffect(() => {
-    if (aba !== 'registros') return undefined;
+    if (aba !== 'registros' && aba !== 'historico') return undefined;
     let active = true;
     setRecordState({ status: 'loading', items: {}, error: '' });
     Promise.all(alunos.map(async (student) => [student.id, await recordLoader.current(student.id)] as const)).then((entries) => {
@@ -115,6 +115,8 @@ export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBa
     });
     return () => { active = false; };
   }, [aba, studentIds]);
+
+  const historyEvents = alunos.flatMap((student) => (recordState.items[student.id] || []).map((record) => ({ student, record }))).slice(0, 6);
 
   const saveName = async () => {
     const nextName = name.trim();
@@ -149,6 +151,8 @@ export function ClassWorkspaceV2({ turma, alunos, carregando = false, goTo, onBa
       <p className="v2-class-workspace__helper">Os números abaixo vêm dos registros salvos neste aparelho. Para lançar a chamada de hoje, abra Frequência.</p>
       <button type="button" className="v2-class-workspace__wide-action v2-pressable" onClick={() => goTo('chamada')}><CalendarCheck2 size={20} /><span><strong>Consultar frequência</strong><small>Revisar presença por data</small></span><ChevronRight size={19} /></button>
       {alunos.length > 0 && <div className="v2-class-workspace__history-list">{alunos.map((student) => { const item = studentAttendance(student); return <button type="button" key={student.id} className="v2-class-workspace__history-row v2-pressable" onClick={() => goTo('perfil', student)}><span><strong>{student.nome}</strong><small>{item.total ? `${item.percent}% de presença` : 'Ainda sem lançamentos'}</small></span><span className="v2-class-workspace__history-count">{item.present}<small>pres.</small></span><ChevronRight size={18} /></button>; })}</div>}
+      {recordState.status === 'loading' && <p className="v2-class-workspace__helper" role="status">Carregando os últimos registros pedagógicos…</p>}
+      {recordState.status === 'ready' && historyEvents.length > 0 && <div className="v2-class-workspace__history-events" aria-label="Últimos registros pedagógicos"><div className="v2-class-workspace__history-events-heading"><span className="v2-eyebrow">MEMÓRIA RECENTE</span><span>{historyEvents.length} registros</span></div>{historyEvents.map(({ student, record }, index) => <button type="button" key={record.id || `${student.id}-${index}`} className="v2-class-workspace__history-event v2-pressable" onClick={() => goTo('perfil', student)}><span className="v2-class-workspace__history-dot" aria-hidden="true" /><span><strong>{student.nome}</strong><small>{record.data || 'Data não informada'}</small><em>{record.texto || 'Observação pedagógica salva.'}</em></span><ChevronRight size={18} aria-hidden="true" /></button>)}</div>}
     </section>
   );
 
