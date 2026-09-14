@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "live:design": "node scripts/live-design.mjs",
     "ui:lab": "vite --host 127.0.0.1",
     "ui:shot": "node scripts/ui-shot.mjs",
     "check:fast": "pnpm run check:v2-boundary && tsc --noEmit",

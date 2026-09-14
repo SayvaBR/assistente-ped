@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
 
-const [preview = 'home', ...expectedParts] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const normalizedArgs = args[0] === '--' ? args.slice(1) : args;
+const [preview = 'home', ...expectedParts] = normalizedArgs;
 const expectedText = expectedParts.join(' ');
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 
@@ -11,6 +13,7 @@ const result = spawnSync(
   ['exec', 'playwright', 'test', 'e2e/v2-adaptive-checkpoint.pw.ts', '--config', 'playwright.config.ts', '--reporter=line'],
   {
     stdio: 'inherit',
+    shell: process.platform === 'win32',
     env: {
       ...process.env,
       V2_PREVIEW: preview,

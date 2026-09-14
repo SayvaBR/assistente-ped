@@ -8,6 +8,10 @@ default_subagent_reasoning_effort = "high"
 config_file = "agents/visual-director.toml"
 description = "Read-only visual director for composition, hierarchy, identity and screenshot critique."
 
+[agents.live_visual_director]
+config_file = "agents/live-visual-director.toml"
+description = "Read-only live visual director for browser/HMR-driven iteration with DOM/CDP-first objective inspection."
+
 [agents.code_mapper]
 config_file = "agents/code-mapper.toml"
 description = "Read-only explorer that maps the smallest code/data path before implementation."

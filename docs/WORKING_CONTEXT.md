@@ -43,16 +43,16 @@ Evitar Material default, dashboard SaaS, card para tudo, gradiente genérico, gl
 
 1. reconstruir a primeira tela pós-Splash como `Onboarding Entry V2` usando `docs/SCREEN_SPEC_ONBOARDING_ENTRY_V2.md`;
 2. construir em paralelo o MVP do `UI Lab` de `docs/UI_LAB_SPEC.md` quando não houver conflito;
-3. trabalhar em loop visual curto: `edit -> HMR -> render 390 -> screenshot -> compare -> corrigir`;
+3. trabalhar em loop visual curto: `edit -> HMR -> render 412 -> screenshot -> compare -> corrigir`;
 4. não expandir para outras telas antes de uma candidata visual convincente.
 
 ## Velocidade
 
 Regra: **rápido no loop, rigoroso no checkpoint**.
 
-Durante iteração: Vite/HMR + `pnpm run check:fast` + render 390px.
+Durante iteração: Vite/HMR + `pnpm run check:fast` + render 412px.
 
-Somente em candidata: 360/390/430, estados essenciais, `pnpm run check:candidate` e teste relacionado.
+Somente em candidata: 360/412/480, estados essenciais, `pnpm run check:candidate` e teste relacionado.
 
 Somente em PR/release: suíte profunda, Android e evidência final conforme risco.
 
@@ -85,7 +85,7 @@ Dados de alunos e conteúdo pedagógico não entram em analytics.
 
 Fluxo padrão:
 
-`target -> primeiro render 390 -> corrigir composição -> candidata -> 360/430 -> integrar estados/dados -> testes relevantes -> review`.
+`target -> primeiro render 412 -> corrigir composição -> candidata -> 360/480 -> integrar estados/dados -> testes relevantes -> review`.
 
 ## Documentação por exceção
 

@@ -14,7 +14,7 @@ Durante implementação/refino visual:
 - editar somente o necessário;
 - usar `pnpm run check:fast`;
 - usar teste diretamente relacionado quando útil;
-- renderizar primeiro em 390px;
+- renderizar primeiro em 412px;
 - tirar screenshot e comparar cedo.
 
 Não rodar Android, E2E completo ou documentação extensa a cada microajuste.
@@ -24,7 +24,7 @@ Não rodar Android, E2E completo ou documentação extensa a cada microajuste.
 Quando a composição já estiver convincente:
 
 - `pnpm run check:candidate`;
-- validar 360/390/430;
+- validar 360/412/480;
 - estados essenciais;
 - teste E2E diretamente relacionado quando existir;
 - comparação final com target/spec.
@@ -43,7 +43,7 @@ Uma vez por entrega, proporcionalmente ao risco:
 
 Para tela com target/spec claro:
 
-`TARGET -> COMPOSIÇÃO -> RENDER 390 -> SCREENSHOT -> CORRIGIR 3–5 MAIORES DIFERENÇAS -> CANDIDATE -> 360/430 -> INTEGRAÇÃO/ESTADOS -> QA`
+`TARGET -> COMPOSIÇÃO -> RENDER 412 -> SCREENSHOT -> CORRIGIR 3–5 MAIORES DIFERENÇAS -> CANDIDATE -> 360/480 -> INTEGRAÇÃO/ESTADOS -> QA`
 
 Se a composição estiver errada, reescrever cedo. Não gastar tempo polindo CSS de uma arquitetura visual ruim.
 
@@ -94,7 +94,7 @@ Não é mais obrigatório:
 
 - Android a cada rodada visual;
 - E2E completo a cada ajuste;
-- 360/390/430 antes de 390 estar bom;
+- 360/412/480 antes de 412 estar bom;
 - bloquear todo trabalho paralelo enquanto uma tela aguarda review;
 - reler todos os documentos a cada sessão;
 - criar Design System completo antes de provar telas reais.
