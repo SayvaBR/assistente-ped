@@ -3,3 +3,4 @@
 @media (prefers-reduced-motion: reduce) { .v2-plan *,.v2-plan *::before,.v2-plan *::after { transition: none !important; animation: none !important; } }
 .v2-plan__status.is-ready { background:#e4f2ff; color:#1671c4; }.v2-plan__field-row--two { grid-template-columns:repeat(2,minmax(0,1fr)); }.v2-plan__ready { background:#e9f7ff; }.v2-plan__ready svg { color:#168be0; }
 @media (max-width:359px) { .v2-plan__field-row--two { grid-template-columns:1fr; } }
+.v2-plan__bncc-description { margin: -2px 0 8px; color: #365b91; font: 600 .72rem/1.35 var(--v2-font-family); }.v2-plan__bncc-description strong { color: #168be0; margin-right: 5px; }

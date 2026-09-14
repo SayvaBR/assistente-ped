@@ -32,7 +32,7 @@ export interface LessonPlan {
   disciplina?: string;
   objetoConhecimento?: string;
   justificativa?: string;
-  bncc: { habilidades: string[] };
+  bncc: { habilidades: string[]; descricoes?: Record<string, string> };
   momentos: LessonMoment[];
   recursos: string;
   avaliacao: string;

@@ -1133,7 +1133,7 @@ function App() {
                                 onBack: _t,
                                 onOpenPlan: (skill) => zt("plano-aula", {
                                   dataKey: dateKey(),
-                                  prefill: { bncc: { habilidades: [skill.codigo] } },
+                                  prefill: { bncc: { habilidades: [skill.codigo], descricoes: { [skill.codigo]: skill.texto } } },
                                 }),
                               }))
                             : (Re == null ? void 0 : Re.name) ===

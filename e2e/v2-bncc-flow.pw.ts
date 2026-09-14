@@ -11,6 +11,9 @@ test('BNCC V2 consulta catálogo real e abre detalhe', async ({ page }) => {
   await expect(device.getByText(/Identificar a função social/)).toBeVisible();
   await device.getByRole('button', { name: 'Abrir no editor de plano' }).click();
   await expect(device.getByRole('heading', { name: 'Editar plano', exact: true })).toBeVisible();
+  await device.getByRole('button', { name: /REFERÊNCIA CURRICULAR/ }).click();
+  await expect(device.getByRole('textbox', { name: 'Códigos BNCC' })).toHaveValue('EF15LP01');
+  await expect(device.getByText(/EF15LP01 Identificar a função social/)).toBeVisible();
 });
 
 test('BNCC V2 preserva busca nas larguras Android previstas', async ({ page }) => {

@@ -120,6 +120,7 @@ export function V2Preview() {
   const [previewTheme, setPreviewTheme] = useState('claro');
   const [previewAccent, setPreviewAccent] = useState('#168be0');
   const [previewSounds, setPreviewSounds] = useState(true);
+  const [planPrefill, setPlanPrefill] = useState<Partial<LessonPlan>>({});
   const [observationStudentId, setObservationStudentId] = useState(initialObservationStudent);
   const frequencyStateData: FrequencyV2Data = {
     ...frequencyPreviewData,
@@ -210,9 +211,9 @@ export function V2Preview() {
           ) : activeScreen === 'more' ? (
             <MoreV2 goTo={(route) => route === 'ferramentas' ? setActiveScreen('tools') : route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : route === 'tema' ? setActiveScreen('appearance') : route === 'notificacoes' ? setActiveScreen('notifications') : route === 'backup' ? setActiveScreen('backup') : route === 'privacidade' ? setActiveScreen('privacy') : route === 'lixeira' ? setActiveScreen('trash') : route === 'ajuda-feedback' ? setActiveScreen('help') : route === 'termos' ? setActiveScreen('legal') : route === 'perfil-professor' ? setActiveScreen('profile') : route === 'gerenciar-turmas' ? setActiveScreen('class-manager') : route === 'organizacao' ? setActiveScreen('organization') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
           ) : activeScreen === 'plan-editor' ? (
-            <LessonPlanV2 plano={planningPreviewPlans[0]} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
+            <LessonPlanV2 plano={planningPreviewPlans[0]} prefill={planPrefill} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
-            <BnccV2 etapa="fundamental_anos_iniciais" storage={previewStorage} onBack={() => setActiveScreen('more')} onOpenPlan={() => setActiveScreen('plan-editor')} />
+            <BnccV2 etapa="fundamental_anos_iniciais" storage={previewStorage} onBack={() => setActiveScreen('more')} onOpenPlan={(skill) => { setPlanPrefill({ bncc: { habilidades: [skill.codigo], descricoes: { [skill.codigo]: skill.texto } } }); setActiveScreen('plan-editor'); }} />
           ) : activeScreen === 'reports' ? (
             <ReportsV2 turma={reportPreviewClass} alunos={classStudentsPreview} storage={previewStorage} initialDays={reportPreviewDays} onBack={() => setActiveScreen('more')} />
           ) : activeScreen === 'settings' ? (

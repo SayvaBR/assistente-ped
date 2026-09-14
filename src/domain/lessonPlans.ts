@@ -20,7 +20,7 @@ export function newLessonPlan({
     disciplina: "",
     objetoConhecimento: "",
     justificativa: "",
-    bncc: { habilidades: [] },
+    bncc: { habilidades: [], descricoes: {} },
     momentos: [],
     recursos: "",
     avaliacao: "",
