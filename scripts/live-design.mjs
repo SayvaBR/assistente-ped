@@ -101,10 +101,18 @@ function processCommandLine(pid) {
   }
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function isExpectedProcess(pid, expectedPath, expectedToken) {
-  const commandLine = processCommandLine(pid).toLowerCase().replaceAll('\\', '/');
-  return commandLine.includes(expectedPath.toLowerCase().replaceAll('\\', '/'))
-    && (!expectedToken || commandLine.includes(`--mode ${expectedToken}`.toLowerCase()));
+  const commandLine = processCommandLine(pid).replaceAll('\\', '/');
+  const normalizedPath = expectedPath.replaceAll('\\', '/');
+  const pathPattern = new RegExp(`(?:^|[\\s"'=])${escapeRegExp(normalizedPath)}(?=$|[\\s"'])`, 'i');
+  if (!pathPattern.test(commandLine)) return false;
+  if (expectedToken === undefined) return true;
+  const tokenPattern = new RegExp(`(?:^|\\s)--mode(?:\\s+|=)(?:"${escapeRegExp(expectedToken)}"|'${escapeRegExp(expectedToken)}'|${escapeRegExp(expectedToken)})(?=\\s|$)`, 'i');
+  return tokenPattern.test(commandLine);
 }
 
 function isLiveLauncher(pid) {
@@ -122,6 +130,7 @@ function markerState() {
       process.kill(marker.launcherPid, 0);
       return isLiveLauncher(marker.launcherPid) ? 'foreign' : 'stale';
     }
+    if (typeof marker.mode !== 'string' || marker.mode.length === 0) return 'stale';
     if (!Number.isInteger(marker.pid)) return 'stale';
     process.kill(marker.pid, 0);
     return isExpectedProcess(marker.pid, viteBin, marker.mode) ? 'owned' : 'stale';
@@ -219,20 +228,26 @@ try {
 }
 
   let readyPrinted = false;
+  let pollInFlight = false;
   let startupTimedOut = false;
 const startedAt = Date.now();
 const poll = setInterval(async () => {
-  if (readyPrinted) return;
-  if (await isReady()) {
-    readyPrinted = true;
-    clearInterval(poll);
-    printReady(false);
-  } else if (Date.now() - startedAt > startupTimeoutMs) {
-    clearInterval(poll);
-    console.error(`[live-design] Vite não ficou pronto em ${startupTimeoutMs}ms. Verifique a saída acima.`);
-    startupTimedOut = true;
-    stop('SIGTERM');
-    process.exitCode = 1;
+  if (readyPrinted || pollInFlight) return;
+  pollInFlight = true;
+  try {
+    if (await isReady()) {
+      readyPrinted = true;
+      clearInterval(poll);
+      printReady(false);
+    } else if (Date.now() - startedAt > startupTimeoutMs) {
+      clearInterval(poll);
+      console.error(`[live-design] Vite não ficou pronto em ${startupTimeoutMs}ms. Verifique a saída acima.`);
+      startupTimedOut = true;
+      stop('SIGTERM');
+      process.exitCode = 1;
+    }
+  } finally {
+    pollInFlight = false;
   }
 }, pollIntervalMs);
 

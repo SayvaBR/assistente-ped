@@ -106,6 +106,18 @@ describe('live design launcher ownership', () => {
     await waitForOutput(owner, 'LIVE_DESIGN_URL=http://127.0.0.1:46103/');
     expect(existsSync(ownerMarker)).toBe(true);
 
+    const missingModeMarker = join(testRoot, 'missing-mode-marker.json');
+    const ownerMarkerData = JSON.parse(readFileSync(ownerMarker, 'utf8')) as Record<string, unknown>;
+    delete ownerMarkerData.mode;
+    writeFileSync(missingModeMarker, JSON.stringify(ownerMarkerData));
+    const missingMode = runLauncher(['home'], {
+      LIVE_DESIGN_PORT: port,
+      LIVE_DESIGN_MARKER: missingModeMarker,
+    });
+    expect(await waitForExit(missingMode.child)).not.toBe(0);
+    expect(missingMode.output).toContain('Port 46103 is already in use');
+    expect(existsSync(missingModeMarker)).toBe(false);
+
     writeFileSync(foreignMarker, JSON.stringify({ cwd: 'C:\\another-worktree', pid: process.pid }));
 
     const reused = runLauncher(['home', '--width=480'], {
