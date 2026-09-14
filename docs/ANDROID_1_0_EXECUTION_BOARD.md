@@ -6,7 +6,7 @@
 ## Estado global
 
 - Base de integração: `integration/android-1.0`
-- Último PR integrado: `#39` (`634916d` → `d0eeff0`)
+- Último PR integrado: `#41` (`e601561` → `73e59d8`)
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -32,24 +32,26 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 
 0. DevEx — UI Lab MVP — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `UI Lab dev-only — registry de superfícies, fixtures sintéticas, scroll interno e screenshot direto`; PR `#39` integrado em `integration/android-1.0`.
-1. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
-2. Registrar observação — `READY FOR DESIGN REVIEW`
-3. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
-4. Planejamento Dia/Semana/Mês — `FUNCTIONAL HARDENING`
+1. Onboarding Entry V2 — `FUNCTIONAL HARDENING`
+   - Delivery Unit concluída: `first-viewport hardening — headline em até três linhas, CTA no viewport inicial, preview direto Live Design e gate responsivo`; PR `#41` integrado em `integration/android-1.0`.
+2. Frequência / Fazer chamada V2 — `READY FOR DESIGN REVIEW`
+3. Registrar observação — `READY FOR DESIGN REVIEW`
+4. Compromissos / Agenda — `READY FOR DESIGN REVIEW`
+5. Planejamento Dia/Semana/Mês — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `Planejamento diário V2 — hardening funcional/responsivo`; PR `#14` integrado em `integration/android-1.0`.
    - Delivery Unit concluída: `Planejamento semanal V2 — hardening funcional/responsivo`; PR `#20` integrado em `integration/android-1.0`.
    - Delivery Unit concluída: `Planejamento mensal V2 — hardening funcional`; PR `#31` integrado em `integration/android-1.0`.
-5. Turmas — `IN PROGRESS`
-6. Perfil do professor — `FUNCTIONAL HARDENING`
+6. Turmas — `IN PROGRESS`
+7. Perfil do professor — `FUNCTIONAL HARDENING`
    - Delivery Unit concluída: `Perfil profissional V2 — hardening de salvar/recuperar dados textuais`; PR `#35` integrado em `integration/android-1.0`.
-7. Arquivos — `IN PROGRESS`
-8. Mais — `IN PROGRESS`
+8. Arquivos — `IN PROGRESS`
+9. Mais — `IN PROGRESS`
    - Delivery Unit concluída: `Ferramentas de sala V2 — hardening de timer, cronômetro e calculadora`; PR `#37` integrado em `integration/android-1.0`.
-9. BNCC — `IN PROGRESS`
-10. Relatórios — `IN PROGRESS`
-11. Configurações — `IN PROGRESS`
-12. Aparência — `IN PROGRESS`
-13. Onboarding — `IN PROGRESS`
+10. BNCC — `IN PROGRESS`
+11. Relatórios — `IN PROGRESS`
+12. Configurações — `IN PROGRESS`
+13. Aparência — `IN PROGRESS`
+14. Onboarding — `FUNCTIONAL HARDENING`
 
 ## Milestone M1 — Primeiro anel da Home
 
@@ -200,18 +202,18 @@ Status: `TODO`
 
 Atualizar a cada rodada significativa:
 
-- Data/hora: 14/09/2026 — checkpoint do UI Lab MVP
-- Base: `origin/integration/android-1.0` em `d0eeff0`; worker `codex/ui-lab-mvp`
-- Tela/fluxo: `/__lab` permanece dev-only e agora seleciona Onboarding Entry V2, Home V2, Frequência e Planejamento diário com fixtures sintéticas; State default/erro, viewport 360/412/480, escala de texto e Reduced Motion continuam disponíveis. O Lab não importa dados reais nem altera runtime pedagógico.
-- Evidência visual: Live Design ativo na mesma aba em `http://127.0.0.1:5173/__lab?screen=home&width=412`; loop HMR observado após correções do harness. DOM/computed confirmou device de 412px, scroll interno real, bottom navigation em fluxo sem sobreposição, sem overflow horizontal e console sem errors; `live_visual_director` PASS após duas reavaliações.
+- Data/hora: 14/09/2026 — checkpoint do Onboarding Entry V2 first-viewport hardening
+- Base: `origin/integration/android-1.0` em `73e59d8`; worker `codex/onboarding-entry-hardening`
+- Tela/fluxo: preview direto `http://127.0.0.1:5173/?v2-preview=onboarding-entry&width=412` habilitado para Live Design. Headline fica em duas linhas no 412px, CTA termina em aproximadamente 664px relativos ao device de 720px e não há overflow horizontal; estado de erro permanece recuperável e o alvo de toque permanece >=48px.
+- Evidência visual: a mesma aba viva foi mantida aberta durante a iteração; HMR foi observado após a alteração da headline e após a criação do preview direto. O `live_visual_director` reavaliou o candidato final e retornou `PASS`. Evidências formais: `docs/qa/android-1.0/onboarding-entry-v2-360.png`, `onboarding-entry-v2-390.png` e `onboarding-entry-v2-432.png`.
 - Escopo não tocado: regras de produto/UX em discussão, Issue #28 Design Supervisor, alunos, deficiência/apoios, atividades de casa, Arquivos, três etapas, fotos, BNCC Computação, PRODUCT_UX_AUTHORITY, billing, auth, notificações, backup e `main`.
-- Evidência formal: `docs/qa/ui-lab/home-v2-412.png`; screenshot direta corrigida para Windows; E2E cobre troca de superfícies/estado e rolagem/overflow em 360/412/480px.
-- Testes executados: E2E direcionado UI Lab + preview-scroll `10/10`, `pnpm test` `66/66`, `check:fast`, `pnpm build`, `pnpm run ui:shot home 412 docs/qa/ui-lab/home-v2-412.png`, `git diff --check` e CI exato `34849761414` verde, incluindo Gate responsivo completo e Build Android QA APK.
-- Revisão: Cicero encontrou e o worker corrigiu overlap P1 do harness e inconsistência P2 do fixture de data; Banach PASS visual no SHA final.
-- Commit/PR: `634916d` (`fix: align UI Lab date fixture`), PR [#39](https://github.com/SayvaBR/assistente-ped/pull/39) integrado em `d0eeff0`.
+- Evidência formal anterior preservada: `docs/qa/ui-lab/home-v2-412.png`; E2E do UI Lab cobre troca de superfícies/estado e rolagem/overflow em 360/412/480px.
+- Testes executados nesta unidade: `pnpm run check:fast`, `pnpm run check:candidate`, E2E direcionado Onboarding Entry + entry `7/7`, `pnpm test` `66/66`, `pnpm run build`, três screenshots formais e `git diff --check`; CI exato `34852417694` verde, incluindo `validate` e `Build Android QA APK`.
+- Revisão: Cicero `PASS` no SHA `e601561`; Banach `PASS` visual no preview direto final.
+- Commit/PR: `e601561` (`P0: harden onboarding entry first viewport`), PR [#41](https://github.com/SayvaBR/assistente-ped/pull/41) integrado em `73e59d8`.
 - Blocker externo: o POCO X7 Pro foi encontrado via SDK ADB direto (`FMV455CMZXY5HYXS`, `2412DPC0AG`, `1220x2712`, density `520`), mas a instalação do APK deste branch falhou com `INSTALL_FAILED_UPDATE_INCOMPATIBLE` porque o pacote `br.com.assistentepedagogico.app.qa` já instalado usa outra assinatura. Não foi feito uninstall, `pm clear` ou exclusão de dados. As capturas físicas existentes são do pacote instalado `0.3.0-qa`, não deste HEAD; validação física do artefato atual permanece bloqueada até keystore compatível ou autorização explícita para remover o pacote.
 - QA físico não destrutivo: abertura, navegação, rolagem, teclado, descarte seguro e reabertura passaram no pacote instalado. Pendências encontradas no instalado (a reproduzir no APK do branch): landscape com composição estreita/sobra de espaço, cobertura de conteúdo pela barra inferior em Perfil, atalho superior de perfil com navegação inesperada e ação de câmera terminando no DocumentsUI. Escala de texto conclusiva ficou bloqueada porque o app reiniciou durante a captura. Relatório do agente: `C:\Users\Usuário\Documents\Codex\2026-09-13\luna-alto-poco-qa\outputs\auditoria-fisica-poco-x7-pro.md`. Desempenho preliminar do instalado: 427 frames, 3 janky (0,70%), PSS total aproximado de 260 MB.
-- Resultado: `FUNCTIONAL HARDENING`; as Ferramentas de sala V2 foram integradas, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
+- Resultado: `FUNCTIONAL HARDENING`; Onboarding Entry V2 recebeu hardening de primeiro viewport, sem mudança de semântica pedagógica ou das decisões de produto adiadas.
 - Próxima ação: sincronizar a integration, conferir issues/PRs ativos e escolher a próxima DU P0/P1 estreita e segura; não tratar o Issue #28 ou o PR documental #26 como bloqueadores, nem iniciar em massa as decisões do `PRODUCT_UX_AUTHORITY.md`.
 
 ### BNCC — evidência e contratos
