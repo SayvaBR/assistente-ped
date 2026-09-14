@@ -1,7 +1,6 @@
 import { StudentImportScreen } from "./StudentImportScreen";
 import { NotebookScreen } from "./NotebookScreen";
 import { stageFrom } from "../domain/education";
-import { AcademicScreen } from "./AcademicScreen";
 import { OrganizationScreen } from "./OrganizationScreen";
 import { setSoundEnabled } from "../core/recovered.js";
 // Recovered from APK 0.2.0. Original behavior retained; vendor code uses npm packages.
@@ -97,6 +96,7 @@ import { AppearanceV2 } from "../v2/screens/AppearanceV2";
 import { newLessonPlan } from "../domain/lessonPlans";
 import { listActivities, newTeachingActivity, saveActivity } from "../domain/activities";
 import { ActivityV2 } from "../v2/screens/ActivityV2";
+import { AcademicV2 } from "../v2/screens/AcademicV2";
 
 const ReportsScreen = React.lazy(() =>
   import("../screens/ReportsModule").then(({ ReportsScreen: screen }) => ({
@@ -938,6 +938,7 @@ function App() {
     onNewStudent: () => zt("novo-aluno"),
     onAttendance: () => zt("chamada"),
     onObservation: () => zt("registro-rapido"),
+    onAcademic: () => zt("academico"),
     onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
   });
   const classManagerV2 = () => React.createElement(ClassManagerV2, {
@@ -1071,7 +1072,7 @@ function App() {
           onDirtyChange: pe,
         }))
       : Re?.name === "academico" && M
-        ? (ht = React.createElement(AcademicScreen, {
+        ? (ht = React.createElement(AcademicV2, {
             onBack: _t,
             turma: M,
             alunos: Za,
