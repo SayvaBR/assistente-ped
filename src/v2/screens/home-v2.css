@@ -509,7 +509,7 @@
   grid-template-columns: repeat(5, minmax(0, 1fr));
   width: min(100%, var(--v2-content-max));
   margin: 0 auto;
-  padding: 9px 10px max(10px, env(safe-area-inset-bottom));
+  padding: 9px 6px max(10px, env(safe-area-inset-bottom));
   border: 1px solid var(--v2-color-border);
   border-bottom: 0;
   border-radius: 24px 24px 0 0;
@@ -536,7 +536,8 @@
 }
 
 .v2-home__nav-item span {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  white-space: nowrap;
   text-align: center;
 }
 
