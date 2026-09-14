@@ -144,6 +144,7 @@ describe('live design launcher ownership', () => {
       pid: process.pid,
       viteBin: fakeVite,
     }));
+    writeFileSync(`${marker}.lock`, JSON.stringify({ cwd: process.cwd(), launcherPid: 999999, viteBin: fakeVite }));
     writeFileSync(fakeVite, "import { writeFileSync } from 'node:fs'; writeFileSync(process.env.FAKE_PID_FILE, String(process.pid)); setInterval(() => {}, 1000);\n");
 
     const timedOut = runLauncher(['home'], {
@@ -157,6 +158,7 @@ describe('live design launcher ownership', () => {
     expect(await waitForExit(timedOut.child)).toBe(1);
     expect(timedOut.output).toContain('não ficou pronto em 300ms');
     expect(existsSync(marker)).toBe(false);
+    expect(existsSync(`${marker}.lock`)).toBe(false);
     await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
   });
 
@@ -179,6 +181,7 @@ describe('live design launcher ownership', () => {
     expect(await waitForExit(launching.child)).toBe(1);
     expect(launching.output).toContain('ownership do marker');
     expect(readFileSync(marker, 'utf8')).toContain('foreign-worktree');
+    expect(existsSync(`${marker}.lock`)).toBe(false);
     await waitForProcessGone(Number(readFileSync(fakePidFile, 'utf8')));
   });
 });

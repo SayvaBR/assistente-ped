@@ -35,6 +35,7 @@ const baseUrl = `http://${host}:${port}`;
 const surfaceUrl = `${baseUrl}/?v2-preview=${encodeURIComponent(preview)}&width=${Math.round(width)}`;
 const markerPath = resolve(process.env.LIVE_DESIGN_MARKER || 'tmp/live-design-server.json');
 const viteBin = resolve(process.env.LIVE_DESIGN_VITE_BIN || 'node_modules/vite/bin/vite.js');
+const startupLockPath = `${markerPath}.lock`;
 
 function removeOwnedMarker(expectedPid) {
   try {
@@ -50,6 +51,32 @@ function removeStaleMarker() {
     const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
     if (marker.cwd === process.cwd()) unlinkSync(markerPath);
   } catch { /* stale marker already gone */ }
+}
+
+function removeOwnedStartupLock() {
+  try {
+    const lock = JSON.parse(readFileSync(startupLockPath, 'utf8'));
+    if (lock.cwd === process.cwd() && lock.launcherPid === process.pid) unlinkSync(startupLockPath);
+  } catch { /* stale lock already gone */ }
+}
+
+function claimStartupLock() {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      mkdirSync(dirname(startupLockPath), { recursive: true });
+      writeFileSync(startupLockPath, JSON.stringify({ cwd: process.cwd(), launcherPid: process.pid, viteBin }), { flag: 'wx' });
+      return true;
+    } catch {
+      try {
+        const lock = JSON.parse(readFileSync(startupLockPath, 'utf8'));
+        if (lock.cwd !== process.cwd()) return false;
+        process.kill(lock.launcherPid, 0);
+        if (isLiveLauncher(lock.launcherPid)) return false;
+      } catch { /* stale lock can be reclaimed */ }
+      try { unlinkSync(startupLockPath); } catch { return false; }
+    }
+  }
+  return false;
 }
 
 function processCommandLine(pid) {
@@ -136,6 +163,10 @@ if (ownedServer) {
     process.exit(1);
   }
 } else {
+  if (!claimStartupLock()) {
+    console.error(`[live-design] startup lock ocupado em ${startupLockPath}; não iniciando um segundo servidor.`);
+    process.exit(1);
+  }
   if (initialMarkerState === 'stale') removeStaleMarker();
 
 try {
@@ -157,6 +188,7 @@ const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String
 });
 if (!child.pid) {
   removeOwnedMarker();
+  removeOwnedStartupLock();
   console.error('[live-design] não foi possível iniciar o processo Vite.');
   process.exit(1);
 }
@@ -175,6 +207,7 @@ try {
   if (!child.killed) child.kill('SIGTERM');
   await childExit;
   removeOwnedMarker();
+  removeOwnedStartupLock();
   console.error(`[live-design] não foi possível finalizar o ownership do marker: ${error.message}`);
   process.exit(1);
 }
@@ -202,13 +235,17 @@ const stop = (signal) => {
   if (!child.killed) child.kill(signal);
 };
 
-process.on('exit', () => removeOwnedMarker(child.pid));
+process.on('exit', () => {
+  removeOwnedMarker(child.pid);
+  removeOwnedStartupLock();
+});
 process.on('SIGINT', () => stop('SIGINT'));
 process.on('SIGTERM', () => stop('SIGTERM'));
 
   child.on('exit', (code, signal) => {
     clearInterval(poll);
     removeOwnedMarker(child.pid);
+    removeOwnedStartupLock();
     if (signal) process.exit(startupTimedOut ? 1 : 0);
   process.exit(code ?? 1);
 });
