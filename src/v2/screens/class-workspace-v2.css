@@ -4,14 +4,14 @@
 .v2-class-workspace__back, .v2-class-workspace__settings { width: 48px; height: 48px; border: 0; border-radius: 16px; display: grid; place-items: center; color: var(--v2-action, #087ff5); background: rgba(255,255,255,.72); box-shadow: 0 3px 0 rgba(80,145,190,.18); }
 .v2-class-workspace__settings { justify-self: end; color: var(--v2-navy, #102a72); }
 .v2-class-workspace__title { min-width: 0; }
-.v2-class-workspace__title h1 { margin: 3px 0 2px; color: var(--v2-navy, #102a72); font: 600 clamp(23px, 6vw, 30px)/1.05 Fredoka, sans-serif; overflow-wrap: anywhere; }
-.v2-class-workspace__title p { margin: 0; color: #5c78a8; font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
+.v2-class-workspace__title h1 { margin: 3px 0 2px; color: var(--v2-navy, #102a72); font: 600 clamp(23px, 6vw, 30px)/1.05 Fredoka, sans-serif; overflow-wrap: normal; word-break: normal; }
+.v2-class-workspace__title p { margin: 0; color: #5c78a8; font-size: 14px; font-weight: 700; overflow-wrap: normal; word-break: normal; }
 .v2-class-workspace__tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; padding: 5px; margin-bottom: 18px; border: 1px solid rgba(155,214,244,.72); border-radius: 20px; background: rgba(255,255,255,.62); }
 .v2-class-workspace__tab { min-height: 56px; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; border-radius: 15px; padding: 6px 3px; color: #5a77a8; background: transparent; font-size: 10px; font-weight: 800; }
 .v2-class-workspace__tab.is-active { color: #fff; background: linear-gradient(180deg, #1aa8fa, #087ff5); box-shadow: 0 3px 0 #0567c9; }
 .v2-class-workspace__section { min-width: 0; }
 .v2-class-workspace__section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 0 2px 12px; }
-.v2-class-workspace__section-heading h2 { margin: 4px 0 0; color: var(--v2-navy, #102a72); font: 600 25px/1.05 Fredoka, sans-serif; overflow-wrap: anywhere; }
+.v2-class-workspace__section-heading h2 { margin: 4px 0 0; color: var(--v2-navy, #102a72); font: 600 25px/1.05 Fredoka, sans-serif; overflow-wrap: normal; word-break: normal; }
 .v2-eyebrow { color: #4f76ab; font-size: 10px; font-weight: 900; letter-spacing: .14em; }
 .v2-class-workspace__text-action { min-height: 48px; display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; color: #087ff5; font-weight: 900; white-space: nowrap; }
 .v2-class-workspace__date-button, .v2-class-workspace__secondary { min-height: 48px; border: 1px solid #a9dcfa; border-radius: 15px; padding: 0 14px; color: #087ff5; background: rgba(255,255,255,.74); font-weight: 900; }
@@ -25,8 +25,8 @@
 .v2-primary-action { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 16px; padding: 0 16px; color: #fff; background: linear-gradient(180deg, #1aa8fa, #087ff5); box-shadow: 0 3px 0 #0767ca; font-weight: 900; }
 .v2-class-workspace__next-line, .v2-class-workspace__wide-action { min-width: 0; display: flex; align-items: center; gap: 12px; border: 1px solid #c4e7f8; border-radius: 18px; padding: 13px 14px; color: #087ff5; background: rgba(255,255,255,.78); text-align: left; }
 .v2-class-workspace__next-line span, .v2-class-workspace__wide-action > span:not(.v2-class-workspace__student-avatar) { min-width: 0; flex: 1; }
-.v2-class-workspace__next-line strong, .v2-class-workspace__wide-action strong, .v2-class-workspace__student-copy strong { display: block; color: #102a72; font-weight: 900; overflow-wrap: anywhere; }
-.v2-class-workspace__next-line small, .v2-class-workspace__wide-action small, .v2-class-workspace__student-copy small { display: block; margin-top: 3px; color: #6481ad; font-size: 12px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.v2-class-workspace__next-line strong, .v2-class-workspace__wide-action strong, .v2-class-workspace__student-copy strong { display: block; color: #102a72; font-weight: 900; overflow-wrap: normal; word-break: normal; }
+.v2-class-workspace__next-line small, .v2-class-workspace__wide-action small, .v2-class-workspace__student-copy small { display: block; margin-top: 3px; color: #6481ad; font-size: 12px; font-weight: 700; line-height: 1.25; overflow-wrap: normal; word-break: normal; }
 .v2-class-workspace__search { min-height: 52px; display: flex; align-items: center; gap: 9px; margin-bottom: 12px; padding: 0 15px; border: 1px solid #bce3f7; border-radius: 18px; color: #4774a8; background: rgba(255,255,255,.75); }
 .v2-class-workspace__search input { min-width: 0; flex: 1; border: 0; outline: 0; color: #102a72; background: transparent; font: inherit; }
 .v2-class-workspace__search input::placeholder { color: #7895bb; }
@@ -41,7 +41,7 @@
 .v2-class-workspace__summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
 .v2-class-workspace__summary div { display: grid; gap: 3px; min-width: 0; padding: 14px 8px; border-radius: 17px; background: rgba(255,255,255,.78); text-align: center; }
 .v2-class-workspace__summary strong { color: #087ff5; font: 600 24px Fredoka, sans-serif; }
-.v2-class-workspace__summary span { color: #6481ad; font-size: 11px; font-weight: 800; overflow-wrap: anywhere; }
+.v2-class-workspace__summary span { color: #6481ad; font-size: 11px; font-weight: 800; overflow-wrap: normal; word-break: normal; }
 .v2-class-workspace__helper { margin: 0 2px 14px; }
 .v2-class-workspace__wide-action { width: 100%; min-height: 68px; border-width: 0 0 1px; border-radius: 0; padding: 11px 14px; }
 .v2-class-workspace__wide-action > svg { flex: 0 0 auto; }
@@ -60,7 +60,7 @@
 .v2-class-workspace__history-event:last-child::before { bottom: 50%; }
 .v2-class-workspace__history-dot { position: relative; z-index: 1; width: 12px; height: 12px; flex: 0 0 12px; margin-left: 0; border: 3px solid #fff; border-radius: 50%; background: #1aa8fa; box-shadow: 0 0 0 2px #9edcff; }
 .v2-class-workspace__history-event > span:nth-child(2) { min-width: 0; flex: 1; }
-.v2-class-workspace__history-event strong, .v2-class-workspace__history-event small, .v2-class-workspace__history-event em { display: block; overflow-wrap: anywhere; }
+.v2-class-workspace__history-event strong, .v2-class-workspace__history-event small, .v2-class-workspace__history-event em { display: block; overflow-wrap: normal; word-break: normal; }
 .v2-class-workspace__history-event strong { color: #102a72; font-size: 13px; font-weight: 900; }
 .v2-class-workspace__history-event small { margin-top: 2px; color: #6481ad; font-size: 11px; font-weight: 800; }
 .v2-class-workspace__history-event em { margin-top: 3px; color: #466b9f; font-size: 12px; font-style: normal; font-weight: 700; line-height: 1.25; }
