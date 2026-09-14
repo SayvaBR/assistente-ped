@@ -25,6 +25,16 @@ test('Planejamento overview V2 encaminha as visões sem overflow em texto amplia
   expect(overflow).toBe(false);
 });
 
+test('Planejamento semanal V2 comunica o ritmo e abre o próximo plano', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 980 });
+  await page.goto('/?v2-preview=planning-week&width=412');
+
+  const device = page.locator('.v2-preview-device');
+  await expect(device.getByRole('heading', { name: /preparos já no caminho/i })).toBeVisible();
+  await device.getByRole('button', { name: 'Planejar próximo momento' }).click();
+  await expect(device.getByRole('heading', { name: 'Editar plano' })).toBeVisible();
+});
+
 test('Novo plano V2 recupera rascunho local após sair do editor', async ({ page }) => {
   const classroom = { id: 'planning_autosave_class', nome: 'Turma do planejamento', nivel: '4º ano', turno: 'Manhã', etapa: 'fundamental_anos_iniciais', componentesCurriculares: ['Língua Portuguesa'], duracaoAulaMin: 50 };
   await page.setViewportSize({ width: 390, height: 980 });

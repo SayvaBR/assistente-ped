@@ -5,8 +5,8 @@
 
 ## Estado global
 
-- Branch ativa: `codex/5-v2-clean-room`
-- PR ativo: `#8`
+- Branch ativa: `feat/planning-week-v2`
+- PR ativo: a abrir contra `integration/android-1.0`
 - North Star visual: Home V2
 - Missão: `docs/CODEX_ANDROID_1_0_COMPLETION_MISSION.md`
 - Estado do produto: **em construção — não pronto para release**
@@ -51,7 +51,7 @@ O Codex pode marcar `READY FOR DESIGN REVIEW`, `FUNCTIONAL HARDENING` e `PRODUCT
 - Registrar observação — `READY FOR DESIGN REVIEW`
 - Compromissos / Agenda — `READY FOR DESIGN REVIEW`
 - Planejamento diário — `IN PROGRESS`
-- Planejamento semanal — `IN PROGRESS`
+- Planejamento semanal — `READY FOR DESIGN REVIEW` (composição semanal V2 reforçada, faixa de ritmo da semana e CTA real para o editor; aguardando revisão visual)
 - Planejamento mensal — `IN PROGRESS`
 - Turmas — `IN PROGRESS`
 - Perfil — `IN PROGRESS`
@@ -192,6 +192,15 @@ Status: `TODO`
 ## Último checkpoint
 
 Atualizar a cada rodada significativa:
+
+- Data/hora: 14/09/2026 — checkpoint Planejamento semanal V2
+- Branch: `feat/planning-week-v2`
+- HEAD: pendente até o commit da rodada
+- Tela/fluxo: Planejamento semanal ganhou resumo semântico da semana, contagem baseada nos planos/atividades reais, CTA `Planejar próximo momento` ligado ao editor e título responsivo para evitar quebra desnecessária em 412px.
+- Screenshot/evidência: `docs/qa/clean-room/planning-week-v2-412-before.png`, `docs/qa/clean-room/planning-week-v2-412-after.png`, `docs/qa/clean-room/planning-week-v2-412-bottom.png`, `docs/qa/clean-room/planning-week-v2-360.png`, `docs/qa/clean-room/planning-week-v2-390.png`, `docs/qa/clean-room/planning-week-v2-430.png`
+- Testes executados: `pnpm run check:fast`; `pnpm exec playwright test e2e/v2-planning-overview-flow.pw.ts --config playwright.config.ts --reporter=line` (4/4); fluxo combinado Dia + Overview (13/13); overflow horizontal verificado em 360/390/430px.
+- Resultado: `READY FOR DESIGN REVIEW`; a revisão não foi declarada aprovada pelo Codex
+- Próxima ação: publicar o branch e abrir PR de planejamento semanal contra `integration/android-1.0`; depois seguir para Planejamento mensal após a evidência desta candidata.
 
 - Data/hora: 14/09/2026 — checkpoint de conclusão parcial
 - Branch: `codex/5-v2-clean-room`
