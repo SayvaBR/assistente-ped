@@ -95,6 +95,8 @@ import { ReportsV2 } from "../v2/screens/ReportsV2";
 import { SettingsV2 } from "../v2/screens/SettingsV2";
 import { AppearanceV2 } from "../v2/screens/AppearanceV2";
 import { newLessonPlan } from "../domain/lessonPlans";
+import { newTeachingActivity, saveActivity } from "../domain/activities";
+import { ActivityV2 } from "../v2/screens/ActivityV2";
 
 const ReportsScreen = React.lazy(() =>
   import("../screens/ReportsModule").then(({ ReportsScreen: screen }) => ({
@@ -441,6 +443,10 @@ function App() {
       });
       ae.dataKey === dateKey(new Date()) && Ue(qe);
       setPlanningV2Reload((value) => value + 1);
+    },
+    saveActivityV2 = async (activity) => {
+      if (!M?.id) throw new Error("Selecione uma turma antes de criar uma atividade.");
+      await saveActivity(activity, storage);
     },
     Ya = async (ae = repository.turmaAtivaId) => {
       if (ae)
@@ -897,6 +903,7 @@ function App() {
     onBack: () => kn("inicio"),
     onRetry: () => setPlanningV2Reload((value) => value + 1),
     onOpenPlan: (plan) => zt("plano-aula", { plano: plan, dataKey: plan.dataKey }),
+    onCreateActivity: () => zt("atividade-v2", { activity: newTeachingActivity({ turmaId: M?.id || "", dataKey: planningV2Date }) }),
     onRestorePlan: (plan) => { void restorePlanV2(plan); },
     onCreatePlan: () => zt("plano-aula", { plano: newLessonPlan({ turmaId: M?.id, dataKey: planningV2Date }), dataKey: planningV2Date, isNew: true }),
     onViewChange: (view) => zt(view === "day" ? "planejamento-dia" : view === "week" ? "planejamento-semana" : "planejamento-mes", { dataKey: planningV2Date }),
@@ -1306,6 +1313,19 @@ function App() {
                                                           : (Re == null
                                                                 ? void 0
                                                                 : Re.name) ===
+                                                              "atividade-v2"
+                                                            ? (ht = React.createElement(ActivityV2, {
+                                                                activity: Re.data?.activity || newTeachingActivity({ turmaId: M?.id || "", dataKey: planningV2Date }),
+                                                                className: M?.nome || "Sua turma",
+                                                                offline: !homeIsOnline,
+                                                                onBack: _t,
+                                                                onSalvar: saveActivityV2,
+                                                                onSaved: () => { setPlanningV2Reload((value) => value + 1); kn("plano"); },
+                                                                onTabChange: (tab) => xr({ inicio: "inicio", planejamento: "plano", turmas: "turmas-v2", arquivos: "biblioteca", mais: "mais" }[tab]),
+                                                              }))
+                                                              : (Re == null
+                                                                    ? void 0
+                                                                    : Re.name) ===
                                                               "plano-aula"
                                                             ? (ht =
                                                                 React.createElement(

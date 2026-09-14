@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { deletePlan, listPlans, loadPlansByDate, savePlan, updatePlanMetadata } from "../src/data/planRepository";
 import { newLessonPlan } from "../src/domain/lessonPlans";
+import { newTeachingActivity, saveActivity, listActivities } from "../src/domain/activities";
 import type { StoragePort } from "../src/domain/models";
 
 function memoryStorage(): StoragePort {
@@ -41,5 +42,14 @@ describe("planning repository", () => {
     expect(archived.arquivadoEm).toBeTruthy();
     await deletePlan(archived, port);
     expect(await listPlans("turma-2", port)).toEqual([]);
+  });
+
+  it("persists a real activity and rejects incomplete content", async () => {
+    const port = memoryStorage();
+    const activity = newTeachingActivity({ turmaId: "turma-atividade", dataKey: "2026-09-12" });
+    await expect(saveActivity(activity, port)).rejects.toThrow("título");
+    const saved = await saveActivity({ ...activity, titulo: "Caça às palavras", instrucoes: "Encontrar palavras no texto." }, port);
+    expect(saved).toHaveLength(1);
+    expect((await listActivities("turma-atividade", port))[0]).toMatchObject({ titulo: "Caça às palavras", status: "rascunho" });
   });
 });

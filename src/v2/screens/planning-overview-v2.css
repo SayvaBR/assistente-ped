@@ -58,3 +58,5 @@
 .v2-planning-overview__archived-open { display: flex; min-width: 0; flex: 1; align-items: center; gap: 10px; padding: 0; border: 0; background: transparent; text-align: left; }
 .v2-planning-overview__archived-open .v2-planning-overview__plan-mark { flex: 0 0 auto; opacity: .7; }
 .v2-planning-overview__restore { min-height: 48px; padding: 0 10px; border: 1px solid #a6dcf6; border-radius: 13px; background: #eefaff; color: #147bd4; font: 800 .72rem "Nunito Sans", sans-serif; }
+.v2-planning-overview__quick-actions { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; margin-top: 15px; }.v2-planning-overview__quick-actions .v2-planning-overview__quick-add { margin-top: 0; }.v2-planning-overview__quick-add.is-activity { border-style: solid; background: #fff; color: #1976c9; }
+@media (max-width:359px) { .v2-planning-overview__quick-actions { grid-template-columns: 1fr; } }

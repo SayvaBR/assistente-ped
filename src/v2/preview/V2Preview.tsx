@@ -30,6 +30,8 @@ import { HelpV2 } from '../screens/HelpV2';
 import { LegalV2 } from '../screens/LegalV2';
 import { TrashV2 } from '../screens/TrashV2';
 import { OrganizationV2 } from '../screens/OrganizationV2';
+import { ActivityV2 } from '../screens/ActivityV2';
+import { newTeachingActivity } from '../../domain/activities';
 import type { Attendance } from '../../domain/models';
 import type { LessonPlan } from '../../domain/models';
 import type { StoragePort } from '../../domain/models';
@@ -109,6 +111,7 @@ const classStudentsPreview = frequencyPreviewData.students.slice(0, 6).map(({ id
 const studentProfilePreview = { id: 'ana', nome: 'Ana Clara Souza', cor: '#1cb0f6', dataNascimento: '2015-03-12', responsavel: 'Carolina Souza', contato: '11987654321', presencas: 18, faltas: 2, atrasos: 1 };
 const reportPreviewDays: Record<string, Attendance> = { '2024-08-28': { ana: 'presente', bruno: 'presente', caio: 'falta', daniela: 'presente', enzo: 'presente', fernanda: 'falta' } };
 const reportPreviewClass = { id: 'class-a', nome: '5º Ano A', nivel: 'Ensino Fundamental', turno: 'Matutino' };
+const activityPreview = newTeachingActivity({ turmaId: 'preview', dataKey: '2024-08-28' });
 const profilePreview = { id: 'teacher-preview', nome: 'Marina Souza', tratamento: 'professora', escola: 'Escola Horizonte', cidade: 'São Paulo', uf: 'SP', etapaEnsino: 'Ensino Fundamental' };
 const previewStorage: StoragePort = { get: async (key) => key === 'biblioteca:pessoal:pastas:v1' ? { value: JSON.stringify([{ id: 'folder-plans', nome: 'Planos de aula', pastaPaiId: 'root', cor: 'primary', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : key === 'documentos:app:v2' ? { value: JSON.stringify([{ id: 'doc-bncc', nome: 'BNCC_2024.pdf', mime: 'application/pdf', tamanho: 245760, pastaId: 'root', path: 'documentos/BNCC_2024.pdf', uri: 'file:///documentos/BNCC_2024.pdf', criadoEm: '2024-08-01T10:00:00.000Z', atualizadoEm: '2024-08-01T10:00:00.000Z' }]) } : { value: '[]' }, set: async () => undefined, delete: async () => undefined, list: async () => ({ keys: [] }) };
 
@@ -194,7 +197,7 @@ export function V2Preview() {
           ) : activeScreen === 'commitments' ? (
             <CommitmentsV2 events={commitmentsPreviewEvents} initialDate="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onSave={() => undefined} onDelete={() => undefined} onPeriodChange={(period) => setActiveScreen(period === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-overview' ? (
-            <PlanningOverviewV2 plans={planningPreviewPlans} className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => setActiveScreen('plan-editor')} onRestorePlan={() => undefined} onCreatePlan={() => setActiveScreen('plan-editor')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} />
+            <PlanningOverviewV2 plans={planningPreviewPlans} className="5º Ano A" onBack={() => setActiveScreen('home')} onOpenPlan={() => setActiveScreen('plan-editor')} onRestorePlan={() => undefined} onCreatePlan={() => setActiveScreen('plan-editor')} onCreateActivity={() => setActiveScreen('activity')} onViewChange={(view) => setActiveScreen(view === 'day' ? 'planning-day' : view === 'week' ? 'planning-week' : 'planning-month')} />
           ) : activeScreen === 'planning-day' ? (
             <PlanningDayV2 plans={planningPreviewPlans} dateKey="2024-08-28" className="5º Ano A" onBack={() => setActiveScreen('home')} onViewChange={(view) => setActiveScreen(view === 'week' ? 'planning-week' : 'planning-month')} onOpenPlan={() => setActiveScreen('plan-editor')} onCreatePlan={() => setActiveScreen('plan-editor')} />
           ) : activeScreen === 'planning-week' || activeScreen === 'planning-month' ? (
@@ -211,6 +214,8 @@ export function V2Preview() {
             <FilesV2 storage={previewStorage} onBack={() => setActiveScreen('home')} onOpenTrash={() => undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : undefined} />
           ) : activeScreen === 'more' ? (
             <MoreV2 goTo={(route) => route === 'ferramentas' ? setActiveScreen('tools') : route === 'bncc' ? setActiveScreen('bncc') : route === 'relatorios' ? setActiveScreen('reports') : route === 'configuracoes' ? setActiveScreen('settings') : route === 'tema' ? setActiveScreen('appearance') : route === 'notificacoes' ? setActiveScreen('notifications') : route === 'backup' ? setActiveScreen('backup') : route === 'privacidade' ? setActiveScreen('privacy') : route === 'lixeira' ? setActiveScreen('trash') : route === 'ajuda-feedback' ? setActiveScreen('help') : route === 'termos' ? setActiveScreen('legal') : route === 'perfil-professor' ? setActiveScreen('profile') : route === 'gerenciar-turmas' ? setActiveScreen('class-manager') : route === 'organizacao' ? setActiveScreen('organization') : undefined} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : undefined} />
+          ) : activeScreen === 'activity' ? (
+            <ActivityV2 activity={activityPreview} className="5º Ano A" onBack={() => setActiveScreen('planning-overview')} onSalvar={() => undefined} onSaved={() => setActiveScreen('planning-overview')} onTabChange={(tab) => tab === 'inicio' ? setActiveScreen('home') : tab === 'planejamento' ? setActiveScreen('planning-overview') : tab === 'turmas' ? setActiveScreen('classes') : tab === 'arquivos' ? setActiveScreen('files') : setActiveScreen('more')} />
           ) : activeScreen === 'plan-editor' ? (
             <LessonPlanV2 plano={planningPreviewPlans[0]} prefill={planPrefill} turmaId="5º Ano A" dataKey="2024-08-28" onBack={() => setActiveScreen('planning-day')} onSalvar={() => undefined} onConcluido={() => setActiveScreen('planning-day')} onExcluir={() => undefined} />
           ) : activeScreen === 'bncc' ? (
