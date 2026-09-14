@@ -12,6 +12,8 @@ test('Planejamento semanal V2 mantém preparo, planos e estados úteis', async (
   await expect(device.getByRole('button', { name: /Ciências/ })).toBeVisible();
   await expect(device.getByText('Leitura silenciosa', { exact: true })).toBeVisible();
   await expect(device.getByText('Sem horário', { exact: true })).toBeVisible();
+  await expect(device.getByText('DIA SELECIONADO', { exact: true })).toBeVisible();
+  await expect(device.getByText('4 itens', { exact: true })).toBeVisible();
   await expect(device.getByRole('heading', { name: 'Atividades preparadas', exact: true })).toBeVisible();
   await expect(device.getByRole('button', { name: /Caça às palavras/ })).toBeVisible();
   await expect(device.getByRole('button', { name: 'Criar plano neste dia' })).toBeVisible();
