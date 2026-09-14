@@ -31,6 +31,47 @@ for (const width of [360, 390, 412, 432] as const) {
   });
 }
 
+test('Onboarding Entry mantém CTA e rodapé acima do safe area inferior em runtime', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 720 });
+  await page.goto('/?v2-preview=onboarding-entry&width=412');
+
+  const device = page.locator('.v2-preview-device');
+  const metrics = await device.evaluate((root) => {
+    const safeBottom = 48;
+    document.documentElement.style.setProperty('--v2-safe-bottom', `${safeBottom}px`);
+
+    const screen = root.querySelector<HTMLElement>('.v2-entry__screen');
+    const cta = root.querySelector<HTMLElement>('.v2-entry__continue');
+    const footer = root.querySelector<HTMLElement>('.v2-entry__footer');
+    const scrollRoot = document.scrollingElement;
+    if (!screen || !cta || !footer || !scrollRoot) throw new Error('Onboarding runtime elements missing');
+
+    const computedSafeBottom = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--v2-safe-bottom'));
+    const paddingBottom = Number.parseFloat(getComputedStyle(screen).paddingBottom);
+    const maxScroll = scrollRoot.scrollHeight - scrollRoot.clientHeight;
+    scrollRoot.scrollTop = scrollRoot.scrollHeight;
+
+    const screenRect = screen.getBoundingClientRect();
+    const ctaRect = cta.getBoundingClientRect();
+    const footerRect = footer.getBoundingClientRect();
+    return {
+      computedSafeBottom,
+      paddingBottom,
+      maxScroll,
+      scrollTop: scrollRoot.scrollTop,
+      ctaClearance: screenRect.bottom - ctaRect.bottom,
+      footerClearance: screenRect.bottom - footerRect.bottom,
+    };
+  });
+
+  expect(metrics.computedSafeBottom).toBe(48);
+  expect(metrics.paddingBottom).toBeGreaterThanOrEqual(metrics.computedSafeBottom);
+  expect(metrics.maxScroll, 'preview perdeu rolagem vertical com inset inferior').toBeGreaterThan(0);
+  expect(metrics.scrollTop, 'preview não chegou ao conteúdo inferior').toBeGreaterThan(0);
+  expect(metrics.ctaClearance, 'CTA ficou sob a área reservada inferior').toBeGreaterThanOrEqual(metrics.computedSafeBottom);
+  expect(metrics.footerClearance, 'rodapé ficou sob a área reservada inferior').toBeGreaterThanOrEqual(metrics.computedSafeBottom);
+});
+
 test('Onboarding Entry mantém estado de erro recuperável, foco e reduced motion', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 720 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
